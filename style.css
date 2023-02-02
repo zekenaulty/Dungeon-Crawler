@@ -1,0 +1,13 @@
+body {
+  background-color: black;
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  font-size: 0.8em;
+  line-height: 1em;
+  font-family: monospace;
+  color: silver;
+}
+
+.hide {
+  display: none !important;
+}
