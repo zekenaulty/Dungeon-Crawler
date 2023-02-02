@@ -32,8 +32,8 @@ export class Header {
 
   }
   
-  info(txt) {
-    this.#left.innerText = txt;
+  info(html) {
+    this.#left.innerHTML = html;
   }
   
   addButton(txt, callback) {
