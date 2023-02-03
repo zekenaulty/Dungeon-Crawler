@@ -1,4 +1,3 @@
-import { go } from '../../isReady.js';
 
 export class Stage {
 
@@ -9,7 +8,9 @@ export class Stage {
 
   constructor(ready) {
     
-    this.onReady = ready;
+    if(ready) {
+      this.onReady = ready;
+    }
     
     this.#styles = document.createElement('link');
 
@@ -47,8 +48,6 @@ export class Stage {
     }
   }
   
-  onReady(gfx) {
-
-  }
+  onReady(gfx) {}
 
 }
