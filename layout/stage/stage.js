@@ -37,6 +37,14 @@ export class Stage {
   get gfx() {
     return this.#gfx;
   }
+  
+  get width() {
+    return this.#canvas.width;
+  }
+  
+  get height() {
+    return this.#canvas.height;
+  }
 
   #scale() {
     this.#canvas.width = this.#stage.offsetWidth;
