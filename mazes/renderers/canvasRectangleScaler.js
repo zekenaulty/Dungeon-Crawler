@@ -1,4 +1,4 @@
-export class CanvasScaler {
+export class CanvasRectangleScaler {
 
   #maxCells = 10000;
   #size = 24;

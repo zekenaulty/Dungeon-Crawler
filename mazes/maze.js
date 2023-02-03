@@ -1,7 +1,6 @@
 import { List } from '../core/list.js';
 import { Cell } from './cell/cell.js';
 
-
 export class Maze {
 
   grid = new List();
@@ -12,7 +11,7 @@ export class Maze {
   constructor(rows, columns) {
     this.rows = rows;
     this.columns = columns;
-    
+
     console.info(`rows: ${rows}, columns: ${columns}`);
 
     let cells = this.#populate();
@@ -82,11 +81,11 @@ export class Maze {
       }
     }
   }
-  
+
   randomCell() {
     return this.grid.sample().sample();
   }
-  
+
   get size() {
     return this.rows * this.columns;
   }

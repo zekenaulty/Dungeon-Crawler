@@ -1,6 +1,9 @@
 
 .stage {
   position: fixed;
+  display: flex;
+  align-content: space-around;
+  justify-items: start;
   top: 15vh;
   left: 4vw;
   width: 92vw;
@@ -27,12 +30,10 @@
 }
 
 .viewport-text {
-  width: 100%;
-  align-content: center;
-  justify-items: center;
   font-size: 0.8em;
   font-weight: bolder;
   color: orange;
+  margin: auto;
 }
 
 .stage-hide {

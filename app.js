@@ -4,7 +4,7 @@ import { Header } from './layout/header/header.js';
 import { Stage } from './layout/stage/stage.js';
 import { JoyStick } from './layout/joystick/joystick.js';
 import { Maze } from './mazes/maze.js';
-import { CanvasScaler } from './mazes/renderers/canvasScaler.js';
+import { CanvasRectangleScaler } from './mazes/renderers/canvasRectangleScaler.js';
 import { MazeToText } from './mazes/renderers/mazeToText.js';
 import { BinaryTree } from './mazes/generators/binaryTree.js';
 
@@ -18,7 +18,7 @@ import { BinaryTree } from './mazes/generators/binaryTree.js';
     const header = new Header();
     const stage = new Stage((gfx) => {
       
-      let scaler = new CanvasScaler(stage.width, stage.height);
+      let scaler = new CanvasRectangleScaler(stage.width, stage.height);
       scaler.calc();
       maze = new Maze(scaler.rows, scaler.columns);
       let mazeText = new MazeToText(maze);
