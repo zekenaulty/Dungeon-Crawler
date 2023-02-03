@@ -21,6 +21,11 @@ import { JoyStick } from './layout/joystick/joystick.js';
     header.addButton('NEW GAME', (e) => {});
     header.addButton('SOLVE (1000g)', (e) => {});
     header.addButton('CHARACTER', (e) => {});
+    
+    joystick.up = () => {};
+    joystick.down = () => {};
+    joystick.left = () => {};
+    joystick.right = () => {};
 
   });
 
