@@ -1,7 +1,7 @@
 import { go } from './isReady.js';
 import { Header } from './layout/header/header.js';
 import { Stage } from './layout/stage/stage.js';
-
+import { JoyStick } from './layout/joystick/joystick.js';
 
 (() => {
 
@@ -15,6 +15,7 @@ import { Stage } from './layout/stage/stage.js';
         gfx.fill();
         gfx.closePath();
       });
+    const joystick = new JoyStick();
 
     header.addButton('SAVE', (e) => {});
     header.addButton('NEW GAME', (e) => {});
