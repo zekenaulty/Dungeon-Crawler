@@ -20,12 +20,31 @@ export class Links {
     }
     
     if(both) {
-      cell.links.connect(this, link, false);
+      cell.links.connect(this.cell, link, false);
     }
   }
   
   linked(cell) {
+    if(cell === undefined) {
+      return false;
+    }
     return this.items.includes(cell);
+  }
+  
+  get north() {
+    return this.linked(this.cell.north);
+  }
+  
+  get east() {
+    return this.linked(this.cell.east);
+  }
+  
+  get south() {
+    return this.linked(this.cell.south);
+  }
+  
+  get west() {
+    return this.linked(this.cell.west);
   }
   
 }

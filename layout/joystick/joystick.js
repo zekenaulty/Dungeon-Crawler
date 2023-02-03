@@ -49,12 +49,25 @@ export class JoyStick {
     this.#left.innerHTML = 'LEFT';
     this.#right.innerHTML = 'RIGHT';
 
-    this.#up.addEventListener('click', this.up);
-    this.#down.addEventListener('click', this.down);
-    this.#left.addEventListener('click', this.left);
-    this.#right.addEventListener('click', this.right);
+    this.#up.addEventListener('click', () => {
+      this.up();
+    });
+    
+    this.#down.addEventListener('click', () => {
+      this.down();
+    });
+    
+    this.#left.addEventListener('click', () => {
+      this.left();
+    });
+    
+    this.#right.addEventListener('click', () => {
+      this.right();
+    });
 
-    this.#hand.addEventListener('click', () => { this.#swap(); });
+    this.#hand.addEventListener('click', () => {
+      this.#swap();
+    });
 
     document.querySelector('body').appendChild(this.#footer);
 

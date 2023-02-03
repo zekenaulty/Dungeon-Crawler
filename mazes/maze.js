@@ -12,6 +12,8 @@ export class Maze {
   constructor(rows, columns) {
     this.rows = rows;
     this.columns = columns;
+    
+    console.info(`rows: ${rows}, columns: ${columns}`);
 
     let cells = this.#populate();
     this.grid = cells.grid;
@@ -90,7 +92,37 @@ export class Maze {
   }
 
   toString() {
-
+    let v = '+';
+    for(let y = 0; y < this.columns; y++) {
+      v += '---+';
+    }
+    v += '\r\n';
+    
+    let top = '';
+    let bottom = '';
+    let eastBoundry = '';
+    let southBoundry = '';
+    this.walkGrid((r, c) => {
+      if(c === 0) {
+        top = '|';
+        bottom = '+';
+      }
+      
+      let cell = this.cell(r, c);
+      
+      eastBoundry = (cell.links.east) ? ' ' : '|';
+      top += '   ' + eastBoundry;
+      
+      southBoundry = (cell.links.south) ? '   ' : '---';
+      bottom += southBoundry + '+';
+      
+      if(c === this.columns - 1) {
+        v += top + '\r\n';
+        v += bottom + '\r\n';
+      }
+    });
+    
+    return v;
   }
 
 }

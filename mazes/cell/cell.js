@@ -20,5 +20,8 @@ export class Cell {
     this.column = column;
   }
   
+  get key() {
+    return this.row + ',' + this.column;
+  }
   
 }

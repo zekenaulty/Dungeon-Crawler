@@ -97,3 +97,7 @@
   max-height: 100px;
   margin-top: 10px;
 }
+
+.joystick-hide {
+  display: none !important;
+}
