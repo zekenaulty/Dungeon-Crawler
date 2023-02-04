@@ -1,23 +1,22 @@
 
 import { List } from '../core/list.js';
 
-export class Distance extends List {
-  root = undefined;
+export class Distance {
+  root;
   distances = {};
+  items = new List();
 
   constructor(start) {
 
-    super();
-
     this.root = start;
     this.distances[this.root.key] = 0;
-    this.push(this.root)
+    this.items.push(this.root)
 
   }
 
   collect(cell, distance) {
     this.distances[cell.key] = distance;
-    this.push(cell);
+    this.items.push(cell);
   }
 
   distance(cell) {
@@ -28,8 +27,8 @@ export class Distance extends List {
     let current = cell;
     let breadcrumbs = new Distance(this.root);
     while (current !== this.root) {
-      for (let i = 0; i < current.links.length; i++) {
-        let neighbor = current.links[i];
+      for (let i = 0; i < current.links.items.length; i++) {
+        let neighbor = current.links.items[i];
         if (this.distance(neighbor) < this.distance(current)) {
           breadcrumbs.collect(neighbor, this.distance(neighbor));
           current = neighbor;
@@ -43,8 +42,8 @@ export class Distance extends List {
   max() {
     let maxDistance = 0;
     let maxCell = this.root;
-    for (let i = 0; i < this.length; i++) {
-      let c = this[i];
+    for (let i = 0; i < this.items.length; i++) {
+      let c = this.items[i];
       let d = this.distance(c);
       if (d > maxDistance) {
         maxCell = c;

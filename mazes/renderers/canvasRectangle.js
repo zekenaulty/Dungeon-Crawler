@@ -14,6 +14,8 @@ export class CanvasRectangle {
   pathColor = '#7F00FF';
   activeColor = '#800080';
   solveColor = 'indigo';
+  
+  showSolution = false;
 
   constructor(maze, scaler, gfx) {
     this.#maze = maze;
@@ -33,12 +35,32 @@ export class CanvasRectangle {
       this.drawWalls(r, c);
     });
     
+    this.drawSolution();
+    
     this.drawStart();
     this.drawEnd();
     this.drawActive();
 
     this.onRendered();
 
+  }
+  
+  drawSolution() {
+    if(!this.showSolution && this.#maze.solution) {
+      return;
+    }
+    
+    for(let i = 0; i < this.#maze.solution.items.length; i++) {
+      let cell = this.#maze.solution.items[i];
+      let dot = new Rectangle(
+        this.#scaler.x(cell.column) + 8,
+        this.#scaler.y(cell.row) + 8,
+        this.#scaler.size - 16,
+        this.#scaler.size - 16,
+        this.solveColor,
+        this.#gfx);
+      dot.draw();
+    }
   }
 
   drawFloor(r, c) {

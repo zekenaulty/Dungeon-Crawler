@@ -44,7 +44,9 @@ import { BinaryTree } from './mazes/generators/binaryTree.js';
     };
 
     header.addButton('SAVE', (e) => {});
-    header.addButton('NEW GAME', (e) => {});
+    header.addButton('NEW GAME', (e) => { 
+      generate(); 
+    });
     header.addButton('SOLVE (1000g)', (e) => {});
     header.addButton('CHARACTER', (e) => {});
 

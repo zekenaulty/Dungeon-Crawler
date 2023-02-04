@@ -5,15 +5,32 @@ export class Maze {
 
   grid = new List();
   cells = new List();
+  visited = new List();
+
   rows = 0;
   columns = 0;
   start;
   end;
   active;
+  distances;
+  solution;
 
   constructor(rows, columns) {
     this.rows = rows;
     this.columns = columns;
+  }
+
+  init() {
+
+    this.grid = new List();
+    this.cells = new List();
+    this.visited = new List();
+
+    this.start = undefined;
+    this.end = undefined;
+    this.active = undefined;
+    this.distances = undefined;
+    this.solution = undefined;
 
     let cells = this.#populate();
     this.grid = cells.grid;
@@ -91,4 +108,30 @@ export class Maze {
     return this.rows * this.columns;
   }
 
+  setup() {
+    this.deadends = this.findDeadends();
+    this.start = this.deadends.sample();
+    this.distances = this.start.distances();
+    let d = this.distances.max();
+    this.start = d.cell;
+    this.distances = this.start.distances();
+    d = this.distances.max();
+    this.end = d.cell;
+    this.active = this.start;
+    this.visited.push(this.start);
+  }
+
+  findDeadends() {
+    let r = new List();
+    this.eachCell((c) => {
+      if (c.links.items.length === 1) {
+        r.push(c);
+      }
+    });
+    return r;
+  }
+
+  solve() {
+    this.solution = this.distances.pathTo(this.end);
+  }
 }
