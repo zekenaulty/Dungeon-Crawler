@@ -4,6 +4,7 @@ import { Header } from './layout/header/header.js';
 import { Stage } from './layout/stage/stage.js';
 import { JoyStick } from './layout/joystick/joystick.js';
 import { Maze } from './mazes/maze.js';
+import { CanvasRectangle } from './mazes/renderers/canvasRectangle.js';
 import { CanvasRectangleScaler } from './mazes/renderers/canvasRectangleScaler.js';
 import { MazeToText } from './mazes/renderers/mazeToText.js';
 import { BinaryTree } from './mazes/generators/binaryTree.js';
@@ -12,7 +13,6 @@ import { BinaryTree } from './mazes/generators/binaryTree.js';
 
   go(() => {
 
-    let maze;
     let generatorIndex = 0;
     const generators = new List();
     const header = new Header();
@@ -20,13 +20,16 @@ import { BinaryTree } from './mazes/generators/binaryTree.js';
       
       let scaler = new CanvasRectangleScaler(stage.width, stage.height);
       scaler.calc();
-      maze = new Maze(scaler.rows, scaler.columns);
+      
+      let maze = new Maze(scaler.rows, scaler.columns);
       let mazeText = new MazeToText(maze);
-
+      let renderer = new CanvasRectangle(maze, scaler, stage.gfx);
+      
       generators.push(new BinaryTree(maze));
 
       generators.forEach((g) => {
         g.onGenerated = () => {
+          renderer.draw();
           stage.setTextView(mazeText.text);
         };
       });

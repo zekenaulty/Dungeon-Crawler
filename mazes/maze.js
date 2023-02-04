@@ -7,12 +7,13 @@ export class Maze {
   cells = new List();
   rows = 0;
   columns = 0;
+  start;
+  end;
+  active;
 
   constructor(rows, columns) {
     this.rows = rows;
     this.columns = columns;
-
-    console.info(`rows: ${rows}, columns: ${columns}`);
 
     let cells = this.#populate();
     this.grid = cells.grid;

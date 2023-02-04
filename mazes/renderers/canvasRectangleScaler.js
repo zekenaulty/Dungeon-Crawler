@@ -12,6 +12,7 @@ export class CanvasRectangleScaler {
   offsetX;
   offsetY;
   cells;
+  size;
 
   constructor(width, height) {
     this.#width = width;
@@ -22,28 +23,30 @@ export class CanvasRectangleScaler {
     this.#maxCells = maxCells;
     this.#size = minSize();
   }
-  
+
   calc() {
     let scale = this.#scale();
-
-    let perRow = 1;
-    while ((perRow + 1) * scale < this.#width) {
-      perRow++;
-    }
-    this.columns = perRow;
+    this.columns = Math.floor(this.#width / scale);
     this.width = this.columns * scale;
-
-    let rowCount = 1;
-    while ((rowCount + 1) * scale < this.#height) {
-      rowCount++;
-    }
-    this.rows = rowCount;
+    this.rows = Math.floor(this.#height / scale);
     this.height = this.rows * scale;
+    this.cells = this.rows * this.columns;
+    this.offsetX = Math.floor((this.#width - this.width) / 4);
+    this.offsetY = Math.floor((this.#height - this.height) / 4);
+    this.size = scale;
 
-    this.cells = perRow * rowCount;
-
-    this.offsetX = Math.floor((this.#width - (perRow * scale)) / 2);
-    this.offsetY = Math.floor((this.#height - (rowCount * scale)) / 2);
+    console.log(`
+#width: ${this.#width}
+#height: ${this.#height}
+size: ${this.size}
+width: ${this.width}
+height: ${this.height}
+offsetX: ${this.offsetX}
+offsetY: ${this.offsetY}
+cells: ${this.cells}
+rows: ${this.rows}
+columns: ${this.columns}
+    `);
 
   }
 
@@ -69,9 +72,17 @@ export class CanvasRectangleScaler {
 
     let v = Math.floor(Math.max(sw, sh));
     if (v < this.#size) {
-      return this.#size;
+      v = this.#size;
     }
 
     return v;
+  }
+
+  y(r) {
+    return r * this.size + this.offsetY;
+  }
+
+  x(c) {
+    return c * this.size + this.offsetX;
   }
 }
