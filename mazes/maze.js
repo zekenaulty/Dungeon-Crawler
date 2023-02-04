@@ -18,7 +18,7 @@ export class Maze extends EventHandler {
 
   constructor(rows, columns) {
     super();
-    
+    this.defineEvent('moved', 'solved');
     this.rows = rows;
     this.columns = columns;
   }
@@ -136,5 +136,25 @@ export class Maze extends EventHandler {
 
   solve() {
     this.solution = this.distances.pathTo(this.end);
+  }
+  
+  move(direction) {
+    let d = direction.toLowerCase();
+    let c = this.active;
+    
+    if(!c) {
+      return;
+    }
+    
+    if(!c.links[d]) {
+      return;
+    }
+    
+    this.active = c[d];
+    this.raiseEvent('moved', d, c, this.active, this);
+    if(this.active === this.end) {
+      this.raiseEvent('solved', this);
+    }
+    
   }
 }

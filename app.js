@@ -15,22 +15,23 @@ import { EventHandler } from './core/eventHandler.js';
 
   go(() => {
 
+    let scaler;
+    let maze;
+    let renderer;
     let generatorIndex = 0;
     const generators = new List();
     const header = new Header();
     const stage = new Stage((gfx) => {
       
-      let scaler = new CanvasRectangleScaler(stage.width, stage.height);
-      let maze = new Maze(scaler.rows, scaler.columns);
-      let mazeText = new MazeToText(maze);
-      let renderer = new CanvasRectangle(maze, scaler, stage.gfx);
+      scaler = new CanvasRectangleScaler(stage.width, stage.height);
+      maze = new Maze(scaler.rows, scaler.columns);
+      renderer = new CanvasRectangle(maze, scaler, stage.gfx);
       
       generators.push(new BinaryTree(maze));
 
       generators.forEach((g) => {
         g.listenToEvent('generated', () => {
           renderer.draw();
-          stage.setTextView(mazeText.text);
         });
       });
       
@@ -50,10 +51,21 @@ import { EventHandler } from './core/eventHandler.js';
     header.addButton('SOLVE (1000g)', (e) => {});
     header.addButton('CHARACTER', (e) => {});
 
-    joystick.up = () => {};
-    joystick.down = () => {};
-    joystick.left = () => {};
-    joystick.right = () => {};
+    joystick.listenToEvent('up', () => {
+      maze.move('north');
+    });
+    
+    joystick.listenToEvent('down',  () => {
+      maze.move('south');
+    });
+    
+    joystick.listenToEvent('left', () => {
+      maze.move('west');
+    });
+    
+    joystick.listenToEvent('right',  () => {
+      maze.move('east');
+    });
 
   });
 
