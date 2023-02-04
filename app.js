@@ -9,7 +9,6 @@ import { CanvasRectangleScaler } from './mazes/renderers/canvasRectangleScaler.j
 import { MazeToText } from './mazes/renderers/mazeToText.js';
 import { BinaryTree } from './mazes/generators/binaryTree.js';
 
-import { EventHandler } from './core/eventHandler.js';
 
 (() => {
 
@@ -19,12 +18,12 @@ import { EventHandler } from './core/eventHandler.js';
     let maze;
     let renderer;
     let generatorIndex = 0;
-    
+
     const generators = new List();
     const generate = () => {
       generators[generatorIndex].generate();
     };
-    
+
     const stageReady = (gfx) => {
       scaler = new CanvasRectangleScaler(stage.width, stage.height);
       maze = new Maze(scaler.rows, scaler.columns);
@@ -51,19 +50,19 @@ import { EventHandler } from './core/eventHandler.js';
     const joystick = new JoyStick();
 
     header.addButton('SAVE', (e) => {
-      
+
     });
-    
+
     header.addButton('NEW GAME', (e) => {
       generate();
     });
-    
+
     header.addButton('SOLVE (1000g)', (e) => {
-      
+
     });
-    
+
     header.addButton('CHARACTER', (e) => {
-      
+
     });
 
     joystick.listenToEvent('up', () => {
