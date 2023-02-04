@@ -19,8 +19,6 @@ import { BinaryTree } from './mazes/generators/binaryTree.js';
     const stage = new Stage((gfx) => {
       
       let scaler = new CanvasRectangleScaler(stage.width, stage.height);
-      scaler.calc();
-      
       let maze = new Maze(scaler.rows, scaler.columns);
       let mazeText = new MazeToText(maze);
       let renderer = new CanvasRectangle(maze, scaler, stage.gfx);

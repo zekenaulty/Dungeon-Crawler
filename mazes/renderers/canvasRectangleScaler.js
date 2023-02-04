@@ -17,6 +17,7 @@ export class CanvasRectangleScaler {
   constructor(width, height) {
     this.#width = width;
     this.#height = height;
+    this.calc();
   }
 
   setScaleBounds(maxCells, minSize) {
@@ -34,7 +35,7 @@ export class CanvasRectangleScaler {
     this.offsetX = Math.floor((this.#width - this.width) / 4);
     this.offsetY = Math.floor((this.#height - this.height) / 4);
     this.size = scale;
-
+/*
     console.log(`
 #width: ${this.#width}
 #height: ${this.#height}
@@ -47,7 +48,7 @@ cells: ${this.cells}
 rows: ${this.rows}
 columns: ${this.columns}
     `);
-
+*/
   }
 
   #scale() {
