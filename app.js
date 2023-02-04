@@ -7,6 +7,7 @@ import { Maze } from './mazes/maze.js';
 import { CanvasRectangle } from './mazes/renderers/canvasRectangle.js';
 import { CanvasRectangleScaler } from './mazes/renderers/canvasRectangleScaler.js';
 import { BinaryTree } from './mazes/generators/binaryTree.js';
+import { Sidewinder } from './mazes/generators/sidewinder.js';
 
 
 (() => {
@@ -16,7 +17,7 @@ import { BinaryTree } from './mazes/generators/binaryTree.js';
     let scaler;
     let maze;
     let renderer;
-    let generatorIndex = 0;
+    let generatorIndex = 1;
 
     const generators = new List();
     const generate = () => {
@@ -29,6 +30,7 @@ import { BinaryTree } from './mazes/generators/binaryTree.js';
       renderer = new CanvasRectangle(maze, scaler, stage.gfx);
 
       generators.push(new BinaryTree(maze));
+      generators.push(new Sidewinder(maze));
 
       generators.forEach((g) => {
         g.listenToEvent('generated', () => {
@@ -57,7 +59,7 @@ import { BinaryTree } from './mazes/generators/binaryTree.js';
     });
 
     header.addButton('SOLVE (1000g)', (e) => {
-
+      renderer.revealSolution();
     });
 
     header.addButton('CHARACTER', (e) => {

@@ -14,6 +14,11 @@ export class Links extends EventHandler {
   }
   
   connect(cell, link = true, both = true) {
+    
+    if(!cell) {
+      return false;
+    }
+    
     if(link) {
       if(!this.linked(cell)) {
         this.items.push(cell);
@@ -25,6 +30,8 @@ export class Links extends EventHandler {
     if(both) {
       cell.links.connect(this.cell, link, false);
     }
+    
+    return true;
   }
   
   linked(cell) {

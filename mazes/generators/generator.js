@@ -16,3 +16,26 @@ export class Generator extends EventHandler {
   }
 
 }
+
+
+/*****   template   ***********************************
+
+import { List } from '../../core/list.js';
+import { Generator } from './generator.js';
+
+export class Template extends Generator {
+
+  generate() {
+    this.maze.init();
+    
+    
+    
+    this.maze.setup();
+    
+    this.raiseEvent('generated');
+
+  }
+
+}
+
+****************/

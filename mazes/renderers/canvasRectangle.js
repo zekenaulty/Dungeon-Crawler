@@ -61,6 +61,15 @@ export class CanvasRectangle extends EventHandler {
     this.raiseEvent('rendered');
 
   }
+  
+  revealSolution() {
+    this.showSolution = true;
+    this.#maze.solve();
+    this.drawSolution();
+    this.drawStart();
+    this.drawEnd();
+    this.drawActive();
+  }
 
   drawSolution() {
     if (!this.showSolution || !this.#maze.solution) {
@@ -73,7 +82,7 @@ export class CanvasRectangle extends EventHandler {
   }
 
   drawSolutionFloor(r, c) {
-    if (!this.showSolution || !this.#maze.solution || !this.#maze.solution.includes(this.#maze.cell(r, c))) {
+    if (!this.showSolution || !this.#maze.solution || !this.#maze.solution.items.includes(this.#maze.cell(r, c))) {
       return;
     }
 
