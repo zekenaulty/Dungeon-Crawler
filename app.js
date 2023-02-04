@@ -19,14 +19,17 @@ import { EventHandler } from './core/eventHandler.js';
     let maze;
     let renderer;
     let generatorIndex = 0;
+    
     const generators = new List();
-    const header = new Header();
-    const stage = new Stage((gfx) => {
-      
+    const generate = () => {
+      generators[generatorIndex].generate();
+    };
+    
+    const stageReady = (gfx) => {
       scaler = new CanvasRectangleScaler(stage.width, stage.height);
       maze = new Maze(scaler.rows, scaler.columns);
       renderer = new CanvasRectangle(maze, scaler, stage.gfx);
-      
+
       generators.push(new BinaryTree(maze));
 
       generators.forEach((g) => {
@@ -34,39 +37,50 @@ import { EventHandler } from './core/eventHandler.js';
           renderer.draw();
         });
       });
-      
+
+      maze.listenToEvent('solved', () => {
+        generate();
+      });
+
       generate();
 
-    });
-    const joystick = new JoyStick();
-
-    const generate = () => {
-      generators[generatorIndex].generate();
     };
 
-    header.addButton('SAVE', (e) => {});
-    header.addButton('NEW GAME', (e) => { 
-      generate(); 
+    const header = new Header();
+    const stage = new Stage(stageReady);
+    const joystick = new JoyStick();
+
+    header.addButton('SAVE', (e) => {
+      
     });
-    header.addButton('SOLVE (1000g)', (e) => {});
-    header.addButton('CHARACTER', (e) => {});
+    
+    header.addButton('NEW GAME', (e) => {
+      generate();
+    });
+    
+    header.addButton('SOLVE (1000g)', (e) => {
+      
+    });
+    
+    header.addButton('CHARACTER', (e) => {
+      
+    });
 
     joystick.listenToEvent('up', () => {
       maze.move('north');
     });
-    
-    joystick.listenToEvent('down',  () => {
+
+    joystick.listenToEvent('down', () => {
       maze.move('south');
     });
-    
+
     joystick.listenToEvent('left', () => {
       maze.move('west');
     });
-    
-    joystick.listenToEvent('right',  () => {
+
+    joystick.listenToEvent('right', () => {
       maze.move('east');
     });
 
   });
-
 })();
