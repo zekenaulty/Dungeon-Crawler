@@ -9,6 +9,8 @@ import { CanvasRectangleScaler } from './mazes/renderers/canvasRectangleScaler.j
 import { MazeToText } from './mazes/renderers/mazeToText.js';
 import { BinaryTree } from './mazes/generators/binaryTree.js';
 
+import { EventHandler } from './core/eventHandler.js';
+
 (() => {
 
   go(() => {
@@ -26,10 +28,10 @@ import { BinaryTree } from './mazes/generators/binaryTree.js';
       generators.push(new BinaryTree(maze));
 
       generators.forEach((g) => {
-        g.onGenerated = () => {
+        g.listenToEvent('generated', () => {
           renderer.draw();
           stage.setTextView(mazeText.text);
-        };
+        });
       });
       
       generate();

@@ -3,8 +3,10 @@ import { List } from '../../core/list.js';
 import { Links } from './links.js';
 import { Neighbors } from './neighbors.js';
 import { Distance } from '../distance.js';
+import { EventHandler } from '../../core/eventHandler.js'
 
-export class Cell {
+
+export class Cell extends EventHandler {
   
   links = new Links(this);
   neighbors = new Neighbors(this);
@@ -16,6 +18,8 @@ export class Cell {
   west;
   
   constructor(row, column) {
+    super();
+    
     this.row = row;
     this.column = column;
   }

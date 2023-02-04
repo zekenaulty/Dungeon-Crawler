@@ -28,7 +28,7 @@ export class BinaryTree extends Generator {
     
     this.maze.setup();
     
-    this.onGenerated();
+    this.raiseEvent('generated');
 
   }
 

@@ -1,4 +1,6 @@
-export class CanvasRectangleScaler {
+import { EventHandler } from '../../core/eventHandler.js'
+
+export class CanvasRectangleScaler extends EventHandler {
 
   #maxCells = 10000;
   #size = 24;
@@ -15,6 +17,8 @@ export class CanvasRectangleScaler {
   size;
 
   constructor(width, height) {
+    super();
+    
     this.#width = width;
     this.#height = height;
     this.calc();

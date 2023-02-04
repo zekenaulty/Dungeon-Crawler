@@ -1,8 +1,12 @@
-export class MazeToText {
+import { EventHandler } from '../../core/eventHandler.js'
+
+export class MazeToText extends EventHandler {
   #maze;
   #output;
   
   constructor(maze) {
+    super();
+    
     this.#maze = maze;
   }
   

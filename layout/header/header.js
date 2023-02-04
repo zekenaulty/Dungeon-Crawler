@@ -1,4 +1,6 @@
-export class Header {
+import { EventHandler } from '../../core/eventHandler.js'
+
+export class Header extends EventHandler{
   
   #header;
   #left;
@@ -7,6 +9,8 @@ export class Header {
   #styles;
 
   constructor() {
+    
+    super();
 
     this.#header = document.createElement('nav');
     this.#left = document.createElement('div');

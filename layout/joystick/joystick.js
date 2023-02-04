@@ -1,4 +1,6 @@
-export class JoyStick {
+import { EventHandler } from '../../core/eventHandler.js'
+
+export class JoyStick extends EventHandler {
 
   #styles;
   #footer;
@@ -11,6 +13,9 @@ export class JoyStick {
 
 
   constructor() {
+    super();
+    
+    this.defineEvent('up', 'down', 'left', 'right');
 
     this.#styles = document.createElement('link');
 
@@ -50,19 +55,19 @@ export class JoyStick {
     this.#right.innerHTML = 'RIGHT';
 
     this.#up.addEventListener('click', () => {
-      this.up();
+      this.raiseEvent('up');
     });
     
     this.#down.addEventListener('click', () => {
-      this.down();
+      this.raiseEvent('down');
     });
     
     this.#left.addEventListener('click', () => {
-      this.left();
+      this.raiseEvent('left');
     });
     
     this.#right.addEventListener('click', () => {
-      this.right();
+      this.raiseEvent('right');
     });
 
     this.#hand.addEventListener('click', () => {
@@ -72,14 +77,6 @@ export class JoyStick {
     document.querySelector('body').appendChild(this.#footer);
 
   }
-
-  up() {}
-
-  down() {}
-
-  left() {}
-
-  right() {}
 
   #swap() {
     if (this.#hand.innerHTML === '&lt;') {

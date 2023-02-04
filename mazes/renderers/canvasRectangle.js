@@ -1,6 +1,7 @@
 import { Line, Rectangle } from './common.js';
+import { EventHandler } from '../../core/eventHandler.js'
 
-export class CanvasRectangle {
+export class CanvasRectangle extends EventHandler {
 
   #maze;
   #scaler;
@@ -18,6 +19,9 @@ export class CanvasRectangle {
   showSolution = false;
 
   constructor(maze, scaler, gfx) {
+    super();
+    
+    this.defineEvent('rendered');
     this.#maze = maze;
     this.#scaler = scaler;
     this.#gfx = gfx;
@@ -41,7 +45,7 @@ export class CanvasRectangle {
     this.drawEnd();
     this.drawActive();
 
-    this.onRendered();
+    this.raiseEvent('rendered');
 
   }
   
@@ -137,10 +141,6 @@ export class CanvasRectangle {
       this.activeColor, 
       this.#gfx);
     active.draw();
-  }
-
-  onRendered() {
-
   }
 
 }

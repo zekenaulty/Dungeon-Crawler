@@ -1,7 +1,8 @@
 import { List } from '../core/list.js';
 import { Cell } from './cell/cell.js';
+import { EventHandler } from '../core/eventHandler.js'
 
-export class Maze {
+export class Maze extends EventHandler {
 
   grid = new List();
   cells = new List();
@@ -16,6 +17,8 @@ export class Maze {
   solution;
 
   constructor(rows, columns) {
+    super();
+    
     this.rows = rows;
     this.columns = columns;
   }

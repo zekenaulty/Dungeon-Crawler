@@ -1,4 +1,6 @@
-export class Stage {
+import { EventHandler } from '../../core/eventHandler.js'
+
+export class Stage extends EventHandler {
 
   #styles;
   #stage;
@@ -9,8 +11,11 @@ export class Stage {
 
   constructor(ready) {
 
+    super();
+    
+    this.defineEvent('ready');
     if (ready) {
-      this.onReady = ready;
+      this.listenToEvent('ready', ready);
     }
 
     this.#styles = document.createElement('link');
@@ -65,13 +70,11 @@ export class Stage {
     this.#canvas.width = this.#stage.offsetWidth;
     this.#canvas.height = this.#stage.offsetHeight;
     if (this.#canvas.height > 400) {
-      this.onReady(this.#gfx);
+      this.raiseEvent('ready', this.#gfx);
     } else {
       setTimeout(() => { this.#scale(); }, 10);
     }
   }
-
-  onReady(gfx) {}
 
   setTextView(text) {
     this.#pre.innerHTML = text;
