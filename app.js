@@ -6,7 +6,6 @@ import { JoyStick } from './layout/joystick/joystick.js';
 import { Maze } from './mazes/maze.js';
 import { CanvasRectangle } from './mazes/renderers/canvasRectangle.js';
 import { CanvasRectangleScaler } from './mazes/renderers/canvasRectangleScaler.js';
-import { MazeToText } from './mazes/renderers/mazeToText.js';
 import { BinaryTree } from './mazes/generators/binaryTree.js';
 
 
