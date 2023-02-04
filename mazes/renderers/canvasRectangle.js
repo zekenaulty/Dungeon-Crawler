@@ -46,7 +46,7 @@ export class CanvasRectangle {
   }
   
   drawSolution() {
-    if(!this.showSolution && this.#maze.solution) {
+    if(!this.showSolution || !this.#maze.solution ) {
       return;
     }
     
