@@ -17,4 +17,12 @@ export class List extends Array {
     if (idx < 0) return;
     this.splice(idx, 1);
   }
+  
+  empty() {
+    return this.length === 0;
+  }
+  
+  any() {
+    return this.length > 0;
+  }
 }

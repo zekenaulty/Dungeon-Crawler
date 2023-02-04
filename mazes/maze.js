@@ -114,6 +114,9 @@ export class Maze extends EventHandler {
   setup() {
     this.deadends = this.findDeadends();
     this.start = this.deadends.sample();
+    if(!this.start) {
+      this.start = this.grid.sample().sample();
+    };
     this.distances = this.start.distances();
     let d = this.distances.max();
     this.start = d.cell;

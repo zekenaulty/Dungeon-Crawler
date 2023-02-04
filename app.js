@@ -9,6 +9,7 @@ import { CanvasRectangleScaler } from './mazes/renderers/canvasRectangleScaler.j
 import { BinaryTree } from './mazes/generators/binaryTree.js';
 import { Sidewinder } from './mazes/generators/sidewinder.js';
 import { AldousBroder } from './mazes/generators/aldousBroder.js';
+import { Wilsons } from './mazes/generators/wilsons.js';
 
 
 (() => {
@@ -18,7 +19,7 @@ import { AldousBroder } from './mazes/generators/aldousBroder.js';
     let scaler;
     let maze;
     let renderer;
-    let generatorIndex = 2;
+    let generatorIndex = 3;
 
     const generators = new List();
     const generate = () => {
@@ -33,6 +34,7 @@ import { AldousBroder } from './mazes/generators/aldousBroder.js';
       generators.push(new BinaryTree(maze));
       generators.push(new Sidewinder(maze));
       generators.push(new AldousBroder(maze));
+      generators.push(new Wilsons(maze));
 
       generators.forEach((g) => {
         g.listenToEvent('generated', () => {

@@ -3,7 +3,7 @@ import { EventHandler } from '../../core/eventHandler.js'
 export class CanvasRectangleScaler extends EventHandler {
 
   #maxCells = 10000;
-  #size = 24;
+  #size = 23;
   #width = 300;
   #height = 300;
 
