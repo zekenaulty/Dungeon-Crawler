@@ -13,4 +13,11 @@ export class Neighbors extends EventHandler {
     this.cell = cell;
   }
   
+  empty() {
+    return this.items.length === 0;
+  }
+  
+  any() {
+    return this.items.length > 0;
+  }
 }

@@ -57,4 +57,11 @@ export class Links extends EventHandler {
     return this.linked(this.cell.west);
   }
   
+  empty() {
+    return this.items.length === 0;
+  }
+  
+  any() {
+    return this.items.length > 0;
+  }
 }
