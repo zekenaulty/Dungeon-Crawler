@@ -37,7 +37,6 @@ export class CanvasRectangle extends EventHandler {
         self.drawEnd();
       }
       
-      console.log($maze.active.key);
       self.drawActive();
     });
   }

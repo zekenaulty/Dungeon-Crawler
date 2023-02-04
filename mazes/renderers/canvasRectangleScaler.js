@@ -39,20 +39,6 @@ export class CanvasRectangleScaler extends EventHandler {
     this.offsetX = Math.floor((this.#width - this.width) / 4);
     this.offsetY = Math.floor((this.#height - this.height) / 4);
     this.size = scale;
-/*
-    console.log(`
-#width: ${this.#width}
-#height: ${this.#height}
-size: ${this.size}
-width: ${this.width}
-height: ${this.height}
-offsetX: ${this.offsetX}
-offsetY: ${this.offsetY}
-cells: ${this.cells}
-rows: ${this.rows}
-columns: ${this.columns}
-    `);
-*/
   }
 
   #scale() {
