@@ -22,7 +22,7 @@ import { Modal } from './layout/modal/modal.js';
     let scaler;
     let maze;
     let renderer;
-    let generatorIndex = 5;
+    let generatorIndex = 1;
 
     const generators = new List();
     const generate = () => {

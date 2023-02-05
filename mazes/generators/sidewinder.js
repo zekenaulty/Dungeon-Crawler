@@ -13,16 +13,20 @@ export class Sidewinder extends Generator {
       }
 
       let cell = this.maze.cell(r, c);
+      let north = this.maze.cell(cell.row - 1, cell.column);
+      let east = this.maze.cell(cell.row, cell.column + 1)
+
       run.push(cell);
 
       let zeroOut = Math.floor(Math.random() * 2) === 0;
-      let closeRun = !cell.east || (cell.north && zeroOut);
+      let closeRun = !east || (north && zeroOut);
       if (closeRun) {
         let n = run.sample();
-        n.links.connect(n.north, true, true);
+        north = this.maze.cell(n.row - 1, n.column);
+        n.links.connect(north, true, true);
         run = new List();
       } else {
-        cell.links.connect(cell.east, true, true);
+        cell.links.connect(east, true, true);
       }
 
     });

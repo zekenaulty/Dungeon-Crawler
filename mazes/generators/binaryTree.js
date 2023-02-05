@@ -10,12 +10,14 @@ export class BinaryTree extends Generator {
       let cell = this.maze.cell(r, c);
       let choice = new List();
 
-      if (cell.north) {
-        choice.push(cell.north);
+      let north = this.maze.cell(cell.row - 1, cell.column);
+      if (north) {
+        choice.push(north);
       }
 
-      if (cell.east) {
-        choice.push(cell.east);
+      let east = this.maze.cell(cell.row, cell.column + 1)
+      if (east) {
+        choice.push(east);
       }
 
       if (choice.length > 0) {
