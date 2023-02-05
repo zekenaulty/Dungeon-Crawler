@@ -114,19 +114,19 @@ export class CanvasRectangle extends EventHandler {
     let x = this.#scaler.x(c);
     let y = this.#scaler.y(r);
     let scale = this.#scaler.size;
-    if (!cell.links.north) {
+    if (!cell.links.linked(cell.north)) {
       let north = new Line(x, y, x + scale, y, this.#gfx);
       north.draw(this.wallColor);
     }
-    if (!cell.links.east) {
+    if (!cell.links.linked(cell.east)) {
       let east = new Line(x + scale, y, x + scale, y + scale, this.#gfx);
       east.draw(this.wallColor);
     }
-    if (!cell.links.south) {
+    if (!cell.links.linked(cell.south)) {
       let south = new Line(x, y + scale, x + scale, y + scale, this.#gfx);
       south.draw(this.wallColor);
     }
-    if (!cell.links.west) {
+    if (!cell.links.linked(cell.west)) {
       let west = new Line(x, y, x, y + scale, this.#gfx);
       west.draw(this.wallColor);
     }

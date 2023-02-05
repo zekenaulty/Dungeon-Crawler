@@ -1,5 +1,5 @@
 import { List } from '../core/list.js';
-import { Cell } from './cell/cell.js';
+import { SquareCell } from './cell/squareCell.js';
 import { EventHandler } from '../core/eventHandler.js'
 
 export class Maze extends EventHandler {
@@ -35,14 +35,14 @@ export class Maze extends EventHandler {
     this.distances = undefined;
     this.solution = undefined;
 
-    let cells = this.#populate();
+    let cells = this.populate();
     this.grid = cells.grid;
     this.cells = cells.all;
 
-    this.#configureCells();
+    this.configureCells();
   }
 
-  #populate() {
+  populate() {
     let all = new List();
     let grid = new List();
 
@@ -50,7 +50,7 @@ export class Maze extends EventHandler {
       if (grid.length - 1 < r) {
         grid.push(new List());
       }
-      let n = new Cell(r, c);
+      let n = new SquareCell(r, c);
       grid[r].push(n);
       all.push(n);
     });
@@ -61,7 +61,7 @@ export class Maze extends EventHandler {
     };
   }
 
-  #configureCells() {
+  configureCells() {
     this.eachCell((cell) => {
       cell.north = this.cell(cell.row - 1, cell.column);
       cell.east = this.cell(cell.row, cell.column + 1);
@@ -149,7 +149,7 @@ export class Maze extends EventHandler {
       return;
     }
     
-    if(!c.links[d]) {
+    if(!c.links.linked(c[d])) {
       return;
     }
     

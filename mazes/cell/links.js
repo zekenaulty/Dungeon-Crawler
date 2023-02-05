@@ -41,22 +41,6 @@ export class Links extends EventHandler {
     return this.items.includes(cell);
   }
   
-  get north() {
-    return this.linked(this.cell.north);
-  }
-  
-  get east() {
-    return this.linked(this.cell.east);
-  }
-  
-  get south() {
-    return this.linked(this.cell.south);
-  }
-  
-  get west() {
-    return this.linked(this.cell.west);
-  }
-  
   empty() {
     return this.items.length === 0;
   }

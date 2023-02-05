@@ -29,10 +29,10 @@ export class MazeToText extends EventHandler {
       
       let cell = this.#maze.cell(r, c);
       
-      eastBoundry = (cell.links.east) ? ' ' : '|';
+      eastBoundry = (cell.links.linked(cell.east)) ? ' ' : '|';
       top += '   ' + eastBoundry;
       
-      southBoundry = (cell.links.south) ? '   ' : '---';
+      southBoundry = (cell.links.linked(cell.south)) ? '   ' : '---';
       bottom += southBoundry + '+';
       
       if(c === this.#maze.columns - 1) {
