@@ -51,11 +51,14 @@ export class Header extends EventHandler {
     this.#left.innerHTML = html;
   }
 
-  addButton(txt, callback) {
+  addButton(txt, action) {
     let btn = document.createElement('button');
     btn.innerText = txt;
     btn.classList.add('header-button');
-    btn.addEventListener('click', callback);
+    btn.addEventListener('click', () => {
+      this.#menu.classList.add('header-hide');
+      action();
+    });
     this.#menu.appendChild(btn);
   }
 }
