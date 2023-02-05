@@ -67,7 +67,7 @@ import { Modal } from './layout/modal/modal.js';
       generate();
     });
 
-    header.addButton('SOLVE (1000g)', (e) => {
+    header.addButton('SOLVE', (e) => {
       renderer.revealSolution();
     });
 

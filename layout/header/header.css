@@ -56,3 +56,29 @@
   margin-top: 2px;
   font-size: 0.8em;
 }
+
+.header-menu-btn {
+  position: fixed;
+  top: 2px;
+  right: 2vw;
+  width: 55px;
+}
+
+.header-menu {
+  position: fixed;
+  top: 26px;
+  right: 2vw;
+  color: orange;
+  font-family: monospace;
+  border: 0px solid orange;
+  z-index: 5000;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: start;
+  align-content: start;
+}
+
+.header-hide {
+  display: none !important;
+}

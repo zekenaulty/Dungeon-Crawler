@@ -1,50 +1,61 @@
 import { EventHandler } from '../../core/eventHandler.js';
 
-export class Header extends EventHandler{
-  
+export class Header extends EventHandler {
+
   #header;
   #left;
-  #spacer;
-  #right;
+  #menuButton;
+  #menu;
   #styles;
 
   constructor() {
-    
+
     super();
 
     this.#header = document.createElement('nav');
     this.#left = document.createElement('div');
-    this.#spacer = document.createElement('div');
-    this.#right = document.createElement('div');
+    this.#menu = document.createElement('div');
+    this.#menuButton = document.createElement('button');
     this.#styles = document.createElement('link');
-    
+
     this.#styles.rel = 'stylesheet';
     this.#styles.href = './layout/header/header.css';
 
     document.querySelector('head').appendChild(this.#styles);
-    
+
     this.#header.classList.add('head');
     this.#left.classList.add('header-info');
-    this.#spacer.classList.add('header-spacer');
-    this.#right.classList.add('header-controls');
-    
-    this.#header.appendChild(this.#left);
-    this.#header.appendChild(this.#spacer);
-    this.#header.appendChild(this.#right);
 
+    this.#menuButton.classList.add('header-button');
+    this.#menuButton.classList.add('header-menu-btn');
+    this.#menuButton.innerHTML = 'MENU';
+    this.#menuButton.addEventListener('click', () => {
+      if (this.#menu.classList.contains('header-hide')) {
+        this.#menu.classList.remove('header-hide');
+      } else {
+        this.#menu.classList.add('header-hide');
+      }
+    });
+    this.#menu.classList.add('header-menu');
+    this.#menu.classList.add('header-hide');
+
+    this.#header.appendChild(this.#left);
+    
     document.querySelector('body').appendChild(this.#header);
+    document.querySelector('body').appendChild(this.#menuButton);
+    document.querySelector('body').appendChild(this.#menu);
 
   }
-  
+
   info(html) {
     this.#left.innerHTML = html;
   }
-  
+
   addButton(txt, callback) {
     let btn = document.createElement('button');
     btn.innerText = txt;
     btn.classList.add('header-button');
     btn.addEventListener('click', callback);
-    this.#right.appendChild(btn);
+    this.#menu.appendChild(btn);
   }
 }
