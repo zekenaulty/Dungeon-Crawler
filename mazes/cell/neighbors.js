@@ -1,6 +1,6 @@
 
 import { List } from '../../core/list.js';
-import { EventHandler } from '../../core/eventHandler.js'
+import { EventHandler } from '../../core/eventHandler.js';
 
 export class Neighbors extends EventHandler {
   

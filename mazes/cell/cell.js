@@ -3,7 +3,7 @@ import { List } from '../../core/list.js';
 import { Links } from './links.js';
 import { Neighbors } from './neighbors.js';
 import { Distance } from '../distance.js';
-import { EventHandler } from '../../core/eventHandler.js'
+import { EventHandler } from '../../core/eventHandler.js';
 
 
 export class Cell extends EventHandler {

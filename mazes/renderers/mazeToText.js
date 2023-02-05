@@ -1,4 +1,4 @@
-import { EventHandler } from '../../core/eventHandler.js'
+import { EventHandler } from '../../core/eventHandler.js';
 
 export class MazeToText extends EventHandler {
   #maze;

@@ -1,5 +1,5 @@
 import { Line, Rectangle } from './common.js';
-import { EventHandler } from '../../core/eventHandler.js'
+import { EventHandler } from '../../core/eventHandler.js';
 
 export class CanvasRectangle extends EventHandler {
 
