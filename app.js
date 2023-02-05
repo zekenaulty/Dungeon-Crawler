@@ -10,6 +10,7 @@ import { BinaryTree } from './mazes/generators/binaryTree.js';
 import { Sidewinder } from './mazes/generators/sidewinder.js';
 import { AldousBroder } from './mazes/generators/aldousBroder.js';
 import { Wilsons } from './mazes/generators/wilsons.js';
+import { HuntAndKill } from './mazes/generators/huntAndKill.js';
 
 
 (() => {
@@ -19,7 +20,7 @@ import { Wilsons } from './mazes/generators/wilsons.js';
     let scaler;
     let maze;
     let renderer;
-    let generatorIndex = 3;
+    let generatorIndex = 4;
 
     const generators = new List();
     const generate = () => {
@@ -35,6 +36,7 @@ import { Wilsons } from './mazes/generators/wilsons.js';
       generators.push(new Sidewinder(maze));
       generators.push(new AldousBroder(maze));
       generators.push(new Wilsons(maze));
+      generators.push(new HuntAndKill(maze));
 
       generators.forEach((g) => {
         g.listenToEvent('generated', () => {

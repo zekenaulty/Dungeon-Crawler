@@ -20,4 +20,24 @@ export class Neighbors extends EventHandler {
   any() {
     return this.items.length > 0;
   }
+  
+  unlinked() {
+    let result = new List();
+    for(let i = 0; i < this.items.length; i++) {
+      if(this.items[i].links.empty()) {
+        result.push(this.items[i]);
+      }
+    }
+    return result;
+  }
+  
+  linked() {
+    let result = new List();
+    for(let i = 0; i < this.items.length; i++) {
+      if(this.items[i].links.any()) {
+        result.push(this.items[i]);
+      }
+    }
+    return result;
+  }
 }
