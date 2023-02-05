@@ -28,7 +28,7 @@ export class CanvasRectangle extends EventHandler {
 
     let self = this;
     maze.listenToEvent('moved', (dir, from, to, $maze) => {
-      self.eraseFloor(from.row, from.column);
+      self.drawFloor(from.row, from.column);
       self.drawSolutionFloor(from.row, from.column);
       if (from === $maze.start) {
         self.drawStart();
@@ -38,7 +38,15 @@ export class CanvasRectangle extends EventHandler {
       }
       
       self.drawActive();
+      self.draw(from.row, from.column);
     });
+  }
+  
+  scaleLock(n) {
+    if(this.#scaler.size > 40) {
+      return n;
+    }
+    return 0;
   }
 
   draw() {
@@ -49,14 +57,14 @@ export class CanvasRectangle extends EventHandler {
       this.drawFloor(r, c);
     });
 
-    this.#maze.walkGrid((r, c) => {
-      this.drawWalls(r, c);
-    });
-
     this.drawSolution();
     this.drawStart();
     this.drawEnd();
     this.drawActive();
+
+    this.#maze.walkGrid((r, c) => {
+      this.drawWalls(r, c);
+    });
 
     this.raiseEvent('rendered');
 
@@ -78,6 +86,7 @@ export class CanvasRectangle extends EventHandler {
 
     for (let i = 0; i < this.#maze.solution.items.length; i++) {
       this.drawSolutionFloor(this.#maze.solution.items[i].row, this.#maze.solution.items[i].column);
+      this.drawWalls(this.#maze.solution.items[i].row, this.#maze.solution.items[i].column);
     }
   }
 
@@ -87,22 +96,34 @@ export class CanvasRectangle extends EventHandler {
     }
 
     let dot = new Rectangle(
-      this.#scaler.x(c) + 8,
-      this.#scaler.y(r) + 8,
-      this.#scaler.size - 16,
-      this.#scaler.size - 16,
+      this.#scaler.x(c) + this.scaleLock(8),
+      this.#scaler.y(r) + this.scaleLock(8),
+      this.#scaler.size - this.scaleLock(16),
+      this.#scaler.size - this.scaleLock(16),
       this.solveColor,
       this.#gfx);
     dot.draw();
   }
 
   eraseFloor(r, c) {
-    let floor = new Rectangle(this.#scaler.x(c) + 1, this.#scaler.y(r) + 1, this.#scaler.size - 2, this.#scaler.size - 2, this.floorColor, this.#gfx);
+    let floor = new Rectangle(
+      this.#scaler.x(c) + 1, 
+      this.#scaler.y(r) + 1, 
+      this.#scaler.size - 2, 
+      this.#scaler.size - 2, 
+      this.floorColor, 
+      this.#gfx);
     floor.draw();
   }
 
   drawFloor(r, c) {
-    let floor = new Rectangle(this.#scaler.x(c), this.#scaler.y(r), this.#scaler.size, this.#scaler.size, this.floorColor, this.#gfx);
+    let floor = new Rectangle(
+      this.#scaler.x(c), 
+      this.#scaler.y(r), 
+      this.#scaler.size, 
+      this.#scaler.size, 
+      this.floorColor, 
+      this.#gfx);
     floor.draw();
   }
 
@@ -136,15 +157,17 @@ export class CanvasRectangle extends EventHandler {
     if (!this.#maze.start) {
       this.#maze.start = this.#maze.cell(0, 0);
     }
+    
     let cell = this.#maze.start;
     let start = new Rectangle(
-      this.#scaler.x(cell.column) + 6,
-      this.#scaler.y(cell.row) + 6,
-      this.#scaler.size - 12,
-      this.#scaler.size - 12,
+      this.#scaler.x(cell.column) + this.scaleLock(6),
+      this.#scaler.y(cell.row) + this.scaleLock(6),
+      this.#scaler.size - this.scaleLock(12),
+      this.#scaler.size - this.scaleLock(12),
       this.startColor,
       this.#gfx);
     start.draw();
+    this.drawWalls(cell.row, cell.column);
   }
 
   drawEnd() {
@@ -153,13 +176,14 @@ export class CanvasRectangle extends EventHandler {
     }
     let cell = this.#maze.end;
     let end = new Rectangle(
-      this.#scaler.x(cell.column) + 6,
-      this.#scaler.y(cell.row) + 6,
-      this.#scaler.size - 12,
-      this.#scaler.size - 12,
+      this.#scaler.x(cell.column) + this.scaleLock(6),
+      this.#scaler.y(cell.row) + this.scaleLock(6),
+      this.#scaler.size - this.scaleLock(12),
+      this.#scaler.size - this.scaleLock(12),
       this.endColor,
       this.#gfx);
     end.draw();
+    this.drawWalls(cell.row, cell.column);
   }
 
   drawActive() {
@@ -168,13 +192,14 @@ export class CanvasRectangle extends EventHandler {
     }
     let cell = this.#maze.active;
     let active = new Rectangle(
-      this.#scaler.x(cell.column) + 8,
-      this.#scaler.y(cell.row) + 8,
-      this.#scaler.size - 16,
-      this.#scaler.size - 16,
+      this.#scaler.x(cell.column) + this.scaleLock(8),
+      this.#scaler.y(cell.row) + this.scaleLock(8),
+      this.#scaler.size - this.scaleLock(16),
+      this.#scaler.size - this.scaleLock(16),
       this.activeColor,
       this.#gfx);
     active.draw();
+    this.drawWalls(cell.row, cell.column);
   }
 
 }

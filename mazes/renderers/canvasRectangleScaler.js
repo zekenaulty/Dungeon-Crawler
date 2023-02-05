@@ -2,8 +2,8 @@ import { EventHandler } from '../../core/eventHandler.js';
 
 export class CanvasRectangleScaler extends EventHandler {
 
-  #maxCells = 10000;
-  #size = 23;
+  #maxCells = 5000;
+  #size = 24;
   #width = 300;
   #height = 300;
 
@@ -16,17 +16,19 @@ export class CanvasRectangleScaler extends EventHandler {
   cells;
   size;
 
-  constructor(width, height) {
+  constructor(width, height, rooms = 3000, toTiny = 18) {
     super();
     
     this.#width = width;
     this.#height = height;
+    this.#maxCells = rooms;
+    this.#size = toTiny;
     this.calc();
   }
 
   setScaleBounds(maxCells, minSize) {
     this.#maxCells = maxCells;
-    this.#size = minSize();
+    this.#size = minSize;
   }
 
   calc() {

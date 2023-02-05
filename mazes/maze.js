@@ -112,10 +112,10 @@ export class Maze extends EventHandler {
   }
 
   setup() {
-    this.deadends = this.findDeadends();
+    this.braid();
     this.start = this.deadends.sample();
-    if(!this.start) {
-      this.start = this.grid.sample().sample();
+    if (!this.start) {
+      this.start = this.cell(0, 0);
     };
     this.distances = this.start.distances();
     let d = this.distances.max();
@@ -140,24 +140,43 @@ export class Maze extends EventHandler {
   solve() {
     this.solution = this.distances.pathTo(this.end);
   }
-  
+
   move(direction) {
     let d = direction.toLowerCase();
     let c = this.active;
-    
-    if(!c) {
+
+    if (!c) {
       return;
     }
-    
-    if(!c.links.linked(c[d])) {
+
+    if (!c.links.linked(c[d])) {
       return;
     }
-    
+
     this.active = c[d];
     this.raiseEvent('moved', d, c, this.active, this);
-    if(this.active === this.end) {
+    if (this.active === this.end) {
       this.raiseEvent('solved', this);
     }
-    
+
+  }
+
+  braid(p = 0.5) {
+    this.deadends = this.findDeadends();
+    for (let i = 0; i < this.deadends.length; i++) {
+      let cell = this.deadends[i];
+      let r = Math.random();
+      if (cell.links.items.length === 1 && r < p) {
+        let neighbor = cell.neighbors.deadends().sample();
+        if (!neighbor) {
+          neighbor = cell.neighbors.notLinkedTo().sample();
+
+        }
+        cell.links.connect(neighbor, true, true);
+      }
+    }
+
+    this.deadends = this.findDeadends();
+    console.log(this.deadends.length);
   }
 }
