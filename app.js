@@ -11,6 +11,7 @@ import { Sidewinder } from './mazes/generators/sidewinder.js';
 import { AldousBroder } from './mazes/generators/aldousBroder.js';
 import { Wilsons } from './mazes/generators/wilsons.js';
 import { HuntAndKill } from './mazes/generators/huntAndKill.js';
+import { RecursiveBacktracker } from './mazes/generators/recursiveBacktracker.js';
 
 
 (() => {
@@ -20,7 +21,7 @@ import { HuntAndKill } from './mazes/generators/huntAndKill.js';
     let scaler;
     let maze;
     let renderer;
-    let generatorIndex = 4;
+    let generatorIndex = 5;
 
     const generators = new List();
     const generate = () => {
@@ -37,6 +38,7 @@ import { HuntAndKill } from './mazes/generators/huntAndKill.js';
       generators.push(new AldousBroder(maze));
       generators.push(new Wilsons(maze));
       generators.push(new HuntAndKill(maze));
+      generators.push(new RecursiveBacktracker(maze));
 
       generators.forEach((g) => {
         g.listenToEvent('generated', () => {
