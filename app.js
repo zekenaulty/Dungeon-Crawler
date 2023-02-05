@@ -13,6 +13,7 @@ import { Wilsons } from './mazes/generators/wilsons.js';
 import { HuntAndKill } from './mazes/generators/huntAndKill.js';
 import { RecursiveBacktracker } from './mazes/generators/recursiveBacktracker.js';
 
+import { Modal } from './layout/modal/modal.js';
 
 (() => {
 
