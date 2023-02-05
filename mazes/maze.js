@@ -161,7 +161,7 @@ export class Maze extends EventHandler {
 
   }
 
-  braid(p = 0.5) {
+  braid(p = 0.3) {
     this.deadends = this.findDeadends();
     for (let i = 0; i < this.deadends.length; i++) {
       let cell = this.deadends[i];
