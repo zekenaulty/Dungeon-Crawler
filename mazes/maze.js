@@ -179,4 +179,12 @@ export class Maze extends EventHandler {
     this.deadends = this.findDeadends();
     console.log(this.deadends.length);
   }
+  
+  clearWalls() {
+    this.eachCell((c) => {
+      c.neighbors.items.forEach((n) => {
+        c.links.connect(n, true, false);
+      });
+    });
+  }
 }
