@@ -4,7 +4,7 @@ import { Generator } from './generator.js';
 export class Sidewinder extends Generator {
 
   generate() {
-    this.maze.init();
+    this.maze.initialize();
 
     let run;
     this.maze.walkGrid((r, c) => {

@@ -5,7 +5,7 @@ import { Generator } from './generator.js';
 export class HuntAndKill extends Generator {
 
   generate() {
-    this.maze.init();
+    this.maze.initialize();
     
     let current = this.maze.randomCell();
     

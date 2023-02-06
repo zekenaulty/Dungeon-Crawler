@@ -5,7 +5,7 @@ import { Generator } from './generator.js';
 export class SimplePrims extends Generator {
 
   generate() {
-    this.maze.init();
+    this.maze.initialize();
     
     let startAt = this.maze.randomCell();
     let active = new List();

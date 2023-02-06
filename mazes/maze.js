@@ -19,11 +19,15 @@ export class Maze extends EventHandler {
   constructor(rows, columns) {
     super();
     this.defineEvent('moved', 'solved');
+    this.resize(rows, columns);
+  }
+
+  resize(rows, columns) {
     this.rows = rows;
     this.columns = columns;
   }
 
-  init() {
+  initialize() {
 
     this.grid = new List();
     this.cells = new List();
@@ -179,7 +183,7 @@ export class Maze extends EventHandler {
     this.deadends = this.findDeadends();
     console.log(this.deadends.length);
   }
-  
+
   clearWalls() {
     this.eachCell((c) => {
       c.neighbors.items.forEach((n) => {

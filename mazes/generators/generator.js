@@ -26,7 +26,7 @@ import { Generator } from './generator.js';
 export class Template extends Generator {
 
   generate() {
-    this.maze.init();
+    this.maze.initialize();
     
     
     

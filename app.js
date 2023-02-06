@@ -3,60 +3,23 @@ import { List } from './core/list.js';
 import { Header } from './layout/header/header.js';
 import { Stage } from './layout/stage/stage.js';
 import { JoyStick } from './layout/joystick/joystick.js';
-import { Maze } from './mazes/maze.js';
-import { CanvasRectangle } from './mazes/renderers/canvasRectangle.js';
-import { CanvasRectangleScaler } from './mazes/renderers/canvasRectangleScaler.js';
-import { BinaryTree } from './mazes/generators/binaryTree.js';
-import { Sidewinder } from './mazes/generators/sidewinder.js';
-import { AldousBroder } from './mazes/generators/aldousBroder.js';
-import { Wilsons } from './mazes/generators/wilsons.js';
-import { HuntAndKill } from './mazes/generators/huntAndKill.js';
-import { RecursiveBacktracker } from './mazes/generators/recursiveBacktracker.js';
-import { SimplePrims } from './mazes/generators/prims.js';
-import { GrowingTree } from './mazes/generators/growingTree.js';
-
 import { Modal } from './layout/modal/modal.js';
+import { GameLevel } from './battle/gameLevel.js';
 
 (() => {
 
   go(() => {
 
-    let scaler;
-    let maze;
-    let renderer;
-    let generatorIndex = 7;
-
-    const generators = new List();
-    const generate = () => {
-      generators[generatorIndex].generate();
-    };
-
+    const game = new GameLevel();
     const stageReady = (gfx) => {
-      scaler = new CanvasRectangleScaler(stage.width, stage.height);
-      maze = new Maze(scaler.rows, scaler.columns);
-      renderer = new CanvasRectangle(maze, scaler, stage.gfx);
 
-      generators.push(new BinaryTree(maze));
-      generators.push(new Sidewinder(maze));
-      generators.push(new AldousBroder(maze));
-      generators.push(new Wilsons(maze));
-      generators.push(new HuntAndKill(maze));
-      generators.push(new RecursiveBacktracker(maze));
-      generators.push(new SimplePrims(maze));
-      generators.push(new GrowingTree(maze));
+      game.initialize(
+        stage.width, 
+        stage.height, 
+        gfx);
 
-      generators.forEach((g) => {
-        g.listenToEvent('generated', () => {
-          renderer.draw();
-        });
-      });
-
-      maze.listenToEvent('solved', () => {
-        generate();
-      });
-
-      generate();
-
+      game.begin();
+      
     };
 
     const header = new Header();
@@ -68,11 +31,11 @@ import { Modal } from './layout/modal/modal.js';
     });
 
     header.addButton('NEW GAME', (e) => {
-      generate();
+
     });
 
     header.addButton('SOLVE', (e) => {
-      renderer.revealSolution();
+
     });
 
     header.addButton('CHARACTER', (e) => {
@@ -80,19 +43,19 @@ import { Modal } from './layout/modal/modal.js';
     });
 
     joystick.listenToEvent('up', () => {
-      maze.move('north');
+      game.move('north');
     });
 
     joystick.listenToEvent('down', () => {
-      maze.move('south');
+      game.move('south');
     });
 
     joystick.listenToEvent('left', () => {
-      maze.move('west');
+      game.move('west');
     });
 
     joystick.listenToEvent('right', () => {
-      maze.move('east');
+      game.move('east');
     });
 
   });

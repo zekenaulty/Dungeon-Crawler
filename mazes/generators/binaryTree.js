@@ -4,7 +4,7 @@ import { Generator } from './generator.js';
 export class BinaryTree extends Generator {
 
   generate() {
-    this.maze.init();
+    this.maze.initialize();
     
     this.maze.walkGrid((r, c) => {
       let cell = this.maze.cell(r, c);

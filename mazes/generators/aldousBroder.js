@@ -4,7 +4,7 @@ import { Generator } from './generator.js';
 export class AldousBroder extends Generator {
 
   generate() {
-    this.maze.init();
+    this.maze.initialize();
     
     let cell = this.maze.randomCell();
     let unvisited = this.maze.cells.length - 1;

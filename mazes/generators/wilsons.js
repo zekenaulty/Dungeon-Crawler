@@ -4,7 +4,7 @@ import { Generator } from './generator.js';
 export class Wilsons extends Generator {
 
   generate() {
-    this.maze.init();
+    this.maze.initialize();
     let first = this.maze.cells.sample();
     let unvisited = new List();
 
