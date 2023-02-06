@@ -150,11 +150,11 @@ export class Maze extends EventHandler {
     let c = this.active;
 
     if (!c) {
-      return;
+      return false;
     }
 
     if (!c.links.linked(c[d])) {
-      return;
+      return false;
     }
 
     this.active = c[d];
@@ -163,6 +163,7 @@ export class Maze extends EventHandler {
       this.raiseEvent('solved', this);
     }
 
+    return true;
   }
 
   braid(p = 0.3) {

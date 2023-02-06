@@ -24,7 +24,8 @@ export class GameLevel extends EventHandler {
   #renderer;
   #maze;
   #generators;
-  #selectedGenerator = 7;
+  
+  #breath = 250;
 
   constructor() {
     super();
@@ -34,7 +35,8 @@ export class GameLevel extends EventHandler {
       'won battle',
       'completed level',
       'saved',
-      'loaded save');
+      'loaded save',
+      'moved');
 
   }
 
@@ -42,12 +44,10 @@ export class GameLevel extends EventHandler {
     this.#scaler = new CanvasRectangleScaler(width, height);
     this.#maze = new Maze(this.#scaler.rows, this.#scaler.columns);
     this.#renderer = new CanvasRectangle(this.#maze, this.#scaler, gfx);
-
     this.#loadGenerators();
     this.#maze.listenToEvent('solved', () => {
       this.#nextLevel();
     });
-
   }
   
   begin() {
@@ -60,22 +60,24 @@ export class GameLevel extends EventHandler {
     }
   }
   
+  #randomMaze() {
+    setTimeout(() => {
+      this.#randomGenerator().generate();
+    }, this.#breath);
+  }
+  
   #firstLevel() {
     this.#level = 1;
     this.#mazeMaxRooms = 16;
     this.#resetMaze();
-    setTimeout(() => {
-      this.#randomGenerator().generate();
-    }, 250);
+    this.#randomMaze();
   }
   
   #nextLevel() {
     this.#level++;
     this.#mazeMaxRooms += Math.ceil(this.#mazeMaxRooms * this.#roomGrowthFactor);
     this.#resetMaze();
-    setTimeout(() => {
-      this.#randomGenerator().generate();
-    }, 250);
+    this.#randomMaze();
   }
   
   #resetMaze() {
@@ -84,10 +86,6 @@ export class GameLevel extends EventHandler {
     this.#scaler.calc();
     this.#maze.resize(this.#scaler.rows, this.#scaler.columns);
     
-  }
-
-  #getGenerator() {
-    return this.#generators[this.#selectedGenerator];
   }
   
   #randomGenerator() {
@@ -107,13 +105,17 @@ export class GameLevel extends EventHandler {
 
     this.#generators.forEach((g) => {
       g.listenToEvent('generated', () => {
-        this.#renderer.draw();
+        setTimeout(() => {
+          this.#renderer.draw();
+        }, this.#breath);
       });
     });
   }
   
   move(d) {
-    this.#maze.move(d);
+    if(this.#maze.move(d)) {
+      this.raiseEvent('moved');
+    }
   }
 
 }

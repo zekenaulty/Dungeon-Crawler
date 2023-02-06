@@ -43,14 +43,20 @@ export class CanvasRectangle extends EventHandler {
   }
   
   scaleLock(n) {
-    if(this.#scaler.size > 40) {
+    if(this.#scaler.size > 22) {
       return n;
     }
     return 0;
   }
 
   draw() {
-    let bg = new Rectangle(0, 0, this.#scaler.width, this.#scaler.height, this.bgColor, this.#gfx);
+    let bg = new Rectangle(
+      0, 
+      0, 
+      this.#scaler.stageWidth, 
+      this.#scaler.stageHeight, 
+      this.bgColor, 
+      this.#gfx);
     bg.draw();
 
     this.#maze.walkGrid((r, c) => {

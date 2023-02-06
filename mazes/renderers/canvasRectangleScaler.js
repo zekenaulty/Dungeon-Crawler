@@ -4,8 +4,8 @@ export class CanvasRectangleScaler extends EventHandler {
 
   #maxCells = 5000;
   #size = 24;
-  #width = 300;
-  #height = 300;
+  stageWidth = 300;
+  stageHeight = 300;
 
   rows;
   columns;
@@ -19,8 +19,8 @@ export class CanvasRectangleScaler extends EventHandler {
   constructor(width, height, rooms = 3000, toTiny = 14) {
     super();
     
-    this.#width = width;
-    this.#height = height;
+    this.stageWidth = width;
+    this.stageHeight = height;
     this.#maxCells = rooms;
     this.#size = toTiny;
     this.calc();
@@ -33,20 +33,20 @@ export class CanvasRectangleScaler extends EventHandler {
 
   calc() {
     let scale = this.#scale();
-    this.columns = Math.floor(this.#width / scale);
+    this.columns = Math.floor(this.stageWidth / scale);
     this.width = this.columns * scale;
-    this.rows = Math.floor(this.#height / scale);
+    this.rows = Math.floor(this.stageHeight / scale);
     this.height = this.rows * scale;
     this.cells = this.rows * this.columns;
-    this.offsetX = Math.floor((this.#width - this.width) / 4);
-    this.offsetY = Math.floor((this.#height - this.height) / 4);
+    this.offsetX = Math.floor((this.stageWidth - this.width) / 4);
+    this.offsetY = Math.floor((this.stageHeight - this.height) / 4);
     this.size = scale;
   }
 
   #scale() {
     let n = this.#maxCells;
-    let w = this.#width;
-    let h = this.#height;
+    let w = this.stageWidth;
+    let h = this.stageHeight;
     let sw, sh;
 
     let pw = Math.ceil(Math.sqrt(n * w / h));
