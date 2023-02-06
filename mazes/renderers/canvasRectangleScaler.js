@@ -16,7 +16,7 @@ export class CanvasRectangleScaler extends EventHandler {
   cells;
   size;
 
-  constructor(width, height, rooms = 3000, toTiny = 18) {
+  constructor(width, height, rooms = 3000, toTiny = 14) {
     super();
     
     this.#width = width;

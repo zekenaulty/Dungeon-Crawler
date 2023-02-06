@@ -12,6 +12,8 @@ import { AldousBroder } from './mazes/generators/aldousBroder.js';
 import { Wilsons } from './mazes/generators/wilsons.js';
 import { HuntAndKill } from './mazes/generators/huntAndKill.js';
 import { RecursiveBacktracker } from './mazes/generators/recursiveBacktracker.js';
+import { SimplePrims } from './mazes/generators/prims.js';
+import { GrowingTree } from './mazes/generators/growingTree.js';
 
 import { Modal } from './layout/modal/modal.js';
 
@@ -22,7 +24,7 @@ import { Modal } from './layout/modal/modal.js';
     let scaler;
     let maze;
     let renderer;
-    let generatorIndex = 5;
+    let generatorIndex = 7;
 
     const generators = new List();
     const generate = () => {
@@ -40,6 +42,8 @@ import { Modal } from './layout/modal/modal.js';
       generators.push(new Wilsons(maze));
       generators.push(new HuntAndKill(maze));
       generators.push(new RecursiveBacktracker(maze));
+      generators.push(new SimplePrims(maze));
+      generators.push(new GrowingTree(maze));
 
       generators.forEach((g) => {
         g.listenToEvent('generated', () => {
