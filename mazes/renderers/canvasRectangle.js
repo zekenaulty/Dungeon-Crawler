@@ -11,7 +11,7 @@ export class CanvasRectangle extends EventHandler {
   wallColor = 'orange';
   floorColor = 'black';
   startColor = 'cornflowerblue';
-  endColor = '#D2042D';
+  endColor = 'green';//'#D2042D';
   pathColor = '#7F00FF';
   activeColor = '#800080';
   solveColor = 'indigo';
@@ -28,36 +28,131 @@ export class CanvasRectangle extends EventHandler {
 
     let self = this;
     maze.listenToEvent('moved', (dir, from, to, $maze) => {
-      self.drawFloor(from.row, from.column);
+      self.eraseFloor(from.row, from.column);
       self.drawSolutionFloor(from.row, from.column);
+      
       if (from === $maze.start) {
         self.drawStart();
       }
+      
       if (from === $maze.end) {
         self.drawEnd();
       }
-      
+
       self.drawActive();
-      self.draw(from.row, from.column);
     });
   }
-  
-  scaleLock(n) {
-    if(this.#scaler.size > 22) {
+
+  scaleLock(n, min = 0) {
+    if (this.#scaler.size > 22) {
       return n;
     }
-    return 0;
+    return min;
+  }
+
+  #drawCircle(cell, color, offsetFactor = 0.75) {
+    if (offsetFactor >= 1) {
+      offsetFactor = 0.9;
+    }
+
+    let x = this.#scaler.x(cell.column);
+    let y = this.#scaler.y(cell.row);
+    let r = Math.floor(this.#scaler.size / 2);
+    let offset = Math.floor(r - (r * offsetFactor));
+
+    this.#gfx.fillStyle = color;
+    this.#gfx.beginPath();
+    this.#gfx.ellipse(
+      x + r,
+      y + r,
+      r - this.scaleLock(offset, 1.5),
+      r - this.scaleLock(offset, 1.5),
+      0,
+      0,
+      360);
+    this.#gfx.fill();
+    this.#gfx.closePath();
+  }
+
+  #drawRectangle(cell, color, offsetFactor = 0.75) {
+    let offset = Math.floor(this.#scaler.size - (this.#scaler.size * offsetFactor));
+    new Rectangle(
+        this.#scaler.x(cell.column) + this.scaleLock(offset, 1.5),
+        this.#scaler.y(cell.row) + this.scaleLock(offset, 1.5),
+        this.#scaler.size - this.scaleLock(offset * 2, 3),
+        this.#scaler.size - this.scaleLock(offset * 2, 3),
+        color,
+        this.#gfx)
+      .fill();
+  }
+
+  #drawNorthEdge(r, c, color) {
+    let x = this.#scaler.x(c);
+    let y = this.#scaler.y(r);
+    let scale = this.#scaler.size;
+
+    new Line(
+        x,
+        y,
+        x + scale,
+        y,
+        this.#gfx)
+      .draw(color);
+  }
+
+  #drawEastEdge(r, c, color) {
+    let x = this.#scaler.x(c);
+    let y = this.#scaler.y(r);
+    let scale = this.#scaler.size;
+
+    new Line(
+        x + scale,
+        y, x + scale,
+        y + scale,
+        this.#gfx)
+      .draw(color);
+  }
+
+  #drawSouthEdge(r, c, color) {
+    let x = this.#scaler.x(c);
+    let y = this.#scaler.y(r);
+    let scale = this.#scaler.size;
+
+    new Line(
+        x,
+        y + scale,
+        x + scale,
+        y + scale,
+        this.#gfx)
+      .draw(color);
+  }
+
+  #drawWestEdge(r, c, color) {
+    let x = this.#scaler.x(c);
+    let y = this.#scaler.y(r);
+    let scale = this.#scaler.size;
+
+    new Line(
+        x,
+        y,
+        x,
+        y + scale,
+        this.#gfx)
+      .draw(this.wallColor);
+  }
+
+  fillBg() {
+    new Rectangle(
+        0,
+        0,
+        this.#scaler.stageWidth,
+        this.#scaler.stageHeight,
+        this.#gfx)
+      .fill(this.bgColor);
   }
 
   draw() {
-    let bg = new Rectangle(
-      0, 
-      0, 
-      this.#scaler.stageWidth, 
-      this.#scaler.stageHeight, 
-      this.bgColor, 
-      this.#gfx);
-    bg.draw();
+    this.fillBg();
 
     this.#maze.walkGrid((r, c) => {
       this.drawFloor(r, c);
@@ -72,10 +167,21 @@ export class CanvasRectangle extends EventHandler {
       this.drawWalls(r, c);
     });
 
-    this.raiseEvent('rendered');
+    this.drawBorder();
 
+    this.raiseEvent('rendered');
   }
-  
+
+  drawBorder() {
+    new Rectangle(
+        this.#scaler.x(0),
+        this.#scaler.y(0),
+        this.#scaler.width,
+        this.#scaler.height,
+        this.#gfx)
+      .stroke(this.wallColor);
+  }
+
   revealSolution() {
     this.showSolution = true;
     this.#maze.solve();
@@ -92,7 +198,6 @@ export class CanvasRectangle extends EventHandler {
 
     for (let i = 0; i < this.#maze.solution.items.length; i++) {
       this.drawSolutionFloor(this.#maze.solution.items[i].row, this.#maze.solution.items[i].column);
-      this.drawWalls(this.#maze.solution.items[i].row, this.#maze.solution.items[i].column);
     }
   }
 
@@ -100,37 +205,47 @@ export class CanvasRectangle extends EventHandler {
     if (!this.showSolution || !this.#maze.solution || !this.#maze.solution.items.includes(this.#maze.cell(r, c))) {
       return;
     }
-
-    let dot = new Rectangle(
-      this.#scaler.x(c) + this.scaleLock(8),
-      this.#scaler.y(r) + this.scaleLock(8),
-      this.#scaler.size - this.scaleLock(16),
-      this.#scaler.size - this.scaleLock(16),
-      this.solveColor,
-      this.#gfx);
-    dot.draw();
+    this.#drawCircle(cell, this.solveColor, 0.5);
   }
 
   eraseFloor(r, c) {
-    let floor = new Rectangle(
-      this.#scaler.x(c) + 1, 
-      this.#scaler.y(r) + 1, 
-      this.#scaler.size - 2, 
-      this.#scaler.size - 2, 
-      this.floorColor, 
-      this.#gfx);
-    floor.draw();
+    new Rectangle(
+        this.#scaler.x(c) + 1,
+        this.#scaler.y(r) + 1,
+        this.#scaler.size - 2,
+        this.#scaler.size - 2,
+        this.#gfx)
+      .fill(this.floorColor);
+  }
+
+
+  drawFloorEdges(r, c) {
+    let cell = this.#maze.cell(r, c);
+    if (!cell) {
+      return;
+    }
+    if (cell.links.linked(cell.north)) {
+      this.#drawNorthEdge(r, c, this.floorColor);
+    }
+    if (cell.links.linked(cell.east)) {
+      this.#drawEastEdge(r, c, this.floorColor);
+    }
+    if (cell.links.linked(cell.south)) {
+      this.#drawSouthEdge(r, c, this.floorColor);
+    }
+    if (cell.links.linked(cell.west)) {
+      this.#drawWestEdge(r, c, this.floorColor);
+    }
   }
 
   drawFloor(r, c) {
-    let floor = new Rectangle(
-      this.#scaler.x(c), 
-      this.#scaler.y(r), 
-      this.#scaler.size, 
-      this.#scaler.size, 
-      this.floorColor, 
-      this.#gfx);
-    floor.draw();
+    new Rectangle(
+        this.#scaler.x(c),
+        this.#scaler.y(r),
+        this.#scaler.size,
+        this.#scaler.size,
+        this.#gfx)
+      .fill(this.floorColor);
   }
 
   drawWalls(r, c) {
@@ -138,24 +253,17 @@ export class CanvasRectangle extends EventHandler {
     if (!cell) {
       return;
     }
-    let x = this.#scaler.x(c);
-    let y = this.#scaler.y(r);
-    let scale = this.#scaler.size;
     if (!cell.links.linked(cell.north)) {
-      let north = new Line(x, y, x + scale, y, this.#gfx);
-      north.draw(this.wallColor);
+      this.#drawNorthEdge(r, c, this.wallColor);
     }
     if (!cell.links.linked(cell.east)) {
-      let east = new Line(x + scale, y, x + scale, y + scale, this.#gfx);
-      east.draw(this.wallColor);
+      this.#drawEastEdge(r, c, this.wallColor);
     }
     if (!cell.links.linked(cell.south)) {
-      let south = new Line(x, y + scale, x + scale, y + scale, this.#gfx);
-      south.draw(this.wallColor);
+      this.#drawSouthEdge(r, c, this.wallColor);
     }
     if (!cell.links.linked(cell.west)) {
-      let west = new Line(x, y, x, y + scale, this.#gfx);
-      west.draw(this.wallColor);
+      this.#drawWestEdge(r, c, this.wallColor);
     }
   }
 
@@ -163,17 +271,8 @@ export class CanvasRectangle extends EventHandler {
     if (!this.#maze.start) {
       this.#maze.start = this.#maze.cell(0, 0);
     }
-    
     let cell = this.#maze.start;
-    let start = new Rectangle(
-      this.#scaler.x(cell.column) + this.scaleLock(6),
-      this.#scaler.y(cell.row) + this.scaleLock(6),
-      this.#scaler.size - this.scaleLock(12),
-      this.#scaler.size - this.scaleLock(12),
-      this.startColor,
-      this.#gfx);
-    start.draw();
-    this.drawWalls(cell.row, cell.column);
+    this.#drawCircle(cell, this.startColor);
   }
 
   drawEnd() {
@@ -181,15 +280,7 @@ export class CanvasRectangle extends EventHandler {
       this.#maze.end = this.#maze.cell(this.#maze.rows - 1, this.#maze.columns - 1);
     }
     let cell = this.#maze.end;
-    let end = new Rectangle(
-      this.#scaler.x(cell.column) + this.scaleLock(6),
-      this.#scaler.y(cell.row) + this.scaleLock(6),
-      this.#scaler.size - this.scaleLock(12),
-      this.#scaler.size - this.scaleLock(12),
-      this.endColor,
-      this.#gfx);
-    end.draw();
-    this.drawWalls(cell.row, cell.column);
+    this.#drawCircle(cell, this.endColor);
   }
 
   drawActive() {
@@ -197,15 +288,7 @@ export class CanvasRectangle extends EventHandler {
       this.#maze.active = this.#maze.cell(0, 0);
     }
     let cell = this.#maze.active;
-    let active = new Rectangle(
-      this.#scaler.x(cell.column) + this.scaleLock(8),
-      this.#scaler.y(cell.row) + this.scaleLock(8),
-      this.#scaler.size - this.scaleLock(16),
-      this.#scaler.size - this.scaleLock(16),
-      this.activeColor,
-      this.#gfx);
-    active.draw();
-    this.drawWalls(cell.row, cell.column);
+    this.#drawCircle(cell, this.activeColor);
   }
 
 }

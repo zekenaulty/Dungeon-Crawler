@@ -16,7 +16,7 @@ import { GrowingTree } from '../mazes/generators/growingTree.js';
 export class GameLevel extends EventHandler {
 
   #level = 0;
-  #mazeMaxRooms = 16;
+  #mazeMaxRooms = 32;
   #toTiny = 14;
   #roomGrowthFactor = 0.3;
 
@@ -68,7 +68,7 @@ export class GameLevel extends EventHandler {
   
   #firstLevel() {
     this.#level = 1;
-    this.#mazeMaxRooms = 16;
+    this.#mazeMaxRooms = 32;
     this.#resetMaze();
     this.#randomMaze();
   }

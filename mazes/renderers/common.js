@@ -32,21 +32,19 @@ export class Rectangle {
   y = 0;
   width = 0;
   height = 0;
-  fillColor = 'black';
   #gfx = undefined;
 
 
-  constructor(x, y, width, height, fillColor, gfx) {
+  constructor(x, y, width, height, gfx) {
     this.x = x;
     this.y = y;
     this.width = width;
     this.height = height;
     this.#gfx = gfx;
-    this.fillColor = fillColor;
   }
 
-  draw() {
-    this.#gfx.fillStyle = this.fillColor;
+  fill(style) {
+    this.#gfx.fillStyle = style;
     this.#gfx.beginPath();
     this.#gfx.rect(
       this.x,
@@ -54,6 +52,18 @@ export class Rectangle {
       this.width,
       this.height);
     this.#gfx.fill();
+    this.#gfx.closePath();
+  }
+  
+  stroke(style) {
+    this.#gfx.strokeStyle = style;
+    this.#gfx.beginPath();
+    this.#gfx.rect(
+      this.x,
+      this.y,
+      this.width,
+      this.height);
+    this.#gfx.stroke();
     this.#gfx.closePath();
   }
 }

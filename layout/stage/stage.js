@@ -35,6 +35,8 @@ export class Stage extends EventHandler {
     this.#stage.appendChild(this.#canvas);
 
     this.#gfx = this.#canvas.getContext("2d");
+    
+    //this.#gfx.ellipse()
 
     this.#scale();
 

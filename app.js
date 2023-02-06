@@ -14,12 +14,12 @@ import { GameLevel } from './battle/gameLevel.js';
     const stageReady = (gfx) => {
 
       game.initialize(
-        stage.width, 
-        stage.height, 
+        stage.width,
+        stage.height,
         gfx);
 
       game.begin();
-      
+
     };
 
     const header = new Header();
