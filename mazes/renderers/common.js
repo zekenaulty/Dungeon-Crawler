@@ -15,18 +15,14 @@ export class Line {
 
   draw(style) {
     let exec = () => {
-
-
       this.#gfx.beginPath();
       this.#gfx.moveTo(this.x1, this.y1);
       this.#gfx.lineTo(this.x2, this.y2);
-      this.#gfx.closePath();
       this.#gfx.strokeStyle = style;
       this.#gfx.stroke();
       this.#gfx.closePath();
     };
 
-    //setTimeout(() => { exec(); }, 10);
     exec();
   }
 }
