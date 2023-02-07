@@ -5,11 +5,16 @@ import { Stage } from './layout/stage/stage.js';
 import { JoyStick } from './layout/joystick/joystick.js';
 import { Modal } from './layout/modal/modal.js';
 import { GameLevel } from './battle/gameLevel.js';
+import { Item } from './battle/actors/items/item.js';
+import { Actor } from './battle/actors/actor.js';
 
 (() => {
 
   go(() => {
-
+    
+    const item = new Item();
+    const actor = new Actor();
+    
     const game = new GameLevel();
     const stageReady = (gfx) => {
 

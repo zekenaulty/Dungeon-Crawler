@@ -94,14 +94,18 @@ export class GameLevel extends EventHandler {
   
   #loadGenerators() {
     this.#generators = new List();
+    /* 
     this.#generators.push(new BinaryTree(this.#maze));
     this.#generators.push(new Sidewinder(this.#maze));
     this.#generators.push(new AldousBroder(this.#maze));
     this.#generators.push(new Wilsons(this.#maze));
     this.#generators.push(new HuntAndKill(this.#maze));
+    */
     this.#generators.push(new RecursiveBacktracker(this.#maze));
+    /*
     this.#generators.push(new SimplePrims(this.#maze));
     this.#generators.push(new GrowingTree(this.#maze));
+    */
 
     this.#generators.forEach((g) => {
       g.listenToEvent('generated', () => {

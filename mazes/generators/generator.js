@@ -3,6 +3,8 @@ import { EventHandler } from '../../core/eventHandler.js';
 export class Generator extends EventHandler {
 
   maze;
+  name = '';
+  summary = ``;
 
   constructor(maze) {
     super();
