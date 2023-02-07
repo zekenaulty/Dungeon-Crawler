@@ -7,6 +7,7 @@ import { Modal } from './layout/modal/modal.js';
 import { GameLevel } from './battle/gameLevel.js';
 import { Item } from './battle/actors/items/item.js';
 import { Actor } from './battle/actors/actor.js';
+import { DetailSheet } from './battle/actors/ui/detailSheet.js';
 
 (() => {
 
@@ -14,6 +15,10 @@ import { Actor } from './battle/actors/actor.js';
     
     const item = new Item();
     const actor = new Actor();
+    const sheet = new DetailSheet(actor, true);
+    
+    actor.attributes.available += 50;
+    sheet.open(true);
     
     const game = new GameLevel();
     const stageReady = (gfx) => {

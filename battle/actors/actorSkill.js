@@ -8,6 +8,11 @@ export class ActorSkill extends EventHandler {
   maxBy = 0;
   lock = false;
   register = false;
+  name = 'base skill';
+  
+  get summary() {
+    return '';
+  }
 
 
   get now() {

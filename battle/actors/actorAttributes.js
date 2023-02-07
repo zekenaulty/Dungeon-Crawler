@@ -23,6 +23,8 @@ export class ActorAttributes extends EventHandler {
     super();
 
     let self = this;
+    
+    this.defineEvent('changed');
 
     this.#actor = actor;
     this.#actor.listenToEvent('constructed', () => {
@@ -35,6 +37,18 @@ export class ActorAttributes extends EventHandler {
     this.mp = this.maxMp;
   }
 
+  get damageRange() {
+    return `${this.minDamage} - ${this.maxDamage}`;
+  }
+  
+  get health() {
+    return `${this.hp}/${this.maxHp}`;
+  }
+  
+  get mana() {
+    return `${this.mp}/${this.maxMp}`;
+  }
+  
   get maxHp() {
     return this.baseHp + (this.vitality * 2);
   }

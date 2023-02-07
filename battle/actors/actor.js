@@ -7,6 +7,7 @@ import { ActorInventory } from './actorInventory.js';
 
 export class Actor extends EventHandler {
 
+  name = 'base actor';
   attributes;
   level;
   inventory;
@@ -55,8 +56,13 @@ class GCD extends ActorSkill {
   constructor(actor) {
     super(actor);
     this.cooldown = 250;
+    this.name = 'Global Cooldown';
   }
 
+  get summary() {
+    return 'The global cooldown for the actor, provides skills fire use gap.';
+  }
+  
   invoke() {
     safeInvoke(() => { /* GCD DO NOTHING */ });
   }
@@ -69,6 +75,11 @@ class BasicAttack extends ActorSkill {
     super(actor);
     this.cooldown = 1000;
     this.register = true;
+    this.name = 'Attack';
+  }
+  
+  get summary() {
+    return `Basic attack. Hits the selected target for damage between ${this.actor.attributes.minDamage} and ${this.actor.attributes.maxDamage} damage.`;
   }
 
   invoke(target) {

@@ -8,11 +8,18 @@ export class Modal extends EventHandler {
   #closeButton;
 
   #isOpen = false;
+  
+  static #openCount = 0;
 
   constructor() {
     super();
 
-    this.defineEvent('opened', 'closed');
+    this.defineEvent(
+      'opened', 
+      'closed',
+      'opening',
+      'closing'
+      );
 
     if (!document.getElementById('modal-styles')) {
       this.#styles = document.createElement('link');
@@ -44,12 +51,19 @@ export class Modal extends EventHandler {
 
   close() {
     if (this.isOpen) {
+      
+      let e = { cancel: false, self: this };
+      this.raiseEvent('closing', e);
+      if(e.cancel){
+        return;
+      }
+      
       let body = document.querySelector('body');
 
-      if (body.dataOpenModals) {
-        body.dataOpenModals -= 1;
+      if(Modal.#openCount > 0) {
+        Modal.#openCount -= 1;
       } else {
-        body.dataOpenModals = 0;
+        Modal.#openCount = 0;
       }
       
       body.removeChild(this.#closeButton);
@@ -57,24 +71,27 @@ export class Modal extends EventHandler {
       body.removeChild(this.#backdrop);
       
       this.#isOpen = false;
-      if (body.dataOpenModals === 0) {
+      if (Modal.#openCount < 1) {
         body.classList.remove('modal-body-lock');
       }
+      this.raiseEvent('closed');
     }
   }
 
   open(showClose) {
     if (!this.isOpen) {
+      
+      let e = { cancel: false, self: this };
+      this.raiseEvent('opening', e);
+      if (e.cancel) {
+        return;
+      }
       let body = document.querySelector('body');
 
-      if (body.dataOpenModals) {
-        body.dataOpenModals += 1;
-      } else {
-        body.dataOpenModals = 1;
-      }
+      Modal.#openCount++;
 
       this.#isOpen = true;
-      if (body.dataOpenModals === 1) {
+      if (Modal.#openCount === 1) {
         body.classList.add('modal-body-lock');
       }
       
@@ -83,6 +100,7 @@ export class Modal extends EventHandler {
       if (showClose) {
         body.appendChild(this.#closeButton);
       }
+      this.raiseEvent('opened');
     }
   }
 

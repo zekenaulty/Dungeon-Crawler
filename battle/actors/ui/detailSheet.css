@@ -1,0 +1,77 @@
+.detail-sheet-content {
+  position: fixed;
+  top: 10px;
+  left: 40px;
+  right: 4vw;
+  display: flex;
+  justify-content: end;
+  align-content: end;
+  flex-flow: column;
+  flex-wrap: nowrap;
+  border: 1px solid white;
+  margin-bottom: auto;
+  padding: 10px 14px 10px 14px;
+  font-size: 1.2em;
+  line-height: 1.3em;
+  border-radius: 13px 13px 13px 13px;
+}
+
+.detail-sheet-attribute-row {
+  padding: 0 0 0 0;
+  margin: 0 0 0 0;
+  display: flex;
+  justify-content: start;
+  align-content: start;
+  flex-flow: row;
+  flex-wrap: nowrap;
+}
+
+.detail-sheet-attribute-group {
+  width: 92%;
+  min-width: 200px;
+  display: flex;
+  justify-content: start;
+  align-content: end;
+}
+
+.detail-sheet-attribute-bold {
+  font-size: 1.2em;
+  line-height: 1.4em;
+  font-weight: bolder;
+}
+
+.detail-sheet-attribute-text {
+  font-size: 1.2em;
+  line-height: 1.4em;
+  font-weight: normal;
+}
+
+.detail-sheet-attribute-text-tiny {
+  font-size: 0.7em;
+  line-height: 0.8em;
+  font-weight: normal;
+}
+
+.detail-sheet-attribute-button {
+  border: 1px solid white;
+  width: 20px;
+  height: 20px;
+  padding: 0 0 0 0;
+  background-color: black;
+  border-radius: 13% 13% 13% 13%;
+  color: white;
+}
+
+.detail-sheet-skills {
+  display: flex;
+  justify-content: end;
+  align-content: end;
+  flex-flow: row;
+  flex-wrap: wrap;
+  border: 1px solid white;
+  margin-bottom: auto;
+  padding: 10px 14px 10px 14px;
+  font-size: 1.2em;
+  line-height: 1.3em;
+  border-radius: 13px 13px 13px 13px;
+}

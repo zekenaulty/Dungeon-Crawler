@@ -46,6 +46,10 @@ export class ActorLevel extends EventHandler {
       'lost xp'
     );
   }
+  
+  get xpRequired() {
+    return `${this.xp}/${this.toLevelXp} (${this.toLevelXp - this.xp})`;
+  }
 
   addXp(amount) {
     this.xp += amount;
