@@ -16,6 +16,7 @@ export class Actor extends EventHandler {
   skills = {};
   target;
   enemies = new List();
+  casting;
 
   constructor() {
     super();
@@ -29,7 +30,12 @@ export class Actor extends EventHandler {
       'leveled up',
       'healed',
       'damaged',
-      'death'
+      'death',
+      'begin cast',
+      'end cast',
+      'begin recoil',
+      'end recoil',
+      'interupted'
     );
 
     this.addSkill('GCD', new GCD(this));
@@ -47,8 +53,29 @@ export class Actor extends EventHandler {
   }
 
   addSkill(key, skill) {
+    let self = this;
     this.skills[key] = skill;
+    
+    skill.listenToEvent('begin cast', (n) => {
+      self.raiseEvent('begin cast', n);
+    });
+    
+    skill.listenToEvent('end cast', (n) => {
+      self.raiseEvent('end cast', n);
+    });
+    
+    skill.listenToEvent('begin recoil', (n) => {
+      self.raiseEvent('begin recoil', n);
+    });
+    
+    skill.listenToEvent('end recoil', (n) => {
+      self.raiseEvent('end recoil', n);
+    });
+    
+    skill.listenToEvent('interupted', (n) => {
+      self.raiseEvent('interupted', n);
+    });
+    
   }
 
-
-} /* end Actor */
+}

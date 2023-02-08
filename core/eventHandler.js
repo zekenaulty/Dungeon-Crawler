@@ -23,7 +23,7 @@ export class EventHandler {
 
   defineEvent() {
     for (let i = 0; i < arguments.length; i++) {
-      this.#events[arguments[i]] = new EventDispatcher();
+      this.#events[arguments[i]] = new EventDispatcher(this);
     }
   }
 
@@ -57,8 +57,11 @@ export class EventHandler {
 
 class EventDispatcher {
   #listeners = new List();
-
-  constructor() {}
+  #parent;
+  
+  constructor(parent) {
+    this.#parent = parent;
+  }
 
   add(action) {
     if (this.#listeners.includes(action)) {
@@ -76,7 +79,7 @@ class EventDispatcher {
     for (let i = 0; i < this.#listeners.length; i++) {
       let action = this.#listeners[i];
       if (action) {
-        action.apply(new Object(), arguments);
+        action.apply(this.#parent, arguments);
       }
     }
   }

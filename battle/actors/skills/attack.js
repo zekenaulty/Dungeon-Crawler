@@ -16,8 +16,9 @@ export class Attack extends ActorSkill {
   }
 
   invoke() {
+    let target = this.actor.target;
     safeInvoke(() => {
-      this.doAttack(this.actor.target);
+      this.doAttack(target);
     });
   }
 
