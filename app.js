@@ -8,6 +8,7 @@ import { GameLevel } from './battle/gameLevel.js';
 import { Item } from './battle/actors/items/item.js';
 import { Actor } from './battle/actors/actor.js';
 import { DetailSheet } from './battle/actors/ui/detailSheet.js';
+import { Hero } from './battle/actors/hero/hero.js';
 
 (() => {
 
@@ -15,9 +16,10 @@ import { DetailSheet } from './battle/actors/ui/detailSheet.js';
     
     const item = new Item();
     const actor = new Actor();
-    const sheet = new DetailSheet(actor, true);
+    const hero = new Hero();
+    const sheet = new DetailSheet(hero, true);
     
-    actor.attributes.available += 50;
+    hero.attributes.available += 50;
     sheet.open(true);
     
     const game = new GameLevel();

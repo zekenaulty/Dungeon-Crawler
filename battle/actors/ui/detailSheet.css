@@ -27,7 +27,7 @@
 }
 
 .detail-sheet-attribute-group {
-  width: 92%;
+  width: 88%;
   min-width: 200px;
   display: flex;
   justify-content: start;
@@ -54,12 +54,13 @@
 
 .detail-sheet-attribute-button {
   border: 1px solid white;
-  width: 20px;
-  height: 20px;
+  width: 26px;
+  height: 26px;
   padding: 0 0 0 0;
   background-color: black;
   border-radius: 13% 13% 13% 13%;
   color: white;
+  margin: 2px 2px 2px 2px;
 }
 
 .detail-sheet-skills {

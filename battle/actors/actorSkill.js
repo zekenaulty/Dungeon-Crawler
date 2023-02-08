@@ -14,7 +14,14 @@ export class ActorSkill extends EventHandler {
     return '';
   }
 
+  get min() {
+    return this.actor.attributes.minDamage + this.minBy;
+  }
 
+  get max() {
+    return this.actor.attributes.maxDamage + this.maxBy;
+  }
+  
   get now() {
     return new Date().getTime();
   }
@@ -48,8 +55,8 @@ export class ActorSkill extends EventHandler {
 
 
   doAttack(target) {
-    let maxDmg = this.actor.attributes.maxDamage + this.maxBy;
-    let minDmg = this.actor.attributes.minDamage + this.minBy;
+    let maxDmg = this.max;
+    let minDmg = this.min;
     let dmg = Math.ceil(Math.random() * maxDmg) + 1;
     if (dmg < minDmg) {
       dmg = minDmg + 1;

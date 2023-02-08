@@ -32,7 +32,7 @@ export class DetailSheet extends Modal {
 
     this.#add('Name', this.#actor, 'name');
     this.#add('Level', this.#actor.level, 'level');
-    this.#add('XP', this.#actor.level, 'requiredXp');
+    this.#add('XP', this.#actor.level, 'xpRequired');
     this.#spacer();
     this.#add('Health', this.#actor.attributes, 'health');
     this.#add('Mana', this.#actor.attributes, 'mana');

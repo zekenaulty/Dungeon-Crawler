@@ -4,6 +4,8 @@ import { ActorSkill } from './actorSkill.js';
 import { ActorLevel } from './actorLevel.js';
 import { ActorAttributes } from './actorAttributes.js';
 import { ActorInventory } from './actorInventory.js';
+import { Attack } from './skills/attack.js';
+import { GCD } from './skills/gcd.js';
 
 export class Actor extends EventHandler {
 
@@ -13,6 +15,7 @@ export class Actor extends EventHandler {
   inventory;
   skills = {};
   target;
+  enemies = new List();
 
   constructor() {
     super();
@@ -30,7 +33,7 @@ export class Actor extends EventHandler {
     );
 
     this.addSkill('GCD', new GCD(this));
-    this.addSkill('attack', new BasicAttack(this));
+    this.addSkill('attack', new Attack(this));
 
     this.raiseEvent('constructed');
   }
@@ -49,43 +52,3 @@ export class Actor extends EventHandler {
 
 
 } /* end Actor */
-
-
-class GCD extends ActorSkill {
-
-  constructor(actor) {
-    super(actor);
-    this.cooldown = 250;
-    this.name = 'Global Cooldown';
-  }
-
-  get summary() {
-    return 'The global cooldown for the actor, provides skills fire use gap.';
-  }
-  
-  invoke() {
-    safeInvoke(() => { /* GCD DO NOTHING */ });
-  }
-
-}
-
-class BasicAttack extends ActorSkill {
-
-  constructor(actor) {
-    super(actor);
-    this.cooldown = 1000;
-    this.register = true;
-    this.name = 'Attack';
-  }
-  
-  get summary() {
-    return `Basic attack. Hits the selected target for damage between ${this.actor.attributes.minDamage} and ${this.actor.attributes.maxDamage} damage.`;
-  }
-
-  invoke(target) {
-    safeInvoke(() => {
-      this.doAttack(target);
-    });
-  }
-
-}

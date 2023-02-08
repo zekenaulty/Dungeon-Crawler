@@ -58,10 +58,10 @@ export class ActorAttributes extends EventHandler {
   }
 
   get minDamage() {
-    return this.baseDamage + Math.floor(this.strength / 6);
+    return this.baseDamage + Math.floor(this.strength / 6) + 1;
   }
 
   get maxDamage() {
-    return this.baseDamage + Math.floor(this.strength / 3);
+    return this.baseDamage + Math.ceil(this.strength / 3) + 2
   }
 } /* end ActorAttributes */
