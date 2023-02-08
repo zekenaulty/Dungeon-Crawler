@@ -12,6 +12,8 @@ import { HuntAndKill } from '../mazes/generators/huntAndKill.js';
 import { RecursiveBacktracker } from '../mazes/generators/recursiveBacktracker.js';
 import { SimplePrims } from '../mazes/generators/prims.js';
 import { GrowingTree } from '../mazes/generators/growingTree.js';
+import { DetailSheet } from './actors/ui/detailSheet.js';
+import { Hero } from './actors/hero/hero.js';
 
 export class GameLevel extends EventHandler {
 
@@ -24,8 +26,11 @@ export class GameLevel extends EventHandler {
   #renderer;
   #maze;
   #generators;
-  
+
   #breath = 250;
+
+  #hero = new Hero();
+  #heroDetail;
 
   constructor() {
     super();
@@ -49,49 +54,63 @@ export class GameLevel extends EventHandler {
       this.#nextLevel();
     });
   }
-  
-  begin() {
+
+  begin(newGame = false) {
     let saveData = localStorage.getItem('DC_GAME_SAVE');
-    
-    if(saveData) {
-      
+
+    if (saveData && !newGame) {
+
     } else {
       this.#firstLevel();
     }
   }
+
+  solve() {
+    if (!this.#renderer.showSolution) {
+      this.#renderer.revealSolution();
+    } else {
+      this.#renderer.hideSolution();
+    }
+  }
   
+  heroInfo() {
+    this.#heroDetail.open(true);
+  }
+
   #randomMaze() {
     setTimeout(() => {
       this.#randomGenerator().generate();
     }, this.#breath);
   }
-  
+
   #firstLevel() {
     this.#level = 1;
     this.#mazeMaxRooms = 32;
     this.#resetMaze();
     this.#randomMaze();
+    this.#hero = new Hero();
+    this.#heroDetail = new DetailSheet(this.#hero, true);
   }
-  
+
   #nextLevel() {
     this.#level++;
     this.#mazeMaxRooms += Math.ceil(this.#mazeMaxRooms * this.#roomGrowthFactor);
     this.#resetMaze();
     this.#randomMaze();
   }
-  
+
   #resetMaze() {
-    
+
     this.#scaler.setScaleBounds(this.#mazeMaxRooms, this.#toTiny);
     this.#scaler.calc();
     this.#maze.resize(this.#scaler.rows, this.#scaler.columns);
-    
+
   }
-  
+
   #randomGenerator() {
     return this.#generators.sample();
   }
-  
+
   #loadGenerators() {
     this.#generators = new List();
     /* 
@@ -115,9 +134,9 @@ export class GameLevel extends EventHandler {
       });
     });
   }
-  
+
   move(d) {
-    if(this.#maze.move(d)) {
+    if (this.#maze.move(d)) {
       this.raiseEvent('moved');
     }
   }

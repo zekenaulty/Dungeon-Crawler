@@ -5,22 +5,10 @@ import { Stage } from './layout/stage/stage.js';
 import { JoyStick } from './layout/joystick/joystick.js';
 import { Modal } from './layout/modal/modal.js';
 import { GameLevel } from './battle/gameLevel.js';
-import { Item } from './battle/actors/items/item.js';
-import { Actor } from './battle/actors/actor.js';
-import { DetailSheet } from './battle/actors/ui/detailSheet.js';
-import { Hero } from './battle/actors/hero/hero.js';
 
 (() => {
 
   go(() => {
-    
-    const item = new Item();
-    const actor = new Actor();
-    const hero = new Hero();
-    const sheet = new DetailSheet(hero, true);
-    
-    hero.attributes.available += 50;
-    sheet.open(true);
     
     const game = new GameLevel();
     const stageReady = (gfx) => {
@@ -43,15 +31,15 @@ import { Hero } from './battle/actors/hero/hero.js';
     });
 
     header.addButton('NEW GAME', (e) => {
-
+      game.begin(true);
     });
 
     header.addButton('SOLVE', (e) => {
-
+      game.solve();
     });
 
     header.addButton('CHARACTER', (e) => {
-
+      game.heroInfo();
     });
 
     joystick.listenToEvent('up', () => {

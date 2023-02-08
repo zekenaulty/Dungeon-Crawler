@@ -11,10 +11,10 @@ export class CanvasRectangle extends EventHandler {
   wallColor = 'orange';
   floorColor = 'black';
   startColor = 'cornflowerblue';
-  endColor = 'green';//'#D2042D';
-  pathColor = '#7F00FF';
-  activeColor = '#800080';
-  solveColor = 'indigo';
+  endColor = 'green'; //'#D2042D';
+  //pathColor = '#7F00FF';
+  activeColor = 'silver'; //'#800080';
+  solveColor = 'cornflowerblue';
 
   showSolution = false;
 
@@ -30,11 +30,11 @@ export class CanvasRectangle extends EventHandler {
     maze.listenToEvent('moved', (dir, from, to, $maze) => {
       self.eraseFloor(from.row, from.column);
       self.drawSolutionFloor(from.row, from.column);
-      
+
       if (from === $maze.start) {
         self.drawStart();
       }
-      
+
       if (from === $maze.end) {
         self.drawEnd();
       }
@@ -50,7 +50,7 @@ export class CanvasRectangle extends EventHandler {
     return min;
   }
 
-  #drawCircle(cell, color, offsetFactor = 0.75) {
+  #drawCircle(cell, color, offsetFactor = 0.75, fill = true) {
     if (offsetFactor >= 1) {
       offsetFactor = 0.9;
     }
@@ -60,7 +60,12 @@ export class CanvasRectangle extends EventHandler {
     let r = Math.floor(this.#scaler.size / 2);
     let offset = Math.floor(r - (r * offsetFactor));
 
-    this.#gfx.fillStyle = color;
+    if (fill) {
+      this.#gfx.fillStyle = color;
+    } else {
+      this.#gfx.strokeStyle = color;
+    }
+    
     this.#gfx.beginPath();
     this.#gfx.ellipse(
       x + r,
@@ -70,7 +75,11 @@ export class CanvasRectangle extends EventHandler {
       0,
       0,
       360);
-    this.#gfx.fill();
+    if (fill) {
+      this.#gfx.fill();
+    } else {
+      this.#gfx.stroke();
+    }
     this.#gfx.closePath();
   }
 
@@ -191,21 +200,48 @@ export class CanvasRectangle extends EventHandler {
     this.drawActive();
   }
 
-  drawSolution() {
+
+  hideSolution() {
+    this.drawSolution(this.floorColor, false);
+    this.drawStart();
+    this.drawEnd();
+    this.drawActive();
+    this.showSolution = false;
+  }
+
+  drawSolution(color, show = true) {
     if (!this.showSolution || !this.#maze.solution) {
       return;
     }
 
+    if (!color) {
+      color = this.solveColor;
+    }
+
     for (let i = 0; i < this.#maze.solution.items.length; i++) {
-      this.drawSolutionFloor(this.#maze.solution.items[i].row, this.#maze.solution.items[i].column);
+      if(show) {
+      this.drawSolutionFloor(
+        this.#maze.solution.items[i].row, 
+        this.#maze.solution.items[i].column, 
+        color);
+      } else {
+        this.eraseFloor(
+        this.#maze.solution.items[i].row, 
+        this.#maze.solution.items[i].column);
+      }
     }
   }
 
-  drawSolutionFloor(r, c) {
+  drawSolutionFloor(r, c, color) {
     if (!this.showSolution || !this.#maze.solution || !this.#maze.solution.items.includes(this.#maze.cell(r, c))) {
       return;
     }
-    this.#drawCircle(cell, this.solveColor, 0.5);
+
+    if (!color) {
+      color = this.solveColor;
+    }
+    let cell = this.#maze.cell(r, c);
+    this.#drawCircle(cell, color, 0.3);
   }
 
   eraseFloor(r, c) {
