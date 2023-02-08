@@ -1,0 +1,55 @@
+.battle-battlefield {
+  position: fixed;
+  top: 1vh;
+  left: 2vw;
+  right: 2vw;
+  height: 68vh;
+  border: 1px solid white;
+  border-radius: 13px 13px 13px 13px;
+  color: white;
+  padding: 4px 1px 1px 6px;
+  display: flex;
+  flex-flow: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+}
+
+.battle-hero-info {
+  position: fixed;
+  top: 71vh;
+  left: 2vw;
+  right: 60vw;
+  height: 26vh;
+  border: 1px solid white;
+  border-radius: 13px 13px 13px 13px;
+  color: white;
+  padding: 4px 1px 1px 6px;
+}
+
+.battle-hero-skills {
+  position: fixed;
+  top: 71vh;
+  left: 42vw;
+  right: 2vw;
+  height: 26vh;
+  border: 1px solid white;
+  border-radius: 13px 13px 13px 13px;
+  color: white;
+  padding: 4px 1px 1px 6px;
+}
+
+.battle-enemy {
+  color: greenyellow;
+  width: 155px;
+  text-align: center;
+  font-size: 1.5em;
+  height: 2em;
+  font-weight: bold;
+}
+
+.battle-enemy-attack {
+  color: darkred;
+  font-weight: bolder;
+  font-size: 1.8em;
+}

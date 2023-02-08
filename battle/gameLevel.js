@@ -14,6 +14,8 @@ import { SimplePrims } from '../mazes/generators/prims.js';
 import { GrowingTree } from '../mazes/generators/growingTree.js';
 import { DetailSheet } from './actors/ui/detailSheet.js';
 import { Hero } from './actors/hero/hero.js';
+import { Battle } from './ui/battle.js';
+import { Dice } from './dice.js';
 
 export class GameLevel extends EventHandler {
 
@@ -31,6 +33,7 @@ export class GameLevel extends EventHandler {
 
   #hero = new Hero();
   #heroDetail;
+  #battle;
 
   constructor() {
     super();
@@ -139,6 +142,26 @@ export class GameLevel extends EventHandler {
     if (this.#maze.move(d)) {
       this.raiseEvent('moved');
     }
+    
+    let dice = Dice.many(20, 20, 20, 20);
+    if(this.#shouldBattle(dice)) {
+      this.raiseEvent('battle starting');
+      this.#battle = new Battle(this.#hero);
+      this.#battle.open(true);
+      
+    } else if(this.#shouldTeleport(dice)) {
+      this.raiseEvent('teleporring');
+      
+    }
   }
+  
+  #shouldBattle(d) {
+    return d[0] > 11 && d[1] < 11 && d[2] > 2 && d[3] < 20;
+  }
+  
+  #shouldTeleport(d) {
+    return d[0] > 18 && d[1] > 10 && d[2] > 10 && d[3] > 10;
+  }
+
 
 }
