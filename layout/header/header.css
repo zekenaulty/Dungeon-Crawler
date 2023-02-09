@@ -17,14 +17,14 @@
   display: flex;
   flex-grow: 1;
   min-width: 200px;
-  max-width: 350px;
+  max-width: 700px;
   flex-direction: column;
   flex-wrap: nowrap;
   padding-left: 14px;
   padding-top: 4px;
   justify-content: start;
   align-content: start;
-  font-size: 1.3em;
+  font-size: 1.2em;
   line-height: 1.3em;
 }
 
@@ -81,4 +81,15 @@
 
 .header-hide {
   display: none !important;
+}
+
+.bold {
+  font-weight: bold;
+}
+.bolder {
+  font-weight: bolder;
+}
+
+.pl-1 {
+  padding-left: 1em;
 }

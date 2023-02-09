@@ -12,6 +12,11 @@ import { Dice } from './battle/dice.js';
   go(() => {
     
     const game = new GameLevel();
+    
+    game.listenToEvent('updated', () => {
+      header.info(game.summary);
+    });
+    
     const stageReady = (gfx) => {
 
       game.initialize(

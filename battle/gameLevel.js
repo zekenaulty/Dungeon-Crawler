@@ -40,6 +40,19 @@ export class GameLevel extends EventHandler {
     let vm = this;
     return vm.#level;
   }
+  
+  get summary() {
+    let vm = this;
+    return `
+      <span><span class="bolder">Dungeon Level: </span>${vm.level}</span>
+      <span><span class="bolder">Hero</span></span>
+      <span><span class="bolder pl-1">Level: </span>${vm.#hero.level.level}</span>
+      <span><span class="bolder pl-1">Health: </span>${vm.#hero.attributes.health}</span>
+      <span><span class="bolder pl-1">Mana: </span>${vm.#hero.attributes.mana}</span>
+    `;
+    //      <span><span></span>${}</span>
+
+  }
 
   constructor() {
     super();
