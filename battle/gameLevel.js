@@ -35,6 +35,11 @@ export class GameLevel extends EventHandler {
   #heroDetail;
   #battle;
   #gameOverId = -1;
+  
+  get level() {
+    let vm = this;
+    return vm.#level;
+  }
 
   constructor() {
     super();
@@ -108,7 +113,7 @@ export class GameLevel extends EventHandler {
 
   #nextLevel() {
     let vm = this;
-    vm.#hero.level.addXp(vm.#level * 100);
+    //vm.#hero.level.addXp(vm.#level * 100);
     vm.#level++;
     vm.#mazeMaxRooms += Math.ceil(vm.#mazeMaxRooms * vm.#roomGrowthFactor);
     vm.#resetMaze();

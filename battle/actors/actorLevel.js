@@ -87,5 +87,7 @@ export class ActorLevel extends EventHandler {
         level: vm,
         actor: vm.#actor
       });
+    vm.#actor.recover();
+
   }
 }

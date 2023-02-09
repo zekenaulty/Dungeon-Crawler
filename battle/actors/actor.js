@@ -125,8 +125,9 @@ export class Actor extends EventHandler {
   
   recover() {
     let vm = this;
-    vm.hp = vm.maxHp;
-    vm.mp = vm.maxMp;
+
+    vm.attributes.hp = vm.attributes.maxHp;
+    vm.attributes.mp = vm.attributes.maxMp;
   }
 
 }

@@ -50,8 +50,8 @@ export class Battle extends Modal {
     vm.#level = level;
     vm.#enemies = new List();
     vm.#paused = true;
-    vm.#minMobLevel = vm.#level - 2;
-    vm.#maxMobLevel = vm.#level + 3;
+    vm.#minMobLevel = vm.#level.level - 2;
+    vm.#maxMobLevel = vm.#level.level + 3;
 
     if (vm.#minMobLevel < 1) {
       vm.#minMobLevel = 1;
@@ -200,7 +200,7 @@ export class Battle extends Modal {
       return l;
     }
 
-    return vm.#level;
+    return vm.#level.level;
   }
 
   toSpwan() {
@@ -233,6 +233,14 @@ export class Battle extends Modal {
       vm,
       vm.#hero
     );
+    
+    let l = vm.mobLevel();
+    while(e.enemy.level.level < l) {
+      e.enemy.level.levelUp();
+    }
+    e.enemy.spendPoints();
+    e.enemy.recover();
+    
     e.enemy.id = e.id;
     e.enemy.div = e;
     e.enemy.target = vm.#hero;

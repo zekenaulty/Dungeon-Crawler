@@ -86,4 +86,16 @@ export class Enemy extends Actor {
     let vm = this;
     clearInterval(vm.#aiId);
   }
+
+  spendPoints() {
+    let vm = this;
+    let stats = new List();
+    stats.push('strength');
+    stats.push('vitality');
+    while(vm.attributes.available > 0) {
+      vm.attributes.available--;
+      vm.attributes[stats.sample()]++;
+    }
+  }
+
 }
