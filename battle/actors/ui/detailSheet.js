@@ -41,9 +41,9 @@ export class DetailSheet extends Modal {
     vm.#spacer();
     vm.#add('Available Points', vm.#actor.attributes, 'available');
     vm.#spacer();
-    vm.#add('Vitality', vm.#actor.attributes, 'vitality', true);
-    vm.#add('Strength', vm.#actor.attributes, 'strength', true);
-    vm.#add('Intellect', vm.#actor.attributes, 'intellect', true);
+    vm.#add('Vitality', vm.#actor.attributes, 'vitality', true && editable);
+    vm.#add('Strength', vm.#actor.attributes, 'strength', true && editable);
+    vm.#add('Intellect', vm.#actor.attributes, 'intellect', true && editable);
     vm.#spacer();
 
     vm.#text('Skills');

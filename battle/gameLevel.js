@@ -46,7 +46,8 @@ export class GameLevel extends EventHandler {
       'completed level',
       'saved',
       'loaded save',
-      'moved'
+      'moved',
+      'updated'
     );
 
   }
@@ -102,6 +103,7 @@ export class GameLevel extends EventHandler {
     vm.#randomMaze();
     vm.#hero = new Hero(vm);
     vm.#heroDetail = new DetailSheet(vm.#hero, true);
+    vm.raiseEvent('updated', this);
   }
 
   #nextLevel() {
@@ -111,6 +113,8 @@ export class GameLevel extends EventHandler {
     vm.#mazeMaxRooms += Math.ceil(vm.#mazeMaxRooms * vm.#roomGrowthFactor);
     vm.#resetMaze();
     vm.#randomMaze();
+    vm.raiseEvent('updated', this);
+
   }
 
   #resetMaze() {
@@ -169,6 +173,8 @@ export class GameLevel extends EventHandler {
       vm.raiseEvent('teleporting', vm);
 
     }
+    vm.raiseEvent('updated', this);
+
   }
 
   #shouldBattle(d) {
@@ -181,9 +187,9 @@ export class GameLevel extends EventHandler {
 
   gameOver(delay = 2250) {
     let vm = this;
-    if(vm.#gameOverId > -1 || !vm.#battle) {
+    if (vm.#gameOverId > -1 || !vm.#battle) {
       return;
-    } 
+    }
     //alert('GAME OVER');
     vm.#gameOverId = setTimeout(() => {
       if (vm.#battle) {
@@ -191,6 +197,8 @@ export class GameLevel extends EventHandler {
         vm.#battle.close();
         vm.#battle = undefined;
         vm.#gameOverId = -1;
+        vm.raiseEvent('game over', this);
+
         vm.#firstLevel();
       }
     }, delay);

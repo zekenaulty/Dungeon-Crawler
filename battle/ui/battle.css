@@ -104,4 +104,9 @@
 
 .battle-hero-btn-active {
   color: red;
+  border: 1px solid red;
+}
+
+.battle-hide {
+  display: none !important;
 }

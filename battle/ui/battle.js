@@ -101,7 +101,8 @@ export class Battle extends Modal {
 
     vm.defineEvent(
       'begin combat',
-      'end combat'
+      'end combat',
+      'won battle'
     );
 
     vm.listenToEvent('opening', (e) => {
@@ -134,6 +135,8 @@ export class Battle extends Modal {
     });
 
     vm.#hero.listenToEvent('death', (e) => {
+      vm.#paused = true;
+      vm.raiseEvent('end combat', this);
       e.gameLevel.gameOver();
     });
 
@@ -155,6 +158,10 @@ export class Battle extends Modal {
         btn.innerHTML = skill.displayName;
         btn.classList.add('battle-hero-btn');
         btn.addEventListener('click', () => {
+          if (vm.#paused || Modal.openCount > 1) {
+            return;
+          }
+
           skill.invoke();
         });
         let begin = () => {
@@ -231,11 +238,21 @@ export class Battle extends Modal {
     e.enemy.target = vm.#hero;
     e.enemy.enemies.push(vm.#hero);
     e.details = new DetailSheet(e.enemy);
+    e.details.listenToEvent('opening', () => {
+      vm.#battlefield.classList.add('battle-hide');
+      vm.#heroInfo.classList.add('battle-hide');
+      vm.#heroSkills.classList.add('battle-hide');
+    });
+    e.details.listenToEvent('closed', () => {
+      vm.#battlefield.classList.remove('battle-hide');
+      vm.#heroInfo.classList.remove('battle-hide');
+      vm.#heroSkills.classList.remove('battle-hide');
+    });
     vm.#hero.enemies.push(e.enemy);
     vm.#enemies.push(e.enemy);
     e.innerHTML = e.enemy.ascii;
     e.classList.add('battle-enemy');
-    
+
     e.addEventListener('click', () => {
       e.details.open(true);
     });
@@ -261,11 +278,13 @@ export class Battle extends Modal {
     e.enemy.listenToEvent('death', (n) => {
       e.enemy.battle.removeEnemy(e.enemy);
       vm.#hero.level.addXp(ActorLevel.monsterXp(e.enemy.level.level));
-      if(vm.#enemies.length < 1) {
+      if (vm.#enemies.length < 1) {
+        vm.raiseEvent('end combat', this);
+        vm.raiseEvent('won battle', this);
         vm.close();
       }
     });
-    
+
     vm.#battlefield.appendChild(e);
   }
 
@@ -281,6 +300,7 @@ export class Battle extends Modal {
 
   clearEnemies(delay = 1250) {
     let vm = this;
+    vm.#paused = true;
     let l = vm.#hero.enemies.length - 1;
     for (let i = l; i >= 0; i--) {
       vm.removeEnemy(vm.#hero.enemies[i], delay);
