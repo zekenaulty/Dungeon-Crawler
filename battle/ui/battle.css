@@ -17,6 +17,11 @@
 
 .battle-hero-info {
   position: fixed;
+  display: flex;
+  flex-flow: column;
+  flex-wrap: nowrap;
+  justify-content: start;
+  align-content: start;
   top: 71vh;
   left: 2vw;
   right: 60vw;
@@ -24,11 +29,16 @@
   border: 1px solid white;
   border-radius: 13px 13px 13px 13px;
   color: white;
-  padding: 4px 1px 1px 6px;
+  padding: 6px 1px 1px 8px;
 }
 
 .battle-hero-skills {
   position: fixed;
+  display: flex;
+  justify-content: start;
+  align-content: start;
+  flex-flow: row;
+  flex-wrap: wrap;
   top: 71vh;
   left: 42vw;
   right: 2vw;
@@ -36,7 +46,7 @@
   border: 1px solid white;
   border-radius: 13px 13px 13px 13px;
   color: white;
-  padding: 4px 1px 1px 6px;
+  padding: 6px 1px 1px 8px;
 }
 
 .battle-enemy {
@@ -44,7 +54,7 @@
   width: 155px;
   text-align: center;
   font-size: 1.5em;
-  height: 2em;
+  height: 3em;
   font-weight: bold;
 }
 
@@ -52,4 +62,42 @@
   color: darkred;
   font-weight: bolder;
   font-size: 1.8em;
+}
+
+.battle-dmg {
+  color: red;
+  font-size: 1.8em;
+  font-weight: bolder;
+}
+
+.battle-hero-info-text {
+  color: white;
+  font-size: 1.3em;
+  display: flex;
+  flex-flow: row;
+  flex-wrap: nowrap;
+  justify-content: start;
+  align-content: start;
+  line-height: 1.5em;
+  padding: 1px 1px 1px 1px;
+}
+
+.battle-hero-dmg {  
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  font-size: 2.5em;
+  line-height: 3em;
+  color: red;
+  margin-left: -6px;
+}
+
+.battle-hero-btn {
+  background-color: black;
+  color: white;
+  border: 1px solid white;
+  border-radius: 13px 13px 13px 13px;
+  margin-top: 2px;
+  margin-right: 4px;
+  padding: 4px 6px 4px 6px;
 }

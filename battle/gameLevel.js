@@ -34,6 +34,7 @@ export class GameLevel extends EventHandler {
   #hero;
   #heroDetail;
   #battle;
+  #gameOverId = -1;
 
   constructor() {
     super();
@@ -105,6 +106,7 @@ export class GameLevel extends EventHandler {
 
   #nextLevel() {
     let vm = this;
+    vm.#hero.level.addXp(vm.#level * 100);
     vm.#level++;
     vm.#mazeMaxRooms += Math.ceil(vm.#mazeMaxRooms * vm.#roomGrowthFactor);
     vm.#resetMaze();
@@ -160,7 +162,7 @@ export class GameLevel extends EventHandler {
     if (vm.#shouldBattle(dice)) {
       vm.raiseEvent('battle starting', vm);
       vm.#battle = new Battle(vm.#hero, vm);
-      vm.#battle.open(true);
+      vm.#battle.open();
 
     } else if (vm.#shouldTeleport(dice)) {
       vm.raiseEvent('teleporting', vm);
@@ -176,12 +178,20 @@ export class GameLevel extends EventHandler {
     return d[0] > 18 && d[1] > 10 && d[2] > 10 && d[3] > 10;
   }
 
-  gameOver() {
+  gameOver(delay = 2250) {
     let vm = this;
-    alert('GAME OVER');
-    vm.#battle.clearEnemies();
-    vm.#battle.close();
-    vm.#battle = undefined;
-    vm.#firstLevel();
+    if(vm.#gameOverId > -1 || !vm.#battle) {
+      return;
+    } 
+    //alert('GAME OVER');
+    vm.#gameOverId = setTimeout(() => {
+      if (vm.#battle) {
+        vm.#battle.clearEnemies();
+        vm.#battle.close();
+        vm.#battle = undefined;
+        vm.#gameOverId = -1;
+        vm.#firstLevel();
+      }
+    }, delay);
   }
 }

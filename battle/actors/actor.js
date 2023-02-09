@@ -97,7 +97,13 @@ export class Actor extends EventHandler {
 
   getTarget(hostile = true) {
     let vm = this;
-    return hostile ? enemies.sample() : vm;
+    return hostile ? this.enemies.sample() : vm;
+  }
+  
+  recover() {
+    let vm = this;
+    vm.hp = vm.maxHp;
+    vm.mp = vm.maxMp;
   }
 
 }

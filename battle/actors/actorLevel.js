@@ -5,14 +5,14 @@ export class ActorLevel extends EventHandler {
   #actor;
 
   level = 1;
-  toLevelXp = 500;
+  toLevelXp = 25;
   xp = 0;
 
   static xpForNextLevel(
     level = 1,
-    toLevelXp = 500,
-    xpFactor = 0.25,
-    baseXpToLevel = 100
+    toLevelXp = 25,
+    xpFactor = 0.05,
+    baseXpToLevel = 25
   ) {
     return baseXpToLevel * level + Math.floor(toLevelXp * xpFactor);
   }
@@ -29,7 +29,7 @@ export class ActorLevel extends EventHandler {
         break;
       }
       amount +=
-        Math.ceil(base * (vm.level / 2)) +
+        Math.ceil(base * (level / 2)) +
         Math.floor(amount * factor);
     }
     return amount;
@@ -70,11 +70,11 @@ export class ActorLevel extends EventHandler {
 
   levelUp() {
     let vm = this;
-    let level = vm.level;
     vm.level++;
-
-    vm.toLevelXp += ActorLevel
-      .xpForNextLevel(
+    vm.#actor.attributes.available += vm.#actor.attributes.pointsPerLevel;
+    vm.#actor.recover();
+    
+    vm.toLevelXp += ActorLevel.xpForNextLevel(
         vm.level,
         vm.toLevelXp,
         vm.xpFactor,

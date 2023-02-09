@@ -8,19 +8,23 @@ export class Modal extends EventHandler {
   #closeButton;
 
   #isOpen = false;
-  
+
   static #openCount = 0;
+  
+  static get openCount() {
+    return Modal.openCount;
+  }
 
   constructor() {
     super();
     let vm = this;
 
     vm.defineEvent(
-      'opened', 
+      'opened',
       'closed',
       'opening',
       'closing'
-      );
+    );
 
     if (!document.getElementById('modal-styles')) {
       vm.#styles = document.createElement('link');
@@ -54,26 +58,28 @@ export class Modal extends EventHandler {
   close() {
     let vm = this;
     if (vm.isOpen) {
-      
+      vm.#isOpen = false;
+
       let e = { cancel: false, modal: vm };
       vm.raiseEvent('closing', e);
-      if(e.cancel){
+      if (e.cancel) {
         return;
       }
-      
+
       let body = document.querySelector('body');
 
-      if(Modal.#openCount > 0) {
+      if (Modal.#openCount > 0) {
         Modal.#openCount -= 1;
       } else {
         Modal.#openCount = 0;
       }
-      
-      body.removeChild(vm.#closeButton);
+
+      try {
+        body.removeChild(vm.#closeButton);
+      } catch (e) {}
       body.removeChild(vm.#content);
       body.removeChild(vm.#backdrop);
-      
-      vm.#isOpen = false;
+
       if (Modal.#openCount < 1) {
         body.classList.remove('modal-body-lock');
       }
@@ -84,7 +90,7 @@ export class Modal extends EventHandler {
   open(showClose) {
     let vm = this;
     if (!vm.isOpen) {
-      
+
       let e = { cancel: false, modal: vm };
       vm.raiseEvent('opening', e);
       if (e.cancel) {
@@ -98,7 +104,7 @@ export class Modal extends EventHandler {
       if (Modal.#openCount === 1) {
         body.classList.add('modal-body-lock');
       }
-      
+
       body.appendChild(vm.#backdrop);
       body.appendChild(vm.#content);
       if (showClose) {

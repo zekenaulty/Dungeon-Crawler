@@ -10,11 +10,18 @@ export class ActorSkill extends EventHandler {
   maxBy = 0;
   lock = false;
   register = false;
+  availableOutOfCombat = false;
   bubble = true;
   triggerGcd = true;
   name = 'base skill';
   castId;
   recoilId;
+  cdId;
+  
+
+  get displayName() {
+    return `base skill`;
+  }
 
   get summary() {
     return '';
@@ -72,7 +79,10 @@ export class ActorSkill extends EventHandler {
       'end cast',
       'begin recoil',
       'end recoil',
-      'interupted'
+      'interupted',
+      'updated',
+      'begin cd',
+      'end cd'
     );
 
   }
@@ -145,6 +155,21 @@ export class ActorSkill extends EventHandler {
 
         if (vm.bubble) {
           vm.raiseEvent(
+            'begin cd',
+            vm
+          );
+          vm.cdId = setTimeout(() => {
+            if (vm.bubble) {
+              vm.raiseEvent(
+                'end cd',
+                vm
+              );
+            }
+          }, vm.cooldown);
+        }
+
+        if (vm.bubble) {
+          vm.raiseEvent(
             'end cast',
             vm
           );
@@ -170,6 +195,7 @@ export class ActorSkill extends EventHandler {
 
           if (!vm.isGcd) {
             vm.actor.casting = undefined;
+            vm.raiseEvent('updated');
           } else {
             vm.raiseEvent(
               'end gcd',

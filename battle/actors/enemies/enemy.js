@@ -5,12 +5,13 @@ import { ActorLevel } from '../actorLevel.js';
 import { ActorInventory } from '../actorInventory.js';
 import { ActorAttributes } from '../actorAttributes.js';
 import { Dice } from '../../dice.js';
+import { Modal } from '../../../layout/modal/modal.js';
 
 export class Enemy extends Actor {
 
   #aiId;
-  #aiIntervalMin = 850;
-  #aiIntervalMax = 1250;
+  #aiIntervalMin = 1250;
+  #aiIntervalMax = 2250;
   battle;
 
   /*  dexterity should factor 
@@ -40,15 +41,26 @@ export class Enemy extends Actor {
       if (e.actor.casting) {
         e.actor.casting.interupt();
       }
-      e.actor.battle.removeEnemy(e.actor);
     });
 
+  }
+
+  aiCanAct(d) {
+    let vm = this;
+    if (!d) {
+      d = Dice.roll(20);
+    }
+
+    if (d > 18 || vm.casting || vm.battle.paused || Modal.openCount > 1) {
+      return false;
+    }
+    return true;
   }
 
   aiLoop() {
     let vm = this;
     let d = Dice.roll(20);
-    if (d > 18 || vm.casting || vm.battle.paused) {
+    if (!vm.aiCanAct(d)) {
       return;
     }
 
