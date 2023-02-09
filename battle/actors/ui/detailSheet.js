@@ -10,7 +10,7 @@ export class DetailSheet extends Modal {
   #skills;
   #elements = new List();
 
-  constructor(actor, editable) {
+  constructor(actor, editable = false) {
     super();
     let vm = this;
 
@@ -72,7 +72,7 @@ export class DetailSheet extends Modal {
       }
     };
 
-    if (skill.availableOutOfCombat) {
+    if (skill.availableOutOfCombat && vm.#editable) {
       e.element.addEventListener('click', () => {
         e.element.classList.add('detail-sheet-skill-active');
         let clear = () => {

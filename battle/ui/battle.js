@@ -4,6 +4,7 @@ import { Dice } from '../dice.js';
 import { Slime } from '../actors/enemies/slime.js';
 import { ActorLevel } from '../actors/actorLevel.js';
 import { ActorInventory } from '../actors/actorInventory.js';
+import { DetailSheet } from '../actors/ui/detailSheet.js';
 
 export class Battle extends Modal {
 
@@ -156,15 +157,25 @@ export class Battle extends Modal {
         btn.addEventListener('click', () => {
           skill.invoke();
         });
+        let begin = () => {
+          btn.classList.add('battle-hero-btn-active');
+        };
+        let done = () => {
+          btn.classList.remove('battle-hero-btn-active');
+        };
         let update = () => {
           btn.innerHTML = skill.displayName;
           vm.heroInfo();
         };
+        skill.listenToEvent('begin cast', begin);
+        skill.listenToEvent('end recoil', done);
         skill.listenToEvent('updated', update);
         skill.listenToEvent('end cast', update);
         vm.listenToEvent('closing', () => {
           skill.ignoreEvent('updated', update);
           skill.ignoreEvent('end cast', update);
+          skill.ignoreEvent('end recoil', done);
+          skill.ignoreEvent('begin cast', begin);
         });
         vm.#heroSkills.appendChild(btn);
       }
@@ -219,10 +230,15 @@ export class Battle extends Modal {
     e.enemy.div = e;
     e.enemy.target = vm.#hero;
     e.enemy.enemies.push(vm.#hero);
+    e.details = new DetailSheet(e.enemy);
     vm.#hero.enemies.push(e.enemy);
     vm.#enemies.push(e.enemy);
     e.innerHTML = e.enemy.ascii;
     e.classList.add('battle-enemy');
+    
+    e.addEventListener('click', () => {
+      e.details.open(true);
+    });
 
     e.enemy.listenToEvent('begin cast', (n) => {
       n.actor.div.classList.add('battle-enemy-attack');
