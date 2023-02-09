@@ -91,6 +91,10 @@ export class Enemy extends Actor {
     let vm = this;
     let stats = new List();
     stats.push('strength');
+    stats.push('strength');
+    stats.push('vitality');
+    stats.push('strength');
+    stats.push('strength');
     stats.push('vitality');
     while(vm.attributes.available > 0) {
       vm.attributes.available--;
