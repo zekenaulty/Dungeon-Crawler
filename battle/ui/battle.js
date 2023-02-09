@@ -239,7 +239,7 @@ export class Battle extends Modal {
       setTimeout(() => {
         e.classList.remove('battle-dmg');
         e.innerHTML = ascii;
-      }, 550);
+      }, 850);
     });
 
     e.enemy.listenToEvent('death', (n) => {
@@ -253,7 +253,7 @@ export class Battle extends Modal {
     vm.#battlefield.appendChild(e);
   }
 
-  removeEnemy(e, delay = 1250) {
+  removeEnemy(e, delay = 1550) {
     let vm = this;
     e.stopAi();
     vm.#enemies.delete(e);

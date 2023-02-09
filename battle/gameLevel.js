@@ -156,6 +156,8 @@ export class GameLevel extends EventHandler {
     let vm = this;
     if (vm.#maze.move(d)) {
       vm.raiseEvent('moved', vm);
+    } else {
+      return;
     }
 
     let dice = Dice.many(20, 20, 20, 20);
@@ -163,7 +165,6 @@ export class GameLevel extends EventHandler {
       vm.raiseEvent('battle starting', vm);
       vm.#battle = new Battle(vm.#hero, vm);
       vm.#battle.open();
-
     } else if (vm.#shouldTeleport(dice)) {
       vm.raiseEvent('teleporting', vm);
 

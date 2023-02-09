@@ -5,6 +5,7 @@ import { ActorLevel } from '../actorLevel.js';
 import { ActorInventory } from '../actorInventory.js';
 import { ActorAttributes } from '../actorAttributes.js';
 import { Cleave } from '../skills/cleave.js';
+import { Heal } from '../skills/heal.js';
 
 export class Hero extends Actor {
 
@@ -25,6 +26,7 @@ export class Hero extends Actor {
 
     vm.name = 'hero';
     vm.addSkill('cleave', new Cleave(vm));
+    vm.addSkill('heal', new Heal(vm));
   }
 
 }

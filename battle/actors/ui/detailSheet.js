@@ -72,8 +72,22 @@ export class DetailSheet extends Modal {
       }
     };
 
+    if (skill.availableOutOfCombat) {
+      e.element.addEventListener('click', () => {
+        e.element.classList.add('detail-sheet-skill-active');
+        let clear = () => {
+          e.element.classList.remove('detail-sheet-skill-active');
+          vm.update();
+          skill.ignoreEvent('end recoil', clear);
+        };
+        skill.listenToEvent('end recoil', clear);
+        skill.invoke();
+      });
+    }
+
     e.update();
     e.element.classList.add('detail-sheet-attribute-bold');
+    e.element.classList.add('detail-sheet-skill');
     vm.#elements.push(e);
     vm.#skills.appendChild(e.element);
   }

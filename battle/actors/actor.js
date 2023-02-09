@@ -49,7 +49,30 @@ export class Actor extends EventHandler {
 
     vm.raiseEvent('actor constructed', vm);
   }
+  
+  spendMp(amt) {
+    let vm = this;
+    if(amt <= vm.attributes.mp) {
+      vm.attributes.mp -= amt;
+      return true
+    }
+    
+    return false;
+  }
 
+  heal(amt) {
+    let vm = this;
+    let hp = vm.attributes.hp + amt;
+    let over = 0;
+    if(vm.attributes.maxHp < hp) {
+      over = hp - vm.attributes.maxHp;
+      vm.attributes.hp += (amt - over);
+    } else {
+      vm.attributes.hp += amt;
+    }
+    vm.raiseEvent('healed', vm, amt, over);
+  }
+  
   takeDamage(dmg) {
     let vm = this;
     vm.attributes.hp -= dmg;

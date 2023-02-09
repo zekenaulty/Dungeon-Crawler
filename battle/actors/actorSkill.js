@@ -17,6 +17,7 @@ export class ActorSkill extends EventHandler {
   castId;
   recoilId;
   cdId;
+  mpCost = 5;
   
 
   get displayName() {
@@ -85,6 +86,18 @@ export class ActorSkill extends EventHandler {
       'end cd'
     );
 
+  }
+  
+  doHeal(target, percent = 0.5, cost = 20) {
+    let vm = this;
+    
+    if(vm.actor.spendMp(cost)) {
+      
+    let amt = Math.ceil(target.attributes.maxHp * percent);
+    target.heal(amt);
+    
+    }
+    
   }
 
   doAttack(target) {

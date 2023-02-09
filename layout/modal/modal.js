@@ -12,7 +12,7 @@ export class Modal extends EventHandler {
   static #openCount = 0;
   
   static get openCount() {
-    return Modal.openCount;
+    return Modal.#openCount;
   }
 
   constructor() {
