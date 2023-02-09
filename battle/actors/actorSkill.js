@@ -21,11 +21,13 @@ export class ActorSkill extends EventHandler {
   }
 
   get min() {
-    return this.actor.attributes.minDamage + this.minBy;
+    let vm = this;
+    return vm.actor.attributes.minDamage + vm.minBy;
   }
 
   get max() {
-    return this.actor.attributes.maxDamage + this.maxBy;
+    let vm = this;
+    return vm.actor.attributes.maxDamage + vm.maxBy;
   }
 
   get now() {
@@ -33,34 +35,39 @@ export class ActorSkill extends EventHandler {
   }
 
   get onCd() {
-    return this.now - this.lastUsed < this.cooldown;
+    let vm = this;
+    return vm.now - vm.lastUsed < vm.cooldown;
   }
 
   get onGcd() {
-    if (!this.actor.skills['GCD']) {
+    let vm = this;
+    if (!vm.actor.skills['GCD']) {
       return false;
     }
-    return this.actor.skills['GCD'].onCd;
+    return vm.actor.skills['GCD'].onCd;
   }
 
   get isGcd() {
-    return this === this.actor.skills['GCD'];
+    let vm = this;
+    return vm === vm.actor.skills['GCD'];
   }
 
   gcd() {
-    if (!this.actor.skills['GCD'] || !this.triggerGcd) {
+    let vm = this;
+    if (!vm.actor.skills['GCD'] || !vm.triggerGcd) {
       return;
     }
-    this.actor.skills['GCD'].invoke();
+    vm.actor.skills['GCD'].invoke();
   }
 
   constructor(actor) {
     super();
+    let vm = this;
 
-    this.actor = actor;
-    this.resetCooldown;
+    vm.actor = actor;
+    vm.resetCooldown();
 
-    this.defineEvent(
+    vm.defineEvent(
       'begin cast',
       'end cast',
       'begin recoil',
@@ -71,8 +78,9 @@ export class ActorSkill extends EventHandler {
   }
 
   doAttack(target) {
-    let maxDmg = this.max;
-    let minDmg = this.min;
+    let vm = this;
+    let maxDmg = vm.max;
+    let minDmg = vm.min;
     let dmg = Math.ceil(Math.random() * maxDmg) + 1;
     if (dmg < minDmg) {
       dmg = minDmg + 1;
@@ -91,107 +99,103 @@ export class ActorSkill extends EventHandler {
   }
 
   resetCooldown() {
-    this.lastUsed = this.now - this.cooldown;
+    let vm = this;
+    vm.lastUsed = vm.now - vm.cooldown;
   }
 
   refresh() {}
 
   safeInvoke(action) {
-    let self = this;
+    let vm = this;
 
-    if (self.lock || self.onGcd) {
+    if (vm.onGcd || vm.actor.casting === vm) {
       return;
     }
 
-    self.lock = true;
-
-
-    if (!self.onCd && !self.onGcd && self.actor.attributes.hp >= 1) {
-      if (self.actor.casting && !self.isGcd) {
-        self.actor.casting.interupt();
+    if (!vm.onCd && vm.actor.attributes.hp >= 1) {
+      if (vm.actor.casting && !vm.isGcd) {
+        vm.actor.casting.interupt();
       }
 
-      if (self.isGcd) {
-        self.raiseEvent(
+      if (vm.isGcd) {
+        vm.raiseEvent(
           'begin gcd',
-          self
+          vm
         );
       }
 
-      if (self.bubble) {
-        self.raiseEvent(
+      if (vm.bubble) {
+        vm.raiseEvent(
           'begin cast',
-          self
+          vm
         );
       }
 
-      if (!self.isGcd) {
-        self.actor.casting = self;
-        self.gcd();
+      if (!vm.isGcd) {
+        vm.actor.casting = vm;
+        vm.gcd();
       }
 
-      self.castId = setTimeout(() => {
+      vm.castId = setTimeout(() => {
 
         /* run the actual skill */
         action();
 
-        //console.log(this);
+        vm.lastUsed = vm.now;
 
-        self.lastUsed = self.now;
-
-        if (self.bubble) {
-          self.raiseEvent(
+        if (vm.bubble) {
+          vm.raiseEvent(
             'end cast',
-            self
+            vm
           );
         }
 
-        self.castId = -1;
+        vm.castId = -1;
 
-        if (self.bubble) {
-          self.raiseEvent(
+        if (vm.bubble) {
+          vm.raiseEvent(
             'begin recoil',
-            self
+            vm
           );
         }
 
-        self.recoilId = setTimeout(() => {
+        vm.recoilId = setTimeout(() => {
 
-          if (self.bubble) {
-            self.raiseEvent(
+          if (vm.bubble) {
+            vm.raiseEvent(
               'end recoil',
-              self
+              vm
             );
           }
 
-          if (!self.isGcd) {
-            self.actor.casting = undefined;
+          if (!vm.isGcd) {
+            vm.actor.casting = undefined;
           } else {
-            self.raiseEvent(
+            vm.raiseEvent(
               'end gcd',
-              self
+              vm
             );
           }
 
-          self.recoilId = -1;
-          self.lock = false;
+          vm.recoilId = -1;
 
-        }, self.recoilTime);
-      }, self.castTime);
+        }, vm.recoilTime);
+      }, vm.castTime);
     }
 
   }
 
   interupt() {
-    clearTimeout(this.castId);
-    clearTimeout(this.recoilId);
-    this.castId = -1;
-    this.casting = undefined;
-    this.recoilId = -1;
-    this.lock = false;
-    this.raiseEvent(
+    let vm = this;
+    clearTimeout(vm.castId);
+    clearTimeout(vm.recoilId);
+    vm.castId = -1;
+    vm.casting = undefined;
+    vm.recoilId = -1;
+    vm.lock = false;
+    vm.raiseEvent(
       'interupted',
-      this
+      vm
     );
   }
 

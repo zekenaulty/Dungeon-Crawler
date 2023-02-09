@@ -21,14 +21,15 @@ export class Actor extends EventHandler {
 
   constructor(gameLevel) {
     super();
+    let vm = this;
 
-    this.gameLevel = gameLevel;
+    vm.gameLevel = gameLevel;
 
-    this.level = new ActorLevel(this);
-    this.attributes = new ActorAttributes(this);
-    this.inventory = new ActorInventory(this);
+    vm.level = new ActorLevel(vm);
+    vm.attributes = new ActorAttributes(vm);
+    vm.inventory = new ActorInventory(vm);
 
-    this.defineEvent(
+    vm.defineEvent(
       'actor constructed',
       'leveled up',
       'healed',
@@ -43,27 +44,29 @@ export class Actor extends EventHandler {
       'end gcd'
     );
 
-    this.addSkill('GCD', new GCD(this));
-    this.addSkill('attack', new Attack(this));
+    vm.addSkill('GCD', new GCD(vm));
+    vm.addSkill('attack', new Attack(vm));
 
-    this.raiseEvent('actor constructed', this);
+    vm.raiseEvent('actor constructed', vm);
   }
 
   takeDamage(dmg) {
-    this.attributes.hp -= dmg;
-    this.raiseEvent('damaged', this, dmg);
-    if (this.attributes.hp < 1) {
-      this.raiseEvent(
+    let vm = this;
+    vm.attributes.hp -= dmg;
+    vm.raiseEvent('damaged', vm, dmg);
+    if (vm.attributes.hp < 1) {
+      vm.raiseEvent(
         'death',
         {
-          actor: this,
-          gameLevel: this.gameLevel
+          actor: vm,
+          gameLevel: vm.gameLevel
         });
     }
   }
 
   addSkill(key, skill) {
-    this.skills[key] = skill;
+    let vm = this;
+    vm.skills[key] = skill;
 
     skill.listenToEvent('begin cast', (n) => {
       n.actor.raiseEvent('begin cast', n);
@@ -93,7 +96,8 @@ export class Actor extends EventHandler {
 
 
   getTarget(hostile = true) {
-    return hostile ? enemies.sample() : this;
+    let vm = this;
+    return hostile ? enemies.sample() : vm;
   }
 
 }

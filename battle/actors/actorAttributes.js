@@ -21,45 +21,53 @@ export class ActorAttributes extends EventHandler {
 
   constructor(actor) {
     super();
+    let vm = this;
 
-    this.defineEvent('changed');
+    vm.defineEvent('changed');
 
-    this.#actor = actor;
-    this.#actor.level.listenToEvent('actor constructed', () => {
+    vm.#actor = actor;
+    vm.#actor.level.listenToEvent('actor constructed', () => {
       actor.listenToEvent('leveled up', (e) => {
         e.actor.attribites.available += e.actor.attribites.pointsPerLevel;
       });
     });
 
-    this.hp = this.maxHp;
-    this.mp = this.maxMp;
+    vm.hp = vm.maxHp;
+    vm.mp = vm.maxMp;
   }
 
   get damageRange() {
-    return `${this.minDamage} - ${this.maxDamage}`;
+    let vm = this;
+    return `${vm.minDamage} - ${vm.maxDamage}`;
   }
   
   get health() {
-    return `${this.hp}/${this.maxHp}`;
+    let vm = this;
+    return `${vm.hp}/${vm.maxHp}`;
   }
   
   get mana() {
-    return `${this.mp}/${this.maxMp}`;
+    let vm = this;
+    return `${vm.mp}/${vm.maxMp}`;
   }
   
   get maxHp() {
-    return this.baseHp + (this.vitality * 2);
+    let vm = this;
+    return vm.baseHp + (vm.vitality * 2);
   }
 
   get maxMp() {
-    return this.baseMp + (this.intellect * 2);
+    let vm = this;
+    return vm.baseMp + (vm.intellect * 2);
   }
 
   get minDamage() {
-    return this.baseDamage + Math.floor(this.strength / 6) + 1;
+    let vm = this;
+    return vm.baseDamage + Math.floor(vm.strength / 6) + 1;
   }
 
   get maxDamage() {
-    return this.baseDamage + Math.ceil(this.strength / 3) + 2
+    let vm = this;
+    return vm.baseDamage + Math.ceil(vm.strength / 3) + 2
   }
-} /* end ActorAttributes */
+}

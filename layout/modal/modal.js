@@ -13,8 +13,9 @@ export class Modal extends EventHandler {
 
   constructor() {
     super();
+    let vm = this;
 
-    this.defineEvent(
+    vm.defineEvent(
       'opened', 
       'closed',
       'opening',
@@ -22,38 +23,40 @@ export class Modal extends EventHandler {
       );
 
     if (!document.getElementById('modal-styles')) {
-      this.#styles = document.createElement('link');
-      this.#styles.id = 'modal-styles';
-      this.#styles.rel = 'stylesheet';
-      this.#styles.href = './layout/modal/modal.css';
-      document.querySelector('head').appendChild(this.#styles);
+      vm.#styles = document.createElement('link');
+      vm.#styles.id = 'modal-styles';
+      vm.#styles.rel = 'stylesheet';
+      vm.#styles.href = './layout/modal/modal.css';
+      document.querySelector('head').appendChild(vm.#styles);
     } else {
-      this.#styles = document.querySelector('#modal-styles');
+      vm.#styles = document.querySelector('#modal-styles');
     }
 
-    this.#backdrop = document.createElement('div');
-    this.#content = document.createElement('div');
-    this.#closeButton = document.createElement('button');
+    vm.#backdrop = document.createElement('div');
+    vm.#content = document.createElement('div');
+    vm.#closeButton = document.createElement('button');
 
-    this.#backdrop.classList.add('modal-bg');
-    this.#content.classList.add('modal-content-container');
-    this.#closeButton.classList.add('modal-close');
+    vm.#backdrop.classList.add('modal-bg');
+    vm.#content.classList.add('modal-content-container');
+    vm.#closeButton.classList.add('modal-close');
 
-    this.#closeButton.innerHTML = '&times;';
-    this.#closeButton.addEventListener('click', () => {
-      this.close();
+    vm.#closeButton.innerHTML = '&times;';
+    vm.#closeButton.addEventListener('click', () => {
+      vm.close();
     });
   }
 
   get isOpen() {
-    return this.#isOpen;
+    let vm = this;
+    return vm.#isOpen;
   }
 
   close() {
-    if (this.isOpen) {
+    let vm = this;
+    if (vm.isOpen) {
       
-      let e = { cancel: false, modal: this };
-      this.raiseEvent('closing', e);
+      let e = { cancel: false, modal: vm };
+      vm.raiseEvent('closing', e);
       if(e.cancel){
         return;
       }
@@ -66,23 +69,24 @@ export class Modal extends EventHandler {
         Modal.#openCount = 0;
       }
       
-      body.removeChild(this.#closeButton);
-      body.removeChild(this.#content);
-      body.removeChild(this.#backdrop);
+      body.removeChild(vm.#closeButton);
+      body.removeChild(vm.#content);
+      body.removeChild(vm.#backdrop);
       
-      this.#isOpen = false;
+      vm.#isOpen = false;
       if (Modal.#openCount < 1) {
         body.classList.remove('modal-body-lock');
       }
-      this.raiseEvent('closed', this);
+      vm.raiseEvent('closed', vm);
     }
   }
 
   open(showClose) {
-    if (!this.isOpen) {
+    let vm = this;
+    if (!vm.isOpen) {
       
-      let e = { cancel: false, modal: this };
-      this.raiseEvent('opening', e);
+      let e = { cancel: false, modal: vm };
+      vm.raiseEvent('opening', e);
       if (e.cancel) {
         return;
       }
@@ -90,34 +94,37 @@ export class Modal extends EventHandler {
 
       Modal.#openCount++;
 
-      this.#isOpen = true;
+      vm.#isOpen = true;
       if (Modal.#openCount === 1) {
         body.classList.add('modal-body-lock');
       }
       
-      body.appendChild(this.#backdrop);
-      body.appendChild(this.#content);
+      body.appendChild(vm.#backdrop);
+      body.appendChild(vm.#content);
       if (showClose) {
-        body.appendChild(this.#closeButton);
+        body.appendChild(vm.#closeButton);
       }
-      this.raiseEvent('opened', this);
+      vm.raiseEvent('opened', vm);
     }
   }
 
   appendChild(e) {
+    let vm = this;
     if (e) {
-      this.#content.appendChild(e);
+      vm.#content.appendChild(e);
     }
   }
 
   removeChild(e) {
+    let vm = this;
     if (e) {
-      this.#content.removeChild(e);
+      vm.#content.removeChild(e);
     }
   }
 
   setHtml(html) {
-    this.#content.innerHTML = html;
+    let vm = this;
+    vm.#content.innerHTML = html;
   }
 
 }

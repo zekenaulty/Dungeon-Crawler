@@ -21,60 +21,63 @@ export class Battle extends Modal {
   #combatDelayMax = 1550;
 
   get #combatDelay() {
-    let r = Math.floor(Math.random() * this.#combatDelayMax) + 1;
-    if (r < this.#combatDelayMin) {
-      r = this.#combatDelayMin;
+    let vm = this;
+    let r = Math.floor(Math.random() * vm.#combatDelayMax) + 1;
+    if (r < vm.#combatDelayMin) {
+      r = vm.#combatDelayMin;
     }
 
     return r;
   }
 
   get paused() {
-    return this.#paused;
+    let vm = this;
+    return vm.#paused;
   }
 
   constructor(hero, level) {
     super();
+    let vm = this;
 
-    this.#hero = hero;
-    this.#level = level;
-    this.#enemies = new List();
-    this.#paused = true;
-    this.#minMobLevel = this.#level - 2;
-    this.#maxMobLevel = this.#level + 3;
+    vm.#hero = hero;
+    vm.#level = level;
+    vm.#enemies = {};
+    vm.#paused = true;
+    vm.#minMobLevel = vm.#level - 2;
+    vm.#maxMobLevel = vm.#level + 3;
 
-    if (this.#minMobLevel < 1) {
-      this.#minMobLevel = 1;
+    if (vm.#minMobLevel < 1) {
+      vm.#minMobLevel = 1;
     }
 
     if (!document.getElementById('battle-styles')) {
-      this.#stylesheet = document.createElement('link');
-      this.#stylesheet.id = 'battle-styles';
-      this.#stylesheet.rel = 'stylesheet';
-      this.#stylesheet.href = './battle/ui/battle.css';
-      document.querySelector('head').appendChild(this.#stylesheet);
+      vm.#stylesheet = document.createElement('link');
+      vm.#stylesheet.id = 'battle-styles';
+      vm.#stylesheet.rel = 'stylesheet';
+      vm.#stylesheet.href = './battle/ui/battle.css';
+      document.querySelector('head').appendChild(vm.#stylesheet);
     } else {
-      this.#stylesheet = document.querySelector('#battle-styles');
+      vm.#stylesheet = document.querySelector('#battle-styles');
     }
 
-    this.#battlefield = document.createElement('div');
-    this.#heroInfo = document.createElement('div');
-    this.#heroSkills = document.createElement('div');
+    vm.#battlefield = document.createElement('div');
+    vm.#heroInfo = document.createElement('div');
+    vm.#heroSkills = document.createElement('div');
 
-    this.#battlefield.classList.add('battle-battlefield');
-    this.#heroInfo.classList.add('battle-hero-info');
-    this.#heroSkills.classList.add('battle-hero-skills');
+    vm.#battlefield.classList.add('battle-battlefield');
+    vm.#heroInfo.classList.add('battle-hero-info');
+    vm.#heroSkills.classList.add('battle-hero-skills');
 
-    this.appendChild(this.#battlefield);
-    this.appendChild(this.#heroInfo);
-    this.appendChild(this.#heroSkills);
+    vm.appendChild(vm.#battlefield);
+    vm.appendChild(vm.#heroInfo);
+    vm.appendChild(vm.#heroSkills);
 
-    this.defineEvent(
+    vm.defineEvent(
       'begin combat',
       'end combat'
     );
 
-    this.listenToEvent('opening', (e) => {
+    vm.listenToEvent('opening', (e) => {
       let count = e.modal.toSpwan();
       for (let i = 0; i < count; i++) {
         e.modal.spawn(i);
@@ -95,26 +98,28 @@ export class Battle extends Modal {
       );
     });
 
-    this.#hero.listenToEvent('death', (e) => {
-      e.actor.gameLevel.gameOver();
+    vm.#hero.listenToEvent('death', (e) => {
+      e.gameLevel.gameOver();
     });
 
   }
 
   mobLevel() {
+    let vm = this;
     if (Dice.d20() > 13) {
-      let l = Math.floor(Math.random() * this.#maxMobLevel) + 1;
-      if (l < this.#minMobLevel) {
-        l = this.#minMobLevel;
+      let l = Math.floor(Math.random() * vm.#maxMobLevel) + 1;
+      if (l < vm.#minMobLevel) {
+        l = vm.#minMobLevel;
       }
 
       return l;
     }
 
-    return this.#level;
+    return vm.#level;
   }
 
   toSpwan() {
+    let vm = this;
     let d = Dice.d20();
     let m = 1;
     if (d > 17) {
@@ -135,18 +140,20 @@ export class Battle extends Modal {
   }
 
   spawn(index) {
+    let vm = this;
     let e = document.createElement('div');
+    e.id = `enemy${index}`;
     e.enemy = new Slime(
-      this.#level,
-      this,
-      this.#hero
+      vm.#level,
+      vm,
+      vm.#hero
     );
+    e.enemy.id = e.id;
     e.enemy.div = e;
-    e.enemy.target = this.#hero;
-    e.enemy.enemies.push(this.#hero);
-    this.#hero.enemies.push(e.enemy);
-    this.#enemies.push(e.enemy);
-    e.id = `enemy-${index}`;
+    e.enemy.target = vm.#hero;
+    e.enemy.enemies.push(vm.#hero);
+    vm.#hero.enemies.push(e.enemy);
+    vm.#enemies[e.id] = e.enemy;
     e.innerHTML = e.enemy.ascii;
     e.classList.add('battle-enemy');
 
@@ -158,26 +165,29 @@ export class Battle extends Modal {
       n.actor.div.classList.remove('battle-enemy-attack');
     });
 
-    this.#battlefield.appendChild(e);
+    vm.#battlefield.appendChild(e);
   }
 
   removeEnemy(e) {
+    let vm = this;
     e.stopAi();
-    this.#enemies.delete(e);
-    this.#hero.enemies.delete(e);
-    this.#battlefield.removeChild(e.div);
+    delete vm.#enemies[e.id];
+    vm.#hero.enemies.delete(e);
+    vm.#battlefield.removeChild(e.div);
   }
 
   clearEnemies() {
-    let l = this.#enemies.length - 1;
+    let vm = this;
+    let l = vm.#hero.enemies.length - 1;
     for (let i = l; i >= 0; i--) {
-      this.removeEnemy(this.#enemies[i]);
+      vm.removeEnemy(vm.#hero.enemies[i]);
     }
   }
 
   startAi() {
-    for (let i = 0; i < this.#enemies.length; i++) {
-      this.#enemies[i].startAi();
+    let vm = this;
+    for (let i = 0; i < vm.#hero.enemies.length; i++) {
+      vm.#hero.enemies[i].startAi();
     }
   }
 

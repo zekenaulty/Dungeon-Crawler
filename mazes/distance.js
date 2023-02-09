@@ -7,30 +7,34 @@ export class Distance {
   items = new List();
 
   constructor(start) {
+    let vm = this;
 
-    this.root = start;
-    this.distances[this.root.key] = 0;
-    this.items.push(this.root)
+    vm.root = start;
+    vm.distances[vm.root.key] = 0;
+    vm.items.push(vm.root)
 
   }
 
   collect(cell, distance) {
-    this.distances[cell.key] = distance;
-    this.items.push(cell);
+    let vm = this;
+    vm.distances[cell.key] = distance;
+    vm.items.push(cell);
   }
 
   distance(cell) {
-    return this.distances[cell.key];
+    let vm = this;
+    return vm.distances[cell.key];
   }
 
   pathTo(cell) {
+    let vm = this;
     let current = cell;
-    let breadcrumbs = new Distance(this.root);
-    while (current !== this.root) {
+    let breadcrumbs = new Distance(vm.root);
+    while (current !== vm.root) {
       for (let i = 0; i < current.links.items.length; i++) {
         let neighbor = current.links.items[i];
-        if (this.distance(neighbor) < this.distance(current)) {
-          breadcrumbs.collect(neighbor, this.distance(neighbor));
+        if (vm.distance(neighbor) < vm.distance(current)) {
+          breadcrumbs.collect(neighbor, vm.distance(neighbor));
           current = neighbor;
           break;
         }
@@ -40,11 +44,12 @@ export class Distance {
   }
 
   max() {
+    let vm = this;
     let maxDistance = 0;
-    let maxCell = this.root;
-    for (let i = 0; i < this.items.length; i++) {
-      let c = this.items[i];
-      let d = this.distance(c);
+    let maxCell = vm.root;
+    for (let i = 0; i < vm.items.length; i++) {
+      let c = vm.items[i];
+      let d = vm.distance(c);
       if (d > maxDistance) {
         maxCell = c;
         maxDistance = d;

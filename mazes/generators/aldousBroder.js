@@ -4,10 +4,11 @@ import { Generator } from './generator.js';
 export class AldousBroder extends Generator {
 
   generate() {
-    this.maze.initialize();
+    let vm = this;
+    vm.maze.initialize();
     
-    let cell = this.maze.randomCell();
-    let unvisited = this.maze.cells.length - 1;
+    let cell = vm.maze.randomCell();
+    let unvisited = vm.maze.cells.length - 1;
     
     while(unvisited > 0) {
       let neighbor = cell.neighbors.items.sample();
@@ -18,9 +19,9 @@ export class AldousBroder extends Generator {
       cell = neighbor;
     }
     
-    this.maze.setup();
+    vm.maze.setup();
     
-    this.raiseEvent('generated');
+    vm.raiseEvent('generated');
 
   }
 

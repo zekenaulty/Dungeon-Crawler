@@ -5,20 +5,23 @@ export class GCD extends ActorSkill {
 
   constructor(actor) {
     super(actor);
-    this.cooldown = 250;
-    this.castTime = 25;
-    this.recoilTime = 25;
-    this.name = 'Global Cooldown';
-    this.triggerGcd = false;
-    this.bubble = false;
+    let vm = this;
+    vm.cooldown = 250;
+    vm.castTime = 25;
+    vm.recoilTime = 25;
+    vm.name = 'Global Cooldown';
+    vm.triggerGcd = false;
+    vm.bubble = false;
   }
 
   get summary() {
+    let vm = this;
     return 'The global cooldown for the actor, provides skills fire use gap.';
   }
   
   invoke() {
-    this.safeInvoke(() => { /* GCD DO NOTHING */ });
+    let vm = this;
+    vm.safeInvoke(() => { /* GCD DO NOTHING */ });
   }
 
 }

@@ -8,10 +8,12 @@ import { Cleave } from '../skills/cleave.js';
 
 export class Hero extends Actor {
   
-  constructor() {
-    super();
+  constructor(gameLevel) {
+    super(gameLevel);
+    let vm = this;
     
-    this.addSkill('cleave', new Cleave(this));
+    vm.name = 'hero';
+    vm.addSkill('cleave', new Cleave(vm));
   }
   
 }

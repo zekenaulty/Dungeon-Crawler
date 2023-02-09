@@ -13,23 +13,27 @@ export class Slime extends Enemy {
   
   constructor(gameLevel, battle, hero) {
     super(gameLevel, battle, hero);
+    let vm = this;
     
-    this.#slimes = new List();
-    this.#slimes.push('( -  - )');
-    this.#slimes.push('( ●  ● )');
-    this.#slimes.push('( ¤  ¤ )');
-    this.#slimes.push('( ○  ○ )');
-    this.#slimes.push('( □  □ )');
-    this.#slimes.push('( ◇  ◇ )');
-    this.#slimes.push('( ° ︎ ° )');
-    this.#slimes.push('( ■  ■ )');
-    this.#slimes.push('( ~  ~ )');
-    this.#slimes.push('( •  • )');
-    this.#slimes.push('( ▪  ▪︎ )');
+    vm.name = 'slime';
+    
+    vm.#slimes = new List();
+    vm.#slimes.push('( -  - )');
+    vm.#slimes.push('( ●  ● )');
+    vm.#slimes.push('( ¤  ¤ )');
+    vm.#slimes.push('( ○  ○ )');
+    vm.#slimes.push('( □  □ )');
+    vm.#slimes.push('( ◇  ◇ )');
+    vm.#slimes.push('( ° ︎ ° )');
+    vm.#slimes.push('( ■  ■ )');
+    vm.#slimes.push('( ~  ~ )');
+    vm.#slimes.push('( •  • )');
+    vm.#slimes.push('( ▪  ▪︎ )');
 
   }
   
   get ascii() {
-    return this.#slimes.sample();
+    let vm = this;
+    return vm.#slimes.sample();
   }
 }

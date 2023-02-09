@@ -37,8 +37,9 @@ export class GameLevel extends EventHandler {
 
   constructor() {
     super();
+    let vm = this;
 
-    this.defineEvent(
+    vm.defineEvent(
       'game over',
       'won battle',
       'completed level',
@@ -50,108 +51,119 @@ export class GameLevel extends EventHandler {
   }
 
   initialize(width, height, gfx) {
-    this.#scaler = new CanvasRectangleScaler(width, height);
-    this.#maze = new Maze(this.#scaler.rows, this.#scaler.columns);
-    this.#renderer = new CanvasRectangle(this.#maze, this.#scaler, gfx);
-    this.#loadGenerators();
-    this.#maze.listenToEvent('solved', () => {
-      this.#nextLevel();
+    let vm = this;
+    vm.#scaler = new CanvasRectangleScaler(width, height);
+    vm.#maze = new Maze(vm.#scaler.rows, vm.#scaler.columns);
+    vm.#renderer = new CanvasRectangle(vm.#maze, vm.#scaler, gfx);
+    vm.#loadGenerators();
+    vm.#maze.listenToEvent('solved', () => {
+      vm.#nextLevel();
     });
   }
 
   begin(newGame = false) {
+    let vm = this;
     let saveData = localStorage.getItem('DC_GAME_SAVE');
 
     if (saveData && !newGame) {
 
     } else {
-      this.#firstLevel();
+      vm.#firstLevel();
     }
   }
 
   solve() {
-    if (!this.#renderer.showSolution) {
-      this.#renderer.revealSolution();
+    let vm = this;
+    if (!vm.#renderer.showSolution) {
+      vm.#renderer.revealSolution();
     } else {
-      this.#renderer.hideSolution();
+      vm.#renderer.hideSolution();
     }
   }
 
   heroInfo() {
-    this.#heroDetail.open(true);
+    let vm = this;
+    vm.#heroDetail.open(true);
   }
 
   #randomMaze() {
+    let vm = this;
     setTimeout(() => {
-      this.#randomGenerator().generate();
-    }, this.#breath);
+      vm.#randomGenerator().generate();
+    }, vm.#breath);
   }
 
   #firstLevel() {
-    this.#level = 1;
-    this.#mazeMaxRooms = 32;
-    this.#resetMaze();
-    this.#randomMaze();
-    this.#hero = new Hero(this);
-    this.#heroDetail = new DetailSheet(this.#hero, true);
+    let vm = this;
+    vm.#level = 1;
+    vm.#mazeMaxRooms = 32;
+    vm.#resetMaze();
+    vm.#randomMaze();
+    vm.#hero = new Hero(vm);
+    vm.#heroDetail = new DetailSheet(vm.#hero, true);
   }
 
   #nextLevel() {
-    this.#level++;
-    this.#mazeMaxRooms += Math.ceil(this.#mazeMaxRooms * this.#roomGrowthFactor);
-    this.#resetMaze();
-    this.#randomMaze();
+    let vm = this;
+    vm.#level++;
+    vm.#mazeMaxRooms += Math.ceil(vm.#mazeMaxRooms * vm.#roomGrowthFactor);
+    vm.#resetMaze();
+    vm.#randomMaze();
   }
 
   #resetMaze() {
+    let vm = this;
 
-    this.#scaler.setScaleBounds(this.#mazeMaxRooms, this.#toTiny);
-    this.#scaler.calc();
-    this.#maze.resize(this.#scaler.rows, this.#scaler.columns);
+    vm.#scaler.setScaleBounds(vm.#mazeMaxRooms, vm.#toTiny);
+    vm.#scaler.calc();
+    vm.#maze.resize(vm.#scaler.rows, vm.#scaler.columns);
 
   }
 
   #randomGenerator() {
-    return this.#generators.sample();
+    let vm = this;
+    return vm.#generators.sample();
   }
 
   #loadGenerators() {
-    this.#generators = new List();
+    let vm = this;
+    vm.#generators = new List();
     /* 
-    this.#generators.push(new BinaryTree(this.#maze));
-    this.#generators.push(new Sidewinder(this.#maze));
-    this.#generators.push(new AldousBroder(this.#maze));
-    this.#generators.push(new Wilsons(this.#maze));
-    this.#generators.push(new HuntAndKill(this.#maze));
+    vm.#generators.push(new BinaryTree(vm.#maze));
+    vm.#generators.push(new Sidewinder(vm.#maze));
+    vm.#generators.push(new AldousBroder(vm.#maze));
+    vm.#generators.push(new Wilsons(vm.#maze));
+    vm.#generators.push(new HuntAndKill(vm.#maze));
     */
-    this.#generators.push(new RecursiveBacktracker(this.#maze));
+    vm.#generators.push(new RecursiveBacktracker(vm.#maze));
     /*
-    this.#generators.push(new SimplePrims(this.#maze));
-    this.#generators.push(new GrowingTree(this.#maze));
+    vm.#generators.push(new SimplePrims(vm.#maze));
+    vm.#generators.push(new GrowingTree(vm.#maze));
     */
 
-    this.#generators.forEach((g) => {
+    vm.#generators.forEach((g) => {
       g.listenToEvent('generated', () => {
         setTimeout(() => {
-          this.#renderer.draw();
-        }, this.#breath);
+          vm.#renderer.draw();
+        }, vm.#breath);
       });
     });
   }
 
   move(d) {
-    if (this.#maze.move(d)) {
-      this.raiseEvent('moved', this);
+    let vm = this;
+    if (vm.#maze.move(d)) {
+      vm.raiseEvent('moved', vm);
     }
 
     let dice = Dice.many(20, 20, 20, 20);
-    if (this.#shouldBattle(dice)) {
-      this.raiseEvent('battle starting', this);
-      this.#battle = new Battle(this.#hero, this);
-      this.#battle.open(true);
+    if (vm.#shouldBattle(dice)) {
+      vm.raiseEvent('battle starting', vm);
+      vm.#battle = new Battle(vm.#hero, vm);
+      vm.#battle.open(true);
 
-    } else if (this.#shouldTeleport(dice)) {
-      this.raiseEvent('teleporting', this);
+    } else if (vm.#shouldTeleport(dice)) {
+      vm.raiseEvent('teleporting', vm);
 
     }
   }
@@ -165,10 +177,11 @@ export class GameLevel extends EventHandler {
   }
 
   gameOver() {
+    let vm = this;
     alert('GAME OVER');
-    this.#battle.clearEnemies();
-    this.#battle.close();
-    this.#battle = undefined;
-    this.#firstLevel();
+    vm.#battle.clearEnemies();
+    vm.#battle.close();
+    vm.#battle = undefined;
+    vm.#firstLevel();
   }
 }

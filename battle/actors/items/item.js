@@ -8,6 +8,7 @@ export class Item extends EventHandler {
 
   constructor() {
     super();
+    let vm = this;
 
   }
   

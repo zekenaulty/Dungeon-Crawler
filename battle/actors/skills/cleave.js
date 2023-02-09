@@ -8,32 +8,36 @@ export class Cleave extends ActorSkill {
 
   constructor(actor) {
     super(actor);
-    this.cooldown = 1000;
-    this.register = true;
-    this.name = 'Cleave';
-    this.#charges = this.#maxCharges;
-    this.minBy = -1;
-    this.maxBy = -3;
+    let vm = this;
+    vm.cooldown = 1000;
+    vm.register = true;
+    vm.name = 'Cleave';
+    vm.#charges = vm.#maxCharges;
+    vm.minBy = -1;
+    vm.maxBy = -3;
   }
 
   get summary() {
-    return `Hit each enemy for ${this.min}-${this.max} damage.`;
+    let vm = this;
+    return `Hit each enemy for ${vm.min}-${vm.max} damage.`;
   }
   
   get charges() {
-    return this.#charges;
+    let vm = this;
+    return vm.#charges;
   }
   
   invoke() {
+    let vm = this;
     safeInvoke(() => {
-      if (this.#charges > 0) {
-        this.#charges--;
-        for (let i = 0; i < this.actor.enemies.length; i++) {
-          this.doAttack(this.actor.enemies[i]);
+      if (vm.#charges > 0) {
+        vm.#charges--;
+        for (let i = 0; i < vm.actor.enemies.length; i++) {
+          vm.doAttack(vm.actor.enemies[i]);
         }
         setTimeout(() => {
-          if(this.#charges < this.#maxCharges) {
-            this.#charges++;
+          if(vm.#charges < vm.#maxCharges) {
+            vm.#charges++;
           }
         }, 4000);
       }

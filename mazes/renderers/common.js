@@ -6,21 +6,23 @@ export class Line {
   #gfx = undefined;
 
   constructor(x1, y1, x2, y2, gfx) {
-    this.x1 = x1;
-    this.y1 = y1;
-    this.x2 = x2;
-    this.y2 = y2;
-    this.#gfx = gfx;
+    let vm = this;
+    vm.x1 = x1;
+    vm.y1 = y1;
+    vm.x2 = x2;
+    vm.y2 = y2;
+    vm.#gfx = gfx;
   }
 
   draw(style) {
+    let vm = this;
     let exec = () => {
-      this.#gfx.beginPath();
-      this.#gfx.moveTo(this.x1, this.y1);
-      this.#gfx.lineTo(this.x2, this.y2);
-      this.#gfx.strokeStyle = style;
-      this.#gfx.stroke();
-      this.#gfx.closePath();
+      vm.#gfx.beginPath();
+      vm.#gfx.moveTo(vm.x1, vm.y1);
+      vm.#gfx.lineTo(vm.x2, vm.y2);
+      vm.#gfx.strokeStyle = style;
+      vm.#gfx.stroke();
+      vm.#gfx.closePath();
     };
 
     exec();
@@ -36,34 +38,37 @@ export class Rectangle {
 
 
   constructor(x, y, width, height, gfx) {
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
-    this.#gfx = gfx;
+    let vm = this;
+    vm.x = x;
+    vm.y = y;
+    vm.width = width;
+    vm.height = height;
+    vm.#gfx = gfx;
   }
 
   fill(style) {
-    this.#gfx.fillStyle = style;
-    this.#gfx.beginPath();
-    this.#gfx.rect(
-      this.x,
-      this.y,
-      this.width,
-      this.height);
-    this.#gfx.fill();
-    this.#gfx.closePath();
+    let vm = this;
+    vm.#gfx.fillStyle = style;
+    vm.#gfx.beginPath();
+    vm.#gfx.rect(
+      vm.x,
+      vm.y,
+      vm.width,
+      vm.height);
+    vm.#gfx.fill();
+    vm.#gfx.closePath();
   }
   
   stroke(style) {
-    this.#gfx.strokeStyle = style;
-    this.#gfx.beginPath();
-    this.#gfx.rect(
-      this.x,
-      this.y,
-      this.width,
-      this.height);
-    this.#gfx.stroke();
-    this.#gfx.closePath();
+    let vm = this;
+    vm.#gfx.strokeStyle = style;
+    vm.#gfx.beginPath();
+    vm.#gfx.rect(
+      vm.x,
+      vm.y,
+      vm.width,
+      vm.height);
+    vm.#gfx.stroke();
+    vm.#gfx.closePath();
   }
 }

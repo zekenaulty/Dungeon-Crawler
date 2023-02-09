@@ -19,19 +19,22 @@ export class Cell extends EventHandler {
   
   constructor(row, column) {
     super();
+    let vm = this;
     
-    this.row = row;
-    this.column = column;
+    vm.row = row;
+    vm.column = column;
   }
   
   get key() {
-    return this.row + ',' + this.column;
+    let vm = this;
+    return vm.row + ',' + vm.column;
   }
   
   distances() {
-    let result = new Distance(this);
+    let vm = this;
+    let result = new Distance(vm);
     let frontier = new List();
-    frontier.push(this);
+    frontier.push(vm);
 
     while (true) {
       let newFrontier = new List();

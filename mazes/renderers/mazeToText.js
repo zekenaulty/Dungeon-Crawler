@@ -6,28 +6,30 @@ export class MazeToText extends EventHandler {
   
   constructor(maze) {
     super();
+    let vm = this;
     
-    this.#maze = maze;
+    vm.#maze = maze;
   }
   
   render(){
-    this.#output = '+';
-    for(let y = 0; y < this.#maze.columns; y++) {
-      this.#output += '---+';
+    let vm = this;
+    vm.#output = '+';
+    for(let y = 0; y < vm.#maze.columns; y++) {
+      vm.#output += '---+';
     }
-    this.#output += '\r\n';
+    vm.#output += '\r\n';
     
     let top = '';
     let bottom = '';
     let eastBoundry = '';
     let southBoundry = '';
-    this.#maze.walkGrid((r, c) => {
+    vm.#maze.walkGrid((r, c) => {
       if(c === 0) {
         top = '|';
         bottom = '+';
       }
       
-      let cell = this.#maze.cell(r, c);
+      let cell = vm.#maze.cell(r, c);
       
       eastBoundry = (cell.links.linked(cell.east)) ? ' ' : '|';
       top += '   ' + eastBoundry;
@@ -35,16 +37,17 @@ export class MazeToText extends EventHandler {
       southBoundry = (cell.links.linked(cell.south)) ? '   ' : '---';
       bottom += southBoundry + '+';
       
-      if(c === this.#maze.columns - 1) {
-        this.#output += top + '\r\n';
-        this.#output += bottom + '\r\n';
+      if(c === vm.#maze.columns - 1) {
+        vm.#output += top + '\r\n';
+        vm.#output += bottom + '\r\n';
       }
     });
   }
   
   get text() {
-    this.render();
-    return this.#output;
+    let vm = this;
+    vm.render();
+    return vm.#output;
   }
   
 }

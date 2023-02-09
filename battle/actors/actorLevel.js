@@ -29,7 +29,7 @@ export class ActorLevel extends EventHandler {
         break;
       }
       amount +=
-        Math.ceil(base * (this.level / 2)) +
+        Math.ceil(base * (vm.level / 2)) +
         Math.floor(amount * factor);
     }
     return amount;
@@ -37,10 +37,11 @@ export class ActorLevel extends EventHandler {
 
   constructor(actor) {
     super();
+    let vm = this;
 
-    this.#actor = actor;
+    vm.#actor = actor;
 
-    this.defineEvent(
+    vm.defineEvent(
       'leveled up',
       'gained xp',
       'lost xp'
@@ -48,40 +49,43 @@ export class ActorLevel extends EventHandler {
   }
   
   get xpRequired() {
-    return `${this.xp}/${this.toLevelXp} (${this.toLevelXp - this.xp})`;
+    let vm = this;
+    return `${vm.xp}/${vm.toLevelXp} (${vm.toLevelXp - vm.xp})`;
   }
 
   addXp(amount) {
-    this.xp += amount;
-    while (this.xp >= this.toLevelXp) {
-      this.levelUp();
+    let vm = this;
+    vm.xp += amount;
+    while (vm.xp >= vm.toLevelXp) {
+      vm.levelUp();
     }
-    this.raiseEvent(
+    vm.raiseEvent(
       'gained xp',
       {
-        level: this,
-        actor: this.#actor,
+        level: vm,
+        actor: vm.#actor,
         amount: amount
       });
   }
 
   levelUp() {
-    let level = this.level;
-    this.level++;
+    let vm = this;
+    let level = vm.level;
+    vm.level++;
 
-    this.toLevelXp += ActorLevel
+    vm.toLevelXp += ActorLevel
       .xpForNextLevel(
-        this.level,
-        this.toLevelXp,
-        this.xpFactor,
-        this.baseXpToLevel
+        vm.level,
+        vm.toLevelXp,
+        vm.xpFactor,
+        vm.baseXpToLevel
       );
 
-    this.raiseEvent(
+    vm.raiseEvent(
       'leveled up',
       {
-        level: this,
-        actor: this.#actor
+        level: vm,
+        actor: vm.#actor
       });
   }
 }

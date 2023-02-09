@@ -12,60 +12,66 @@ export class Stage extends EventHandler {
   constructor(ready) {
 
     super();
+    let vm = this;
 
-    this.defineEvent('ready');
+    vm.defineEvent('ready');
     if (ready) {
-      this.listenToEvent('ready', ready);
+      vm.listenToEvent('ready', ready);
     }
 
-    this.#styles = document.createElement('link');
+    vm.#styles = document.createElement('link');
 
-    this.#styles.rel = 'stylesheet';
-    this.#styles.href = './layout/stage/stage.css';
+    vm.#styles.rel = 'stylesheet';
+    vm.#styles.href = './layout/stage/stage.css';
 
-    document.querySelector('head').appendChild(this.#styles);
+    document.querySelector('head').appendChild(vm.#styles);
 
-    this.#stage = document.createElement('div');
-    this.#stage.classList.add('stage');
+    vm.#stage = document.createElement('div');
+    vm.#stage.classList.add('stage');
 
-    document.querySelector('body').appendChild(this.#stage);
+    document.querySelector('body').appendChild(vm.#stage);
 
-    this.#canvas = document.createElement('canvas');
-    this.#canvas.classList.add('viewport');
-    this.#stage.appendChild(this.#canvas);
+    vm.#canvas = document.createElement('canvas');
+    vm.#canvas.classList.add('viewport');
+    vm.#stage.appendChild(vm.#canvas);
 
-    this.#gfx = this.#canvas.getContext("2d");
+    vm.#gfx = vm.#canvas.getContext("2d");
     
-    //this.#gfx.ellipse()
+    //vm.#gfx.ellipse()
 
-    this.#scale();
+    vm.#scale();
 
   }
 
   get gfx() {
-    return this.#gfx;
+    let vm = this;
+    return vm.#gfx;
   }
 
   get width() {
-    return this.#canvas.width;
+    let vm = this;
+    return vm.#canvas.width;
   }
 
   get height() {
-    return this.#canvas.height;
+    let vm = this;
+    return vm.#canvas.height;
   }
 
   #scale() {
-    this.#canvas.width = this.#stage.offsetWidth;
-    this.#canvas.height = this.#stage.offsetHeight;
-    if (this.#canvas.height > 400) {
-      this.raiseEvent('ready', this.#gfx);
+    let vm = this;
+    vm.#canvas.width = vm.#stage.offsetWidth;
+    vm.#canvas.height = vm.#stage.offsetHeight;
+    if (vm.#canvas.height > 400) {
+      vm.raiseEvent('ready', vm.#gfx);
     } else {
-      setTimeout(() => { this.#scale(); }, 10);
+      setTimeout(() => { vm.#scale(); }, 10);
     }
   }
 
   setTextView(text) {
-    this.#pre.innerHTML = text;
+    let vm = this;
+    vm.#pre.innerHTML = text;
   }
 
 }

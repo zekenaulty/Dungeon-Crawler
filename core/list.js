@@ -5,24 +5,28 @@ export class List extends Array {
   }
 
   sample() {
-    if (this.length === 1) return this[0];
-    if (this.length === 0) return undefined;
+    let vm = this;
+    if (vm.length === 1) return vm[0];
+    if (vm.length === 0) return undefined;
 
-    return this[Math.floor(Math.random() * this.length)];
+    return vm[Math.floor(Math.random() * vm.length)];
   }
 
   delete(item) {
-    if (this.length === 0) return;
-    let idx = this.indexOf(item);
+    let vm = this;
+    if (vm.length === 0) return;
+    let idx = vm.indexOf(item);
     if (idx < 0) return;
-    this.splice(idx, 1);
+    vm.splice(idx, 1);
   }
   
   empty() {
-    return this.length === 0;
+    let vm = this;
+    return vm.length === 0;
   }
   
   any() {
-    return this.length > 0;
+    let vm = this;
+    return vm.length > 0;
   }
 }

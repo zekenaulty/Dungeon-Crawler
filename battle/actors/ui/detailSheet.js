@@ -12,57 +12,59 @@ export class DetailSheet extends Modal {
 
   constructor(actor, editable) {
     super();
+    let vm = this;
 
-    this.#actor = actor;
-    this.#editable = editable;
+    vm.#actor = actor;
+    vm.#editable = editable;
 
     if (!document.getElementById('detail-sheet-styles')) {
-      this.#stylesheet = document.createElement('link');
-      this.#stylesheet.id = 'detail-sheet-styles';
-      this.#stylesheet.rel = 'stylesheet';
-      this.#stylesheet.href = './battle/actors/ui/detailSheet.css';
-      document.querySelector('head').appendChild(this.#stylesheet);
+      vm.#stylesheet = document.createElement('link');
+      vm.#stylesheet.id = 'detail-sheet-styles';
+      vm.#stylesheet.rel = 'stylesheet';
+      vm.#stylesheet.href = './battle/actors/ui/detailSheet.css';
+      document.querySelector('head').appendChild(vm.#stylesheet);
     } else {
-      this.#stylesheet = document.querySelector('#detail-sheet-styles');
+      vm.#stylesheet = document.querySelector('#detail-sheet-styles');
     }
 
-    this.#container = document.createElement('div');
-    this.#container.classList.add('detail-sheet-content');
-    this.appendChild(this.#container);
+    vm.#container = document.createElement('div');
+    vm.#container.classList.add('detail-sheet-content');
+    vm.appendChild(vm.#container);
 
-    this.#add('Name', this.#actor, 'name');
-    this.#add('Level', this.#actor.level, 'level');
-    this.#add('XP', this.#actor.level, 'xpRequired');
-    this.#spacer();
-    this.#add('Health', this.#actor.attributes, 'health');
-    this.#add('Mana', this.#actor.attributes, 'mana');
-    this.#add('Damage', this.#actor.attributes, 'damageRange');
-    this.#spacer();
-    this.#add('Available Points', this.#actor.attributes, 'available');
-    this.#spacer();
-    this.#add('Vitality', this.#actor.attributes, 'vitality', true);
-    this.#add('Strength', this.#actor.attributes, 'strength', true);
-    this.#add('Intellect', this.#actor.attributes, 'intellect', true);
-    this.#spacer();
+    vm.#add('Name', vm.#actor, 'name');
+    vm.#add('Level', vm.#actor.level, 'level');
+    vm.#add('XP', vm.#actor.level, 'xpRequired');
+    vm.#spacer();
+    vm.#add('Health', vm.#actor.attributes, 'health');
+    vm.#add('Mana', vm.#actor.attributes, 'mana');
+    vm.#add('Damage', vm.#actor.attributes, 'damageRange');
+    vm.#spacer();
+    vm.#add('Available Points', vm.#actor.attributes, 'available');
+    vm.#spacer();
+    vm.#add('Vitality', vm.#actor.attributes, 'vitality', true);
+    vm.#add('Strength', vm.#actor.attributes, 'strength', true);
+    vm.#add('Intellect', vm.#actor.attributes, 'intellect', true);
+    vm.#spacer();
 
-    this.#text('Skills');
-    this.#skills = document.createElement('div');
-    this.#skills.classList.add('detail-sheet-skills');
-    this.#container.appendChild(this.#skills);
-    for (let p in this.#actor.skills) {
-      let skill = this.#actor.skills[p];
+    vm.#text('Skills');
+    vm.#skills = document.createElement('div');
+    vm.#skills.classList.add('detail-sheet-skills');
+    vm.#container.appendChild(vm.#skills);
+    for (let p in vm.#actor.skills) {
+      let skill = vm.#actor.skills[p];
       if (skill.register) {
-        this.#addSkill(skill);
+        vm.#addSkill(skill);
       }
     }
 
-    this.listenToEvent('opening', (e) => {
+    vm.listenToEvent('opening', (e) => {
       e.modal.update();
     });
 
   }
 
   #addSkill(skill) {
+    let vm = this;
     let e = {
       element: document.createElement('span'),
       update: () => {
@@ -72,13 +74,14 @@ export class DetailSheet extends Modal {
 
     e.update();
     e.element.classList.add('detail-sheet-attribute-bold');
-    this.#elements.push(e);
-    this.#skills.appendChild(e.element);
+    vm.#elements.push(e);
+    vm.#skills.appendChild(e.element);
   }
 
   #add(label, scope, key, editableAttribute = false, target) {
+    let vm = this;
     if (!target) {
-      target = this.#container;
+      target = vm.#container;
     }
 
     let e = {
@@ -106,28 +109,29 @@ export class DetailSheet extends Modal {
       e.button.innerHTML = '+';
       e.row.appendChild(e.button);
       e.button.addEventListener('click', () => {
-        if (this.#actor.attributes.available > 0) {
-          this.#actor.attributes.available--;
+        if (vm.#actor.attributes.available > 0) {
+          vm.#actor.attributes.available--;
           scope[key]++;
-          this.#actor.attributes.raiseEvent(
+          vm.#actor.attributes.raiseEvent(
             'changed',
             {
-              sheet: this,
-              actor: this.#actor
+              sheet: vm,
+              actor: vm.#actor
             });
         }
-        this.update();
+        vm.update();
       });
     }
 
-    this.#elements.push(e);
+    vm.#elements.push(e);
     target.appendChild(e.row);
 
   }
 
   #spacer(target) {
+    let vm = this;
     if (!target) {
-      target = this.#container;
+      target = vm.#container;
     }
 
     let row = document.createElement('div');
@@ -136,8 +140,9 @@ export class DetailSheet extends Modal {
   }
 
   #text(t, target, bold = true) {
+    let vm = this;
     if (!target) {
-      target = this.#container;
+      target = vm.#container;
     }
     let txt = document.createElement('span');
     txt.innerHTML = t;
@@ -146,8 +151,9 @@ export class DetailSheet extends Modal {
   }
 
   update() {
-    for (let i = 0; i < this.#elements.length; i++) {
-      this.#elements[i].update();
+    let vm = this;
+    for (let i = 0; i < vm.#elements.length; i++) {
+      vm.#elements[i].update();
     }
   }
 }

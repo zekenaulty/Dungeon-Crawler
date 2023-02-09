@@ -8,71 +8,79 @@ export class Neighbors extends EventHandler {
 
   constructor(cell) {
     super();
+    let vm = this;
 
-    this.cell = cell;
+    vm.cell = cell;
   }
 
   empty() {
-    return this.items.length === 0;
+    let vm = this;
+    return vm.items.length === 0;
   }
 
   any() {
-    return this.items.length > 0;
+    let vm = this;
+    return vm.items.length > 0;
   }
 
   unlinked() {
+    let vm = this;
     let result = new List();
-    for (let i = 0; i < this.items.length; i++) {
-      if (this.items[i].links.empty()) {
-        result.push(this.items[i]);
+    for (let i = 0; i < vm.items.length; i++) {
+      if (vm.items[i].links.empty()) {
+        result.push(vm.items[i]);
       }
     }
     return result;
   }
 
   linked() {
+    let vm = this;
     let result = new List();
-    for (let i = 0; i < this.items.length; i++) {
-      if (this.items[i].links.any()) {
-        result.push(this.items[i]);
+    for (let i = 0; i < vm.items.length; i++) {
+      if (vm.items[i].links.any()) {
+        result.push(vm.items[i]);
       }
     }
     return result;
   }
 
   linkedTo(cell) {
+    let vm = this;
     if (!cell) {
-      cell = this.cell;
+      cell = vm.cell;
     }
     
     let result = new List();
-    for (let i = 0; i < this.items.length; i++) {
-      if (this.items[i].links.items.includes(cell)) {
-        result.push(this.items[i]);
+    for (let i = 0; i < vm.items.length; i++) {
+      if (vm.items[i].links.items.includes(cell)) {
+        result.push(vm.items[i]);
       }
     }
     return result;
   }
 
   notLinkedTo(cell) {
+    let vm = this;
     if (!cell) {
-      cell = this.cell;
+      cell = vm.cell;
     }
     
     let result = new List();
-    for (let i = 0; i < this.items.length; i++) {
-      if (!this.items[i].links.items.includes(cell)) {
-        result.push(this.items[i]);
+    for (let i = 0; i < vm.items.length; i++) {
+      if (!vm.items[i].links.items.includes(cell)) {
+        result.push(vm.items[i]);
       }
     }
     return result;
   }
 
   deadends() {
+    let vm = this;
     let result = new List();
-    for (let i = 0; i < this.items.length; i++) {
-      if (this.items[i].links.items.length === 1) {
-        result.push(this.items[i]);
+    for (let i = 0; i < vm.items.length; i++) {
+      if (vm.items[i].links.items.length === 1) {
+        result.push(vm.items[i]);
       }
     }
     return result;

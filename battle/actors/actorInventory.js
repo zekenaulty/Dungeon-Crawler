@@ -23,7 +23,7 @@ export class ActorInventory extends EventHandler {
         break;
       }
       amount +=
-        Math.ceil(base * (this.level / 2)) +
+        Math.ceil(base * (vm.level / 2)) +
         Math.floor(amount * factor);
     }
     return amount;
@@ -31,10 +31,11 @@ export class ActorInventory extends EventHandler {
 
   constructor(actor) {
     super();
+    let vm = this;
 
-    this.#actor = actor;
+    vm.#actor = actor;
 
-    this.defineEvent(
+    vm.defineEvent(
       'inventory full',
       'item added',
       'item dropped',
@@ -44,37 +45,40 @@ export class ActorInventory extends EventHandler {
   }
 
   addItem(item) {
-    if (this.items.length === this.maxItemSlots - 1) {
-      this.raiseEvent(
+    let vm = this;
+    if (vm.items.length === vm.maxItemSlots - 1) {
+      vm.raiseEvent(
         'inventory full',
         {
-          inventory: this,
-          actor: this.#actor,
+          inventory: vm,
+          actor: vm.#actor,
           item: item
         });
     }
   }
 
   addGold(amount) {
-    this.gold += amount;
-    this.raiseEvent(
+    let vm = this;
+    vm.gold += amount;
+    vm.raiseEvent(
       'gold added',
       {
-        inventory: this,
-        actor: this.#actor,
+        inventory: vm,
+        actor: vm.#actor,
         amount: amount
       });
   }
 
   loseGold(amount) {
-    this.gold -= amount;
-    this.raiseEvent(
+    let vm = this;
+    vm.gold -= amount;
+    vm.raiseEvent(
       'gold lost',
       {
-        inventory: this,
-        actor: this.#actor,
+        inventory: vm,
+        actor: vm.#actor,
         amount: amount
       });
   }
 
-} /* end ActorInventory */
+}

@@ -9,11 +9,12 @@ export class EventHandler {
   }
 
   raiseEvent(event) {
+    let vm = this;
     if (!event || !arguments || arguments.length === 0) {
       return;
     }
 
-    let e = this.#events[event];
+    let e = vm.#events[event];
     if (!e || !e.dispatch) {
       return;
     }
@@ -22,17 +23,19 @@ export class EventHandler {
   }
 
   defineEvent() {
+    let vm = this;
     for (let i = 0; i < arguments.length; i++) {
-      this.#events[arguments[i]] = new EventDispatcher(this);
+      vm.#events[arguments[i]] = new EventDispatcher(vm);
     }
   }
 
   listenToEvent(event, action) {
+    let vm = this;
     if (!event || !action) {
       return;
     }
 
-    let e = this.#events[event];
+    let e = vm.#events[event];
     if (!e) {
       return;
     }
@@ -41,11 +44,12 @@ export class EventHandler {
   }
 
   ignoreEvent(event, action) {
+    let vm = this;
     if (!event || !action) {
       return;
     }
 
-    let e = this.#events[event];
+    let e = vm.#events[event];
     if (!e) {
       return;
     }
@@ -60,26 +64,30 @@ class EventDispatcher {
   #parent;
   
   constructor(parent) {
-    this.#parent = parent;
+    let vm = this;
+    vm.#parent = parent;
   }
 
   add(action) {
-    if (this.#listeners.includes(action)) {
+    let vm = this;
+    if (vm.#listeners.includes(action)) {
       return;
     }
 
-    this.#listeners.push(action);
+    vm.#listeners.push(action);
   }
 
   remove(action) {
-    this.#listeners.delete(action);
+    let vm = this;
+    vm.#listeners.delete(action);
   }
 
   dispatch() {
-    for (let i = 0; i < this.#listeners.length; i++) {
-      let action = this.#listeners[i];
+    let vm = this;
+    for (let i = 0; i < vm.#listeners.length; i++) {
+      let action = vm.#listeners[i];
       if (action) {
-        action.apply(this.#parent, arguments);
+        action.apply(vm.#parent, arguments);
       }
     }
   }

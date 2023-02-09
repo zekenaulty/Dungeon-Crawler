@@ -8,13 +8,15 @@ export class Generator extends EventHandler {
 
   constructor(maze) {
     super();
+    let vm = this;
     
-    this.defineEvent('generated');
-    this.maze = maze;
+    vm.defineEvent('generated');
+    vm.maze = maze;
   }
 
   generate() {
-    this.raiseEvent('generated');
+    let vm = this;
+    vm.raiseEvent('generated');
   }
 
 }
@@ -28,13 +30,13 @@ import { Generator } from './generator.js';
 export class Template extends Generator {
 
   generate() {
-    this.maze.initialize();
+    vm.maze.initialize();
     
     
     
-    this.maze.setup();
+    vm.maze.setup();
     
-    this.raiseEvent('generated');
+    vm.raiseEvent('generated');
 
   }
 

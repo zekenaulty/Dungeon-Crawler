@@ -18,39 +18,43 @@ export class Maze extends EventHandler {
 
   constructor(rows, columns) {
     super();
-    this.defineEvent('moved', 'solved');
-    this.resize(rows, columns);
+    let vm = this;
+    vm.defineEvent('moved', 'solved');
+    vm.resize(rows, columns);
   }
 
   resize(rows, columns) {
-    this.rows = rows;
-    this.columns = columns;
+    let vm = this;
+    vm.rows = rows;
+    vm.columns = columns;
   }
 
   initialize() {
+    let vm = this;
 
-    this.grid = new List();
-    this.cells = new List();
-    this.visited = new List();
+    vm.grid = new List();
+    vm.cells = new List();
+    vm.visited = new List();
 
-    this.start = undefined;
-    this.end = undefined;
-    this.active = undefined;
-    this.distances = undefined;
-    this.solution = undefined;
+    vm.start = undefined;
+    vm.end = undefined;
+    vm.active = undefined;
+    vm.distances = undefined;
+    vm.solution = undefined;
 
-    let cells = this.populate();
-    this.grid = cells.grid;
-    this.cells = cells.all;
+    let cells = vm.populate();
+    vm.grid = cells.grid;
+    vm.cells = cells.all;
 
-    this.configureCells();
+    vm.configureCells();
   }
 
   populate() {
+    let vm = this;
     let all = new List();
     let grid = new List();
 
-    this.walkGrid((r, c) => {
+    vm.walkGrid((r, c) => {
       if (grid.length - 1 < r) {
         grid.push(new List());
       }
@@ -66,11 +70,12 @@ export class Maze extends EventHandler {
   }
 
   configureCells() {
-    this.eachCell((cell) => {
-      cell.north = this.cell(cell.row - 1, cell.column);
-      cell.east = this.cell(cell.row, cell.column + 1);
-      cell.south = this.cell(cell.row + 1, cell.column);
-      cell.west = this.cell(cell.row, cell.column - 1);
+    let vm = this;
+    vm.eachCell((cell) => {
+      cell.north = vm.cell(cell.row - 1, cell.column);
+      cell.east = vm.cell(cell.row, cell.column + 1);
+      cell.south = vm.cell(cell.row + 1, cell.column);
+      cell.west = vm.cell(cell.row, cell.column - 1);
 
       if (cell.north) { cell.neighbors.items.push(cell.north); }
       if (cell.east) { cell.neighbors.items.push(cell.east); }
@@ -80,60 +85,68 @@ export class Maze extends EventHandler {
   }
 
   cell(row, column) {
-    if (row < 0 || column < 0 || row >= this.rows || column >= this.columns) {
+    let vm = this;
+    if (row < 0 || column < 0 || row >= vm.rows || column >= vm.columns) {
       return undefined;
     }
 
-    return this.grid[row][column];
+    return vm.grid[row][column];
   }
 
   eachRow(action) {
-    for (let r = 0; r < this.rows; r++) {
-      action(this.grid[r]);
+    let vm = this;
+    for (let r = 0; r < vm.rows; r++) {
+      action(vm.grid[r]);
     }
   }
 
   eachCell(action) {
-    for (let i = 0; i < this.cells.length; i++) {
-      action(this.cells[i]);
+    let vm = this;
+    for (let i = 0; i < vm.cells.length; i++) {
+      action(vm.cells[i]);
     }
   }
 
   walkGrid(action) {
-    for (let r = 0; r < this.rows; r++) {
-      for (let c = 0; c < this.columns; c++) {
+    let vm = this;
+    for (let r = 0; r < vm.rows; r++) {
+      for (let c = 0; c < vm.columns; c++) {
         action(r, c);
       }
     }
   }
 
   randomCell() {
-    return this.grid.sample().sample();
+    let vm = this;
+    return vm.grid.sample().sample();
   }
 
   get size() {
-    return this.rows * this.columns;
+    let vm = this;
+    return vm.rows * vm.columns;
   }
 
   setup() {
-    this.braid();
-    this.start = this.deadends.sample();
-    if (!this.start) {
-      this.start = this.cell(0, 0);
+    let vm = this;
+    vm.braid();
+    vm.start = vm.deadends.sample();
+    if (!vm.start) {
+      vm.start = vm.cell(0, 0);
     };
-    this.distances = this.start.distances();
-    let d = this.distances.max();
-    this.start = d.cell;
-    this.distances = this.start.distances();
-    d = this.distances.max();
-    this.end = d.cell;
-    this.active = this.start;
-    this.visited.push(this.start);
+    vm.distances = vm.start.distances();
+    let d = vm.distances.max();
+    vm.start = d.cell;
+    vm.distances = vm.start.distances();
+    d = vm.distances.max();
+    vm.end = d.cell;
+    vm.active = vm.start;
+    vm.visited.push(vm.start);
   }
 
   findDeadends() {
+    let vm = this;
     let r = new List();
-    this.eachCell((c) => {
+    vm.eachCell((c) => {
       if (c.links.items.length === 1) {
         r.push(c);
       }
@@ -142,12 +155,14 @@ export class Maze extends EventHandler {
   }
 
   solve() {
-    this.solution = this.distances.pathTo(this.end);
+    let vm = this;
+    vm.solution = vm.distances.pathTo(vm.end);
   }
 
   move(direction) {
+    let vm = this;
     let d = direction.toLowerCase();
-    let c = this.active;
+    let c = vm.active;
 
     if (!c) {
       return false;
@@ -157,19 +172,20 @@ export class Maze extends EventHandler {
       return false;
     }
 
-    this.active = c[d];
-    this.raiseEvent('moved', d, c, this.active, this);
-    if (this.active === this.end) {
-      this.raiseEvent('solved', this);
+    vm.active = c[d];
+    vm.raiseEvent('moved', d, c, vm.active, vm);
+    if (vm.active === vm.end) {
+      vm.raiseEvent('solved', vm);
     }
 
     return true;
   }
 
   braid(p = 0.3) {
-    this.deadends = this.findDeadends();
-    for (let i = 0; i < this.deadends.length; i++) {
-      let cell = this.deadends[i];
+    let vm = this;
+    vm.deadends = vm.findDeadends();
+    for (let i = 0; i < vm.deadends.length; i++) {
+      let cell = vm.deadends[i];
       let r = Math.random();
       if (cell.links.items.length === 1 && r < p) {
         let neighbor = cell.neighbors.deadends().sample();
@@ -180,11 +196,12 @@ export class Maze extends EventHandler {
         cell.links.connect(neighbor, true, true);
       }
     }
-    this.deadends = this.findDeadends();
+    vm.deadends = vm.findDeadends();
   }
 
   clearWalls() {
-    this.eachCell((c) => {
+    let vm = this;
+    vm.eachCell((c) => {
       c.neighbors.items.forEach((n) => {
         c.links.connect(n, true, false);
       });

@@ -11,54 +11,57 @@ export class Header extends EventHandler {
   constructor() {
 
     super();
+    let vm = this;
 
-    this.#header = document.createElement('nav');
-    this.#left = document.createElement('div');
-    this.#menu = document.createElement('div');
-    this.#menuButton = document.createElement('button');
-    this.#styles = document.createElement('link');
+    vm.#header = document.createElement('nav');
+    vm.#left = document.createElement('div');
+    vm.#menu = document.createElement('div');
+    vm.#menuButton = document.createElement('button');
+    vm.#styles = document.createElement('link');
 
-    this.#styles.rel = 'stylesheet';
-    this.#styles.href = './layout/header/header.css';
+    vm.#styles.rel = 'stylesheet';
+    vm.#styles.href = './layout/header/header.css';
 
-    document.querySelector('head').appendChild(this.#styles);
+    document.querySelector('head').appendChild(vm.#styles);
 
-    this.#header.classList.add('head');
-    this.#left.classList.add('header-info');
+    vm.#header.classList.add('head');
+    vm.#left.classList.add('header-info');
 
-    this.#menuButton.classList.add('header-button');
-    this.#menuButton.classList.add('header-menu-btn');
-    this.#menuButton.innerHTML = 'MENU';
-    this.#menuButton.addEventListener('click', () => {
-      if (this.#menu.classList.contains('header-hide')) {
-        this.#menu.classList.remove('header-hide');
+    vm.#menuButton.classList.add('header-button');
+    vm.#menuButton.classList.add('header-menu-btn');
+    vm.#menuButton.innerHTML = 'MENU';
+    vm.#menuButton.addEventListener('click', () => {
+      if (vm.#menu.classList.contains('header-hide')) {
+        vm.#menu.classList.remove('header-hide');
       } else {
-        this.#menu.classList.add('header-hide');
+        vm.#menu.classList.add('header-hide');
       }
     });
-    this.#menu.classList.add('header-menu');
-    this.#menu.classList.add('header-hide');
+    vm.#menu.classList.add('header-menu');
+    vm.#menu.classList.add('header-hide');
 
-    this.#header.appendChild(this.#left);
+    vm.#header.appendChild(vm.#left);
     
-    document.querySelector('body').appendChild(this.#header);
-    document.querySelector('body').appendChild(this.#menuButton);
-    document.querySelector('body').appendChild(this.#menu);
+    document.querySelector('body').appendChild(vm.#header);
+    document.querySelector('body').appendChild(vm.#menuButton);
+    document.querySelector('body').appendChild(vm.#menu);
 
   }
 
   info(html) {
-    this.#left.innerHTML = html;
+    let vm = this;
+    vm.#left.innerHTML = html;
   }
 
   addButton(txt, action) {
+    let vm = this;
     let btn = document.createElement('button');
     btn.innerText = txt;
     btn.classList.add('header-button');
     btn.addEventListener('click', () => {
-      this.#menu.classList.add('header-hide');
+      vm.#menu.classList.add('header-hide');
       action();
     });
-    this.#menu.appendChild(btn);
+    vm.#menu.appendChild(btn);
   }
 }

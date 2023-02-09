@@ -18,35 +18,39 @@ export class CanvasRectangleScaler extends EventHandler {
 
   constructor(width, height, rooms = 3000, toTiny = 14) {
     super();
+    let vm = this;
     
-    this.stageWidth = width;
-    this.stageHeight = height;
-    this.#maxCells = rooms;
-    this.#size = toTiny;
-    this.calc();
+    vm.stageWidth = width;
+    vm.stageHeight = height;
+    vm.#maxCells = rooms;
+    vm.#size = toTiny;
+    vm.calc();
   }
 
   setScaleBounds(maxCells, minSize) {
-    this.#maxCells = maxCells;
-    this.#size = minSize;
+    let vm = this;
+    vm.#maxCells = maxCells;
+    vm.#size = minSize;
   }
 
   calc() {
-    let scale = this.#scale();
-    this.columns = Math.floor(this.stageWidth / scale);
-    this.width = this.columns * scale;
-    this.rows = Math.floor(this.stageHeight / scale);
-    this.height = this.rows * scale;
-    this.cells = this.rows * this.columns;
-    this.offsetX = Math.floor((this.stageWidth - this.width) / 4);
-    this.offsetY = Math.floor((this.stageHeight - this.height) / 4);
-    this.size = scale;
+    let vm = this;
+    let scale = vm.#scale();
+    vm.columns = Math.floor(vm.stageWidth / scale);
+    vm.width = vm.columns * scale;
+    vm.rows = Math.floor(vm.stageHeight / scale);
+    vm.height = vm.rows * scale;
+    vm.cells = vm.rows * vm.columns;
+    vm.offsetX = Math.floor((vm.stageWidth - vm.width) / 4);
+    vm.offsetY = Math.floor((vm.stageHeight - vm.height) / 4);
+    vm.size = scale;
   }
 
   #scale() {
-    let n = this.#maxCells;
-    let w = this.stageWidth;
-    let h = this.stageHeight;
+    let vm = this;
+    let n = vm.#maxCells;
+    let w = vm.stageWidth;
+    let h = vm.stageHeight;
     let sw, sh;
 
     let pw = Math.ceil(Math.sqrt(n * w / h));
@@ -64,18 +68,20 @@ export class CanvasRectangleScaler extends EventHandler {
     }
 
     let v = Math.floor(Math.max(sw, sh));
-    if (v < this.#size) {
-      v = this.#size;
+    if (v < vm.#size) {
+      v = vm.#size;
     }
 
     return v;
   }
 
   y(r) {
-    return r * this.size + this.offsetY;
+    let vm = this;
+    return r * vm.size + vm.offsetY;
   }
 
   x(c) {
-    return c * this.size + this.offsetX;
+    let vm = this;
+    return c * vm.size + vm.offsetX;
   }
 }

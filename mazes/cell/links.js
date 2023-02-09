@@ -9,43 +9,48 @@ export class Links extends EventHandler {
   
   constructor(cell) {
     super();
+    let vm = this;
     
-    this.cell = cell;
+    vm.cell = cell;
   }
   
   connect(cell, link = true, both = true) {
+    let vm = this;
     
     if(!cell) {
       return false;
     }
     
     if(link) {
-      if(!this.linked(cell)) {
-        this.items.push(cell);
+      if(!vm.linked(cell)) {
+        vm.items.push(cell);
       }
     } else {
-      this.items.delete(cell);
+      vm.items.delete(cell);
     }
     
     if(both) {
-      cell.links.connect(this.cell, link, false);
+      cell.links.connect(vm.cell, link, false);
     }
     
     return true;
   }
   
   linked(cell) {
+    let vm = this;
     if(cell === undefined) {
       return false;
     }
-    return this.items.includes(cell);
+    return vm.items.includes(cell);
   }
   
   empty() {
-    return this.items.length === 0;
+    let vm = this;
+    return vm.items.length === 0;
   }
   
   any() {
-    return this.items.length > 0;
+    let vm = this;
+    return vm.items.length > 0;
   }
 }

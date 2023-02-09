@@ -9,17 +9,18 @@ import { Dice } from '../../dice.js';
 export class Enemy extends Actor {
 
   #aiId;
-  #aiIntervalMin = 550;
+  #aiIntervalMin = 850;
   #aiIntervalMax = 1250;
   battle;
-  
+
   /*  dexterity should factor 
       into these numbers 
       a.k.a. speed */
   get #aiInterval() {
-    let r = Math.floor(Math.random() * this.#aiIntervalMax) + 1;
-    if (r < this.#aiIntervalMin) {
-      r = this.#aiIntervalMin;
+    let vm = this;
+    let r = Math.floor(Math.random() * vm.#aiIntervalMax) + 1;
+    if (r < vm.#aiIntervalMin) {
+      r = vm.#aiIntervalMin;
     }
 
     return r;
@@ -27,11 +28,14 @@ export class Enemy extends Actor {
 
   constructor(gameLevel, battle, hero) {
     super(gameLevel);
+    let vm = this;
 
-    this.battle = battle;
-    this.target = hero;
+    vm.battle = battle;
+    vm.target = hero;
 
-    this.listenToEvent('death', (e) => {
+    vm.name = 'enemy';
+
+    vm.listenToEvent('death', (e) => {
       e.actor.stopAi();
       if (e.actor.casting) {
         e.actor.casting.interupt();
@@ -42,28 +46,32 @@ export class Enemy extends Actor {
   }
 
   aiLoop() {
+    let vm = this;
     let d = Dice.roll(20);
-    if(d > 18 || this.casting || this.battle.paused) {
+    if (d > 18 || vm.casting || vm.battle.paused) {
       return;
     }
-    
-    if(!this.target) {
-      this.target = this.battle.getTarget(false);
+
+    if (!vm.target) {
+      vm.target = vm.battle.getTarget(false);
     }
-    
-    if(d > 3) {
-      this.skills['attack'].invoke();
+
+    if (d > 3) {
+      let skill = vm.skills.attack;
+      skill.invoke();
     }
-    
+
   }
 
   startAi() {
-    this.#aiId = setInterval(() => {
-      this.aiLoop();
-    }, this.#aiInterval);
+    let vm = this;
+    vm.#aiId = setInterval(() => {
+      vm.aiLoop();
+    }, vm.#aiInterval);
   }
 
   stopAi() {
-    clearInterval(this.#aiId);
+    let vm = this;
+    clearInterval(vm.#aiId);
   }
 }

@@ -4,11 +4,12 @@ import { Generator } from './generator.js';
 export class Wilsons extends Generator {
 
   generate() {
-    this.maze.initialize();
-    let first = this.maze.cells.sample();
+    let vm = this;
+    vm.maze.initialize();
+    let first = vm.maze.cells.sample();
     let unvisited = new List();
 
-    this.maze.eachCell((c) => {
+    vm.maze.eachCell((c) => {
       if (c !== first) {
         unvisited.push(c);
       }
@@ -35,9 +36,9 @@ export class Wilsons extends Generator {
       }
     }
 
-    this.maze.setup();
+    vm.maze.setup();
 
-    this.raiseEvent('generated');
+    vm.raiseEvent('generated');
 
   }
 

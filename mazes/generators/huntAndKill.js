@@ -5,9 +5,10 @@ import { Generator } from './generator.js';
 export class HuntAndKill extends Generator {
 
   generate() {
-    this.maze.initialize();
+    let vm = this;
+    vm.maze.initialize();
     
-    let current = this.maze.randomCell();
+    let current = vm.maze.randomCell();
     
     while(current) {
       let unvisitedNeighbors = current.neighbors.unlinked();
@@ -17,8 +18,8 @@ export class HuntAndKill extends Generator {
         current = neighbor;
       } else {
         current = undefined;
-        for(let i = 0; i < this.maze.cells.length; i++) {
-          let cell = this.maze.cells[i];
+        for(let i = 0; i < vm.maze.cells.length; i++) {
+          let cell = vm.maze.cells[i];
           let visitedNeighbors = cell.neighbors.linked();
           if(cell.links.empty() && visitedNeighbors.any()) {
             current = cell;
@@ -30,9 +31,9 @@ export class HuntAndKill extends Generator {
       }
     }
     
-    this.maze.setup();
+    vm.maze.setup();
     
-    this.raiseEvent('generated');
+    vm.raiseEvent('generated');
 
   }
 

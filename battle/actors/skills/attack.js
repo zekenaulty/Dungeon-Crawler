@@ -6,23 +6,26 @@ export class Attack extends ActorSkill {
 
   constructor(actor) {
     super(actor);
-    this.cooldown = 1000;
-    this.register = true;
-    this.name = 'Attack';
-    this.bubble = true;
+    let vm = this;
+    vm.cooldown = 1000;
+    vm.register = true;
+    vm.name = 'Attack';
+    vm.bubble = true;
   }
   
   get summary() {
-    return `Hit the selected target for ${this.min}-${this.max} damage.`;
+    let vm = this;
+    return `Hit the selected target for ${vm.min}-${vm.max} damage.`;
   }
 
   invoke() {
-    let target = this.actor.target;
+    let vm = this;
+    let target = vm.actor.target;
     if(!target) {
-      target = this.actor.getTarget();
+      target = vm.actor.getTarget();
     }
-    this.safeInvoke(() => {
-      this.doAttack(target);
+    vm.safeInvoke(() => {
+      vm.doAttack(target);
     });
   }
 

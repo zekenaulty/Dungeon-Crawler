@@ -5,10 +5,11 @@ import { Generator } from './generator.js';
 export class RecursiveBacktracker extends Generator {
 
   generate() {
-    this.maze.initialize();
+    let vm = this;
+    vm.maze.initialize();
     
     let stack = new List();
-    stack.push(this.maze.randomCell());
+    stack.push(vm.maze.randomCell());
     
     while(stack.length > 0) {
       let current = stack[stack.length - 1];
@@ -22,9 +23,9 @@ export class RecursiveBacktracker extends Generator {
       }
     }
 
-    this.maze.setup();
+    vm.maze.setup();
     
-    this.raiseEvent('generated');
+    vm.raiseEvent('generated');
 
   }
 

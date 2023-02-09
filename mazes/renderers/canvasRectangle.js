@@ -20,311 +20,332 @@ export class CanvasRectangle extends EventHandler {
 
   constructor(maze, scaler, gfx) {
     super();
+    let vm = this;
 
-    this.defineEvent('rendered');
-    this.#maze = maze;
-    this.#scaler = scaler;
-    this.#gfx = gfx;
+    vm.defineEvent('rendered');
+    vm.#maze = maze;
+    vm.#scaler = scaler;
+    vm.#gfx = gfx;
 
-    let self = this;
     maze.listenToEvent('moved', (dir, from, to, $maze) => {
-      self.eraseFloor(from.row, from.column);
-      self.drawSolutionFloor(from.row, from.column);
+      vm.eraseFloor(from.row, from.column);
+      vm.drawSolutionFloor(from.row, from.column);
 
       if (from === $maze.start) {
-        self.drawStart();
+        vm.drawStart();
       }
 
       if (from === $maze.end) {
-        self.drawEnd();
+        vm.drawEnd();
       }
 
-      self.drawActive();
+      vm.drawActive();
     });
   }
 
   scaleLock(n, min = 0) {
-    if (this.#scaler.size > 22) {
+    let vm = this;
+    if (vm.#scaler.size > 22) {
       return n;
     }
     return min;
   }
 
   #drawCircle(cell, color, offsetFactor = 0.75, fill = true) {
+    let vm = this;
     if (offsetFactor >= 1) {
       offsetFactor = 0.9;
     }
 
-    let x = this.#scaler.x(cell.column);
-    let y = this.#scaler.y(cell.row);
-    let r = Math.floor(this.#scaler.size / 2);
+    let x = vm.#scaler.x(cell.column);
+    let y = vm.#scaler.y(cell.row);
+    let r = Math.floor(vm.#scaler.size / 2);
     let offset = Math.floor(r - (r * offsetFactor));
 
     if (fill) {
-      this.#gfx.fillStyle = color;
+      vm.#gfx.fillStyle = color;
     } else {
-      this.#gfx.strokeStyle = color;
+      vm.#gfx.strokeStyle = color;
     }
     
-    this.#gfx.beginPath();
-    this.#gfx.ellipse(
+    vm.#gfx.beginPath();
+    vm.#gfx.ellipse(
       x + r,
       y + r,
-      r - this.scaleLock(offset, 1.5),
-      r - this.scaleLock(offset, 1.5),
+      r - vm.scaleLock(offset, 1.5),
+      r - vm.scaleLock(offset, 1.5),
       0,
       0,
       360);
     if (fill) {
-      this.#gfx.fill();
+      vm.#gfx.fill();
     } else {
-      this.#gfx.stroke();
+      vm.#gfx.stroke();
     }
-    this.#gfx.closePath();
+    vm.#gfx.closePath();
   }
 
   #drawRectangle(cell, color, offsetFactor = 0.75) {
-    let offset = Math.floor(this.#scaler.size - (this.#scaler.size * offsetFactor));
+    let vm = this;
+    let offset = Math.floor(vm.#scaler.size - (vm.#scaler.size * offsetFactor));
     new Rectangle(
-        this.#scaler.x(cell.column) + this.scaleLock(offset, 1.5),
-        this.#scaler.y(cell.row) + this.scaleLock(offset, 1.5),
-        this.#scaler.size - this.scaleLock(offset * 2, 3),
-        this.#scaler.size - this.scaleLock(offset * 2, 3),
+        vm.#scaler.x(cell.column) + vm.scaleLock(offset, 1.5),
+        vm.#scaler.y(cell.row) + vm.scaleLock(offset, 1.5),
+        vm.#scaler.size - vm.scaleLock(offset * 2, 3),
+        vm.#scaler.size - vm.scaleLock(offset * 2, 3),
         color,
-        this.#gfx)
+        vm.#gfx)
       .fill();
   }
 
   #drawNorthEdge(r, c, color) {
-    let x = this.#scaler.x(c);
-    let y = this.#scaler.y(r);
-    let scale = this.#scaler.size;
+    let vm = this;
+    let x = vm.#scaler.x(c);
+    let y = vm.#scaler.y(r);
+    let scale = vm.#scaler.size;
 
     new Line(
         x,
         y,
         x + scale,
         y,
-        this.#gfx)
+        vm.#gfx)
       .draw(color);
   }
 
   #drawEastEdge(r, c, color) {
-    let x = this.#scaler.x(c);
-    let y = this.#scaler.y(r);
-    let scale = this.#scaler.size;
+    let vm = this;
+    let x = vm.#scaler.x(c);
+    let y = vm.#scaler.y(r);
+    let scale = vm.#scaler.size;
 
     new Line(
         x + scale,
         y, x + scale,
         y + scale,
-        this.#gfx)
+        vm.#gfx)
       .draw(color);
   }
 
   #drawSouthEdge(r, c, color) {
-    let x = this.#scaler.x(c);
-    let y = this.#scaler.y(r);
-    let scale = this.#scaler.size;
+    let vm = this;
+    let x = vm.#scaler.x(c);
+    let y = vm.#scaler.y(r);
+    let scale = vm.#scaler.size;
 
     new Line(
         x,
         y + scale,
         x + scale,
         y + scale,
-        this.#gfx)
+        vm.#gfx)
       .draw(color);
   }
 
   #drawWestEdge(r, c, color) {
-    let x = this.#scaler.x(c);
-    let y = this.#scaler.y(r);
-    let scale = this.#scaler.size;
+    let vm = this;
+    let x = vm.#scaler.x(c);
+    let y = vm.#scaler.y(r);
+    let scale = vm.#scaler.size;
 
     new Line(
         x,
         y,
         x,
         y + scale,
-        this.#gfx)
-      .draw(this.wallColor);
+        vm.#gfx)
+      .draw(vm.wallColor);
   }
 
   fillBg() {
+    let vm = this;
     new Rectangle(
         0,
         0,
-        this.#scaler.stageWidth,
-        this.#scaler.stageHeight,
-        this.#gfx)
-      .fill(this.bgColor);
+        vm.#scaler.stageWidth,
+        vm.#scaler.stageHeight,
+        vm.#gfx)
+      .fill(vm.bgColor);
   }
 
   draw() {
-    this.fillBg();
+    let vm = this;
+    vm.fillBg();
 
-    this.#maze.walkGrid((r, c) => {
-      this.drawFloor(r, c);
+    vm.#maze.walkGrid((r, c) => {
+      vm.drawFloor(r, c);
     });
 
-    this.drawSolution();
-    this.drawStart();
-    this.drawEnd();
-    this.drawActive();
+    vm.drawSolution();
+    vm.drawStart();
+    vm.drawEnd();
+    vm.drawActive();
 
-    this.#maze.walkGrid((r, c) => {
-      this.drawWalls(r, c);
+    vm.#maze.walkGrid((r, c) => {
+      vm.drawWalls(r, c);
     });
 
-    this.drawBorder();
+    vm.drawBorder();
 
-    this.raiseEvent('rendered');
+    vm.raiseEvent('rendered');
   }
 
   drawBorder() {
+    let vm = this;
     new Rectangle(
-        this.#scaler.x(0),
-        this.#scaler.y(0),
-        this.#scaler.width,
-        this.#scaler.height,
-        this.#gfx)
-      .stroke(this.wallColor);
+        vm.#scaler.x(0),
+        vm.#scaler.y(0),
+        vm.#scaler.width,
+        vm.#scaler.height,
+        vm.#gfx)
+      .stroke(vm.wallColor);
   }
 
   revealSolution() {
-    this.showSolution = true;
-    this.#maze.solve();
-    this.drawSolution();
-    this.drawStart();
-    this.drawEnd();
-    this.drawActive();
+    let vm = this;
+    vm.showSolution = true;
+    vm.#maze.solve();
+    vm.drawSolution();
+    vm.drawStart();
+    vm.drawEnd();
+    vm.drawActive();
   }
 
 
   hideSolution() {
-    this.drawSolution(this.floorColor, false);
-    this.drawStart();
-    this.drawEnd();
-    this.drawActive();
-    this.showSolution = false;
+    let vm = this;
+    vm.drawSolution(vm.floorColor, false);
+    vm.drawStart();
+    vm.drawEnd();
+    vm.drawActive();
+    vm.showSolution = false;
   }
 
   drawSolution(color, show = true) {
-    if (!this.showSolution || !this.#maze.solution) {
+    let vm = this;
+    if (!vm.showSolution || !vm.#maze.solution) {
       return;
     }
 
     if (!color) {
-      color = this.solveColor;
+      color = vm.solveColor;
     }
 
-    for (let i = 0; i < this.#maze.solution.items.length; i++) {
+    for (let i = 0; i < vm.#maze.solution.items.length; i++) {
       if(show) {
-      this.drawSolutionFloor(
-        this.#maze.solution.items[i].row, 
-        this.#maze.solution.items[i].column, 
+      vm.drawSolutionFloor(
+        vm.#maze.solution.items[i].row, 
+        vm.#maze.solution.items[i].column, 
         color);
       } else {
-        this.eraseFloor(
-        this.#maze.solution.items[i].row, 
-        this.#maze.solution.items[i].column);
+        vm.eraseFloor(
+        vm.#maze.solution.items[i].row, 
+        vm.#maze.solution.items[i].column);
       }
     }
   }
 
   drawSolutionFloor(r, c, color) {
-    if (!this.showSolution || !this.#maze.solution || !this.#maze.solution.items.includes(this.#maze.cell(r, c))) {
+    let vm = this;
+    if (!vm.showSolution || !vm.#maze.solution || !vm.#maze.solution.items.includes(vm.#maze.cell(r, c))) {
       return;
     }
 
     if (!color) {
-      color = this.solveColor;
+      color = vm.solveColor;
     }
-    let cell = this.#maze.cell(r, c);
-    this.#drawCircle(cell, color, 0.3);
+    let cell = vm.#maze.cell(r, c);
+    vm.#drawCircle(cell, color, 0.3);
   }
 
   eraseFloor(r, c) {
+    let vm = this;
     new Rectangle(
-        this.#scaler.x(c) + 1,
-        this.#scaler.y(r) + 1,
-        this.#scaler.size - 2,
-        this.#scaler.size - 2,
-        this.#gfx)
-      .fill(this.floorColor);
+        vm.#scaler.x(c) + 1,
+        vm.#scaler.y(r) + 1,
+        vm.#scaler.size - 2,
+        vm.#scaler.size - 2,
+        vm.#gfx)
+      .fill(vm.floorColor);
   }
 
 
   drawFloorEdges(r, c) {
-    let cell = this.#maze.cell(r, c);
+    let vm = this;
+    let cell = vm.#maze.cell(r, c);
     if (!cell) {
       return;
     }
     if (cell.links.linked(cell.north)) {
-      this.#drawNorthEdge(r, c, this.floorColor);
+      vm.#drawNorthEdge(r, c, vm.floorColor);
     }
     if (cell.links.linked(cell.east)) {
-      this.#drawEastEdge(r, c, this.floorColor);
+      vm.#drawEastEdge(r, c, vm.floorColor);
     }
     if (cell.links.linked(cell.south)) {
-      this.#drawSouthEdge(r, c, this.floorColor);
+      vm.#drawSouthEdge(r, c, vm.floorColor);
     }
     if (cell.links.linked(cell.west)) {
-      this.#drawWestEdge(r, c, this.floorColor);
+      vm.#drawWestEdge(r, c, vm.floorColor);
     }
   }
 
   drawFloor(r, c) {
+    let vm = this;
     new Rectangle(
-        this.#scaler.x(c),
-        this.#scaler.y(r),
-        this.#scaler.size,
-        this.#scaler.size,
-        this.#gfx)
-      .fill(this.floorColor);
+        vm.#scaler.x(c),
+        vm.#scaler.y(r),
+        vm.#scaler.size,
+        vm.#scaler.size,
+        vm.#gfx)
+      .fill(vm.floorColor);
   }
 
   drawWalls(r, c) {
-    let cell = this.#maze.cell(r, c);
+    let vm = this;
+    let cell = vm.#maze.cell(r, c);
     if (!cell) {
       return;
     }
     if (!cell.links.linked(cell.north)) {
-      this.#drawNorthEdge(r, c, this.wallColor);
+      vm.#drawNorthEdge(r, c, vm.wallColor);
     }
     if (!cell.links.linked(cell.east)) {
-      this.#drawEastEdge(r, c, this.wallColor);
+      vm.#drawEastEdge(r, c, vm.wallColor);
     }
     if (!cell.links.linked(cell.south)) {
-      this.#drawSouthEdge(r, c, this.wallColor);
+      vm.#drawSouthEdge(r, c, vm.wallColor);
     }
     if (!cell.links.linked(cell.west)) {
-      this.#drawWestEdge(r, c, this.wallColor);
+      vm.#drawWestEdge(r, c, vm.wallColor);
     }
   }
 
   drawStart() {
-    if (!this.#maze.start) {
-      this.#maze.start = this.#maze.cell(0, 0);
+    let vm = this;
+    if (!vm.#maze.start) {
+      vm.#maze.start = vm.#maze.cell(0, 0);
     }
-    let cell = this.#maze.start;
-    this.#drawCircle(cell, this.startColor);
+    let cell = vm.#maze.start;
+    vm.#drawCircle(cell, vm.startColor);
   }
 
   drawEnd() {
-    if (!this.#maze.end) {
-      this.#maze.end = this.#maze.cell(this.#maze.rows - 1, this.#maze.columns - 1);
+    let vm = this;
+    if (!vm.#maze.end) {
+      vm.#maze.end = vm.#maze.cell(vm.#maze.rows - 1, vm.#maze.columns - 1);
     }
-    let cell = this.#maze.end;
-    this.#drawCircle(cell, this.endColor);
+    let cell = vm.#maze.end;
+    vm.#drawCircle(cell, vm.endColor);
   }
 
   drawActive() {
-    if (!this.#maze.active) {
-      this.#maze.active = this.#maze.cell(0, 0);
+    let vm = this;
+    if (!vm.#maze.active) {
+      vm.#maze.active = vm.#maze.cell(0, 0);
     }
-    let cell = this.#maze.active;
-    this.#drawCircle(cell, this.activeColor);
+    let cell = vm.#maze.active;
+    vm.#drawCircle(cell, vm.activeColor);
   }
 
 }

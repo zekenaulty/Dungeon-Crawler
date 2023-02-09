@@ -39,9 +39,10 @@ export class GrowingTree extends Generator {
   }
 
   generate(filter = GrowingTree.last) {
-    this.maze.initialize();
+    let vm = this;
+    vm.maze.initialize();
     
-    let startAt = this.maze.randomCell();
+    let startAt = vm.maze.randomCell();
     let active = new List();
     active.push(startAt);
     
@@ -57,9 +58,9 @@ export class GrowingTree extends Generator {
       }
     }
     
-    this.maze.setup();
+    vm.maze.setup();
     
-    this.raiseEvent('generated');
+    vm.raiseEvent('generated');
 
   }
 

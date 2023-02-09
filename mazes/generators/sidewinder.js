@@ -4,17 +4,18 @@ import { Generator } from './generator.js';
 export class Sidewinder extends Generator {
 
   generate() {
-    this.maze.initialize();
+    let vm = this;
+    vm.maze.initialize();
 
     let run;
-    this.maze.walkGrid((r, c) => {
+    vm.maze.walkGrid((r, c) => {
       if (c === 0) {
         run = new List();
       }
 
-      let cell = this.maze.cell(r, c);
-      let north = this.maze.cell(cell.row - 1, cell.column);
-      let east = this.maze.cell(cell.row, cell.column + 1)
+      let cell = vm.maze.cell(r, c);
+      let north = vm.maze.cell(cell.row - 1, cell.column);
+      let east = vm.maze.cell(cell.row, cell.column + 1)
 
       run.push(cell);
 
@@ -22,7 +23,7 @@ export class Sidewinder extends Generator {
       let closeRun = !east || (north && zeroOut);
       if (closeRun) {
         let n = run.sample();
-        north = this.maze.cell(n.row - 1, n.column);
+        north = vm.maze.cell(n.row - 1, n.column);
         n.links.connect(north, true, true);
         run = new List();
       } else {
@@ -31,9 +32,9 @@ export class Sidewinder extends Generator {
 
     });
 
-    this.maze.setup();
+    vm.maze.setup();
 
-    this.raiseEvent('generated');
+    vm.raiseEvent('generated');
 
   }
 
