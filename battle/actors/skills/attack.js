@@ -9,6 +9,7 @@ export class Attack extends ActorSkill {
     this.cooldown = 1000;
     this.register = true;
     this.name = 'Attack';
+    this.bubble = true;
   }
   
   get summary() {
@@ -17,7 +18,10 @@ export class Attack extends ActorSkill {
 
   invoke() {
     let target = this.actor.target;
-    safeInvoke(() => {
+    if(!target) {
+      target = this.actor.getTarget();
+    }
+    this.safeInvoke(() => {
       this.doAttack(target);
     });
   }

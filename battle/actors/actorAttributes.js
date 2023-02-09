@@ -22,14 +22,12 @@ export class ActorAttributes extends EventHandler {
   constructor(actor) {
     super();
 
-    let self = this;
-    
     this.defineEvent('changed');
 
     this.#actor = actor;
-    this.#actor.listenToEvent('constructed', () => {
-      actor.listenToEvent('leveled up', () => {
-        self.available += self.pointsPerLevel;
+    this.#actor.level.listenToEvent('actor constructed', () => {
+      actor.listenToEvent('leveled up', (e) => {
+        e.actor.attribites.available += e.actor.attribites.pointsPerLevel;
       });
     });
 

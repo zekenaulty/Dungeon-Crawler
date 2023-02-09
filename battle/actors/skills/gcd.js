@@ -6,7 +6,11 @@ export class GCD extends ActorSkill {
   constructor(actor) {
     super(actor);
     this.cooldown = 250;
+    this.castTime = 25;
+    this.recoilTime = 25;
     this.name = 'Global Cooldown';
+    this.triggerGcd = false;
+    this.bubble = false;
   }
 
   get summary() {
@@ -14,7 +18,7 @@ export class GCD extends ActorSkill {
   }
   
   invoke() {
-    safeInvoke(() => { /* GCD DO NOTHING */ });
+    this.safeInvoke(() => { /* GCD DO NOTHING */ });
   }
 
 }

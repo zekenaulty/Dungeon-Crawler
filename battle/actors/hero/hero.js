@@ -11,7 +11,7 @@ export class Hero extends Actor {
   constructor() {
     super();
     
-    this.skills['cleave'] = new Cleave(this);
+    this.addSkill('cleave', new Cleave(this));
   }
   
 }

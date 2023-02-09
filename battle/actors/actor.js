@@ -17,16 +17,19 @@ export class Actor extends EventHandler {
   target;
   enemies = new List();
   casting;
+  gameLevel;
 
-  constructor() {
+  constructor(gameLevel) {
     super();
+
+    this.gameLevel = gameLevel;
 
     this.level = new ActorLevel(this);
     this.attributes = new ActorAttributes(this);
     this.inventory = new ActorInventory(this);
 
     this.defineEvent(
-      'constructed',
+      'actor constructed',
       'leveled up',
       'healed',
       'damaged',
@@ -35,47 +38,62 @@ export class Actor extends EventHandler {
       'end cast',
       'begin recoil',
       'end recoil',
-      'interupted'
+      'interupted',
+      'begin gcd',
+      'end gcd'
     );
 
     this.addSkill('GCD', new GCD(this));
     this.addSkill('attack', new Attack(this));
 
-    this.raiseEvent('constructed');
+    this.raiseEvent('actor constructed', this);
   }
 
   takeDamage(dmg) {
     this.attributes.hp -= dmg;
-    this.raiseEvent('damaged', dmg);
+    this.raiseEvent('damaged', this, dmg);
     if (this.attributes.hp < 1) {
-      this.raiseEvent('death');
+      this.raiseEvent(
+        'death',
+        {
+          actor: this,
+          gameLevel: this.gameLevel
+        });
     }
   }
 
   addSkill(key, skill) {
-    let self = this;
     this.skills[key] = skill;
-    
+
     skill.listenToEvent('begin cast', (n) => {
-      self.raiseEvent('begin cast', n);
+      n.actor.raiseEvent('begin cast', n);
     });
-    
+
     skill.listenToEvent('end cast', (n) => {
-      self.raiseEvent('end cast', n);
+      n.actor.raiseEvent('end cast', n);
     });
-    
+
     skill.listenToEvent('begin recoil', (n) => {
-      self.raiseEvent('begin recoil', n);
+      n.actor.raiseEvent('begin recoil', n);
     });
-    
+
     skill.listenToEvent('end recoil', (n) => {
-      self.raiseEvent('end recoil', n);
+      n.actor.raiseEvent('end recoil', n);
     });
-    
+
     skill.listenToEvent('interupted', (n) => {
-      self.raiseEvent('interupted', n);
+      n.actor.raiseEvent('interupted', n);
     });
-    
+
+  }
+
+  get ascii() {
+    return '';
+  }
+
+
+  getTarget(hostile = true) {
+    return hostile ? enemies.sample() : this;
   }
 
 }

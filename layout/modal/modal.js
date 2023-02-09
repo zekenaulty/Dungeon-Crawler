@@ -52,7 +52,7 @@ export class Modal extends EventHandler {
   close() {
     if (this.isOpen) {
       
-      let e = { cancel: false, self: this };
+      let e = { cancel: false, modal: this };
       this.raiseEvent('closing', e);
       if(e.cancel){
         return;
@@ -74,14 +74,14 @@ export class Modal extends EventHandler {
       if (Modal.#openCount < 1) {
         body.classList.remove('modal-body-lock');
       }
-      this.raiseEvent('closed');
+      this.raiseEvent('closed', this);
     }
   }
 
   open(showClose) {
     if (!this.isOpen) {
       
-      let e = { cancel: false, self: this };
+      let e = { cancel: false, modal: this };
       this.raiseEvent('opening', e);
       if (e.cancel) {
         return;
@@ -100,7 +100,7 @@ export class Modal extends EventHandler {
       if (showClose) {
         body.appendChild(this.#closeButton);
       }
-      this.raiseEvent('opened');
+      this.raiseEvent('opened', this);
     }
   }
 

@@ -56,9 +56,8 @@ export class DetailSheet extends Modal {
       }
     }
 
-    let self = this;
-    this.listenToEvent('opening', () => {
-      self.update();
+    this.listenToEvent('opening', (e) => {
+      e.modal.update();
     });
 
   }
@@ -110,7 +109,12 @@ export class DetailSheet extends Modal {
         if (this.#actor.attributes.available > 0) {
           this.#actor.attributes.available--;
           scope[key]++;
-          this.#actor.attributes.raiseEvent('changed');
+          this.#actor.attributes.raiseEvent(
+            'changed',
+            {
+              sheet: this,
+              actor: this.#actor
+            });
         }
         this.update();
       });

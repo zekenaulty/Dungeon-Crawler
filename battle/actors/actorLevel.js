@@ -56,7 +56,13 @@ export class ActorLevel extends EventHandler {
     while (this.xp >= this.toLevelXp) {
       this.levelUp();
     }
-    this.raiseEvent('gained xp');
+    this.raiseEvent(
+      'gained xp',
+      {
+        level: this,
+        actor: this.#actor,
+        amount: amount
+      });
   }
 
   levelUp() {
@@ -71,6 +77,11 @@ export class ActorLevel extends EventHandler {
         this.baseXpToLevel
       );
 
-    this.raiseEvent('leveled up');
+    this.raiseEvent(
+      'leveled up',
+      {
+        level: this,
+        actor: this.#actor
+      });
   }
-} /* end ActorLevel */
+}

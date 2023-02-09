@@ -31,7 +31,7 @@ export class GameLevel extends EventHandler {
 
   #breath = 250;
 
-  #hero = new Hero();
+  #hero;
   #heroDetail;
   #battle;
 
@@ -44,7 +44,8 @@ export class GameLevel extends EventHandler {
       'completed level',
       'saved',
       'loaded save',
-      'moved');
+      'moved'
+    );
 
   }
 
@@ -75,7 +76,7 @@ export class GameLevel extends EventHandler {
       this.#renderer.hideSolution();
     }
   }
-  
+
   heroInfo() {
     this.#heroDetail.open(true);
   }
@@ -91,7 +92,7 @@ export class GameLevel extends EventHandler {
     this.#mazeMaxRooms = 32;
     this.#resetMaze();
     this.#randomMaze();
-    this.#hero = new Hero();
+    this.#hero = new Hero(this);
     this.#heroDetail = new DetailSheet(this.#hero, true);
   }
 
@@ -140,28 +141,34 @@ export class GameLevel extends EventHandler {
 
   move(d) {
     if (this.#maze.move(d)) {
-      this.raiseEvent('moved');
+      this.raiseEvent('moved', this);
     }
-    
+
     let dice = Dice.many(20, 20, 20, 20);
-    if(this.#shouldBattle(dice)) {
-      this.raiseEvent('battle starting');
-      this.#battle = new Battle(this.#hero);
+    if (this.#shouldBattle(dice)) {
+      this.raiseEvent('battle starting', this);
+      this.#battle = new Battle(this.#hero, this);
       this.#battle.open(true);
-      
-    } else if(this.#shouldTeleport(dice)) {
-      this.raiseEvent('teleporring');
-      
+
+    } else if (this.#shouldTeleport(dice)) {
+      this.raiseEvent('teleporting', this);
+
     }
   }
-  
+
   #shouldBattle(d) {
     return d[0] > 11 && d[1] < 11 && d[2] > 2 && d[3] < 20;
   }
-  
+
   #shouldTeleport(d) {
     return d[0] > 18 && d[1] > 10 && d[2] > 10 && d[3] > 10;
   }
 
-
+  gameOver() {
+    alert('GAME OVER');
+    this.#battle.clearEnemies();
+    this.#battle.close();
+    this.#battle = undefined;
+    this.#firstLevel();
+  }
 }

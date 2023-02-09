@@ -10,6 +10,8 @@ export class ActorSkill extends EventHandler {
   maxBy = 0;
   lock = false;
   register = false;
+  bubble = true;
+  triggerGcd = true;
   name = 'base skill';
   castId;
   recoilId;
@@ -41,8 +43,12 @@ export class ActorSkill extends EventHandler {
     return this.actor.skills['GCD'].onCd;
   }
 
+  get isGcd() {
+    return this === this.actor.skills['GCD'];
+  }
+
   gcd() {
-    if (!this.actor.skills['GCD']) {
+    if (!this.actor.skills['GCD'] || !this.triggerGcd) {
       return;
     }
     this.actor.skills['GCD'].invoke();
@@ -91,30 +97,87 @@ export class ActorSkill extends EventHandler {
   refresh() {}
 
   safeInvoke(action) {
-    if (this.lock || this.onGcd) {
+    let self = this;
+
+    if (self.lock || self.onGcd) {
       return;
     }
 
-    this.lock = true;
-    if (!this.onCd && this.actor.attributes.hp >= 1) {
-      if(this.actor.casting) {
-        this.actor.casting.interupt();
+    self.lock = true;
+
+
+    if (!self.onCd && !self.onGcd && self.actor.attributes.hp >= 1) {
+      if (self.actor.casting && !self.isGcd) {
+        self.actor.casting.interupt();
       }
-      this.raiseEvent('begin cast', this.name);
-      this.actor.casting = this;
-      this.castId = setTimeout(() => {
+
+      if (self.isGcd) {
+        self.raiseEvent(
+          'begin gcd',
+          self
+        );
+      }
+
+      if (self.bubble) {
+        self.raiseEvent(
+          'begin cast',
+          self
+        );
+      }
+
+      if (!self.isGcd) {
+        self.actor.casting = self;
+        self.gcd();
+      }
+
+      self.castId = setTimeout(() => {
+
+        /* run the actual skill */
         action();
-        this.lastUsed = this.now;
-        this.raiseEvent('end cast', this.name);
-        this.castId = -1;
-        this.raiseEvent('begin recoil', this.name);
-        this.recoilId = setTimeout(() => {
-          this.raiseEvent('end recoil', this.name);
-          this.casting = undefined;
-          this.recoilId = -1;
-          this.lock = false;
-        }, this.recoilTime);
-      }, this.castTime);
+
+        //console.log(this);
+
+        self.lastUsed = self.now;
+
+        if (self.bubble) {
+          self.raiseEvent(
+            'end cast',
+            self
+          );
+        }
+
+        self.castId = -1;
+
+        if (self.bubble) {
+          self.raiseEvent(
+            'begin recoil',
+            self
+          );
+        }
+
+        self.recoilId = setTimeout(() => {
+
+          if (self.bubble) {
+            self.raiseEvent(
+              'end recoil',
+              self
+            );
+          }
+
+          if (!self.isGcd) {
+            self.actor.casting = undefined;
+          } else {
+            self.raiseEvent(
+              'end gcd',
+              self
+            );
+          }
+
+          self.recoilId = -1;
+          self.lock = false;
+
+        }, self.recoilTime);
+      }, self.castTime);
     }
 
   }
@@ -126,7 +189,10 @@ export class ActorSkill extends EventHandler {
     this.casting = undefined;
     this.recoilId = -1;
     this.lock = false;
-    this.raiseEvent('interupted', this.name);
+    this.raiseEvent(
+      'interupted',
+      this
+    );
   }
 
 }

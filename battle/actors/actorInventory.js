@@ -45,18 +45,36 @@ export class ActorInventory extends EventHandler {
 
   addItem(item) {
     if (this.items.length === this.maxItemSlots - 1) {
-      this.raiseEvent('inventory full', item);
+      this.raiseEvent(
+        'inventory full',
+        {
+          inventory: this,
+          actor: this.#actor,
+          item: item
+        });
     }
   }
 
   addGold(amount) {
     this.gold += amount;
-    this.raiseEvent('gold added', amount);
+    this.raiseEvent(
+      'gold added',
+      {
+        inventory: this,
+        actor: this.#actor,
+        amount: amount
+      });
   }
 
   loseGold(amount) {
     this.gold -= amount;
-    this.raiseEvent('gold lost', amount);
+    this.raiseEvent(
+      'gold lost',
+      {
+        inventory: this,
+        actor: this.#actor,
+        amount: amount
+      });
   }
 
 } /* end ActorInventory */
