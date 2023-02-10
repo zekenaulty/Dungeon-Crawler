@@ -46,7 +46,7 @@ export class DetailSheet extends Modal {
     vm.#add('Intellect', vm.#actor.attributes, 'intellect', true && editable);
     vm.#spacer();
 
-    vm.#text('Skills');
+    vm.#text('Skills <span class="tiny-text">(☆ castable)</span>');
     vm.#skills = document.createElement('div');
     vm.#skills.classList.add('detail-sheet-skills');
     vm.#container.appendChild(vm.#skills);
@@ -68,7 +68,9 @@ export class DetailSheet extends Modal {
     let e = {
       element: document.createElement('span'),
       update: () => {
-        e.element.innerHTML = `${skill.name} (${skill.cooldown/1000}s cd): <span class="detail-sheet-attribute-text-tiny">${skill.summary}</span>`;
+        let castable = skill.availableOutOfCombat ? '☆ ' : '';
+        let mp = skill.mpCost > 0 ? `, ${skill.mpCost}mp` : ``;
+        e.element.innerHTML = `<span class="bold">${castable}${skill.name} (${skill.cooldown/1000}s cd${mp}): </span><span>${skill.summary}</span>`;
       }
     };
 
@@ -86,7 +88,6 @@ export class DetailSheet extends Modal {
     }
 
     e.update();
-    e.element.classList.add('detail-sheet-attribute-bold');
     e.element.classList.add('detail-sheet-skill');
     vm.#elements.push(e);
     vm.#skills.appendChild(e.element);

@@ -220,8 +220,8 @@ export class GameLevel extends EventHandler {
   move(d) {
     let vm = this;
     if (vm.#maze.move(d)) {
-      vm.saveState();
       vm.raiseEvent('moved', vm);
+      vm.saveState();
     } else {
       return;
     }
@@ -248,6 +248,7 @@ export class GameLevel extends EventHandler {
     }
     vm.#maze.active = n;
     vm.raiseEvent('teleported', f, n, vm.#maze);
+    this.saveState();
   }
 
   #shouldBattle(d) {

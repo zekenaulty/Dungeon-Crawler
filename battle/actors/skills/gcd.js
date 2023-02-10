@@ -12,6 +12,7 @@ export class GCD extends ActorSkill {
     vm.name = 'Global Cooldown';
     vm.triggerGcd = false;
     vm.bubble = false;
+    vm.mpCost = 0;
   }
 
   get summary() {

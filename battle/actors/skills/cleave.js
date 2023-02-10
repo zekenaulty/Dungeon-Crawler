@@ -16,6 +16,7 @@ export class Cleave extends ActorSkill {
     vm.#charges = vm.#maxCharges;
     vm.minBy = -1;
     vm.maxBy = -3;
+    vm.mpCost = 0;
   }
 
   get displayName() { 

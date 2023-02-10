@@ -11,6 +11,7 @@ export class Attack extends ActorSkill {
     vm.register = true;
     vm.name = 'Attack';
     vm.bubble = true;
+    vm.mpCost = 0;
   }
   
   get displayName() {
