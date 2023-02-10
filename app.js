@@ -32,6 +32,10 @@ import { Dice } from './battle/dice.js';
     const stage = new Stage(stageReady);
     const joystick = new JoyStick();
 
+    header.addButton('CHARACTER', (e) => {
+      game.heroInfo();
+    });
+    
     header.addButton('SAVE', (e) => {
       game.saveState();
     });
@@ -50,9 +54,6 @@ import { Dice } from './battle/dice.js';
 
     header.addButton('HISTOGRAM', (e) => {
       game.histogram();
-    });
-    header.addButton('CHARACTER', (e) => {
-      game.heroInfo();
     });
 
     joystick.listenToEvent('up', () => {
