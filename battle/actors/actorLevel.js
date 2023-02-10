@@ -11,10 +11,11 @@ export class ActorLevel extends EventHandler {
   static xpForNextLevel(
     level = 1,
     toLevelXp = 25,
-    xpFactor = 0.05,
+    xpFactor = 0.25,
     baseXpToLevel = 25
   ) {
-    return baseXpToLevel * level + Math.floor(toLevelXp * xpFactor);
+    return baseXpToLevel * level + 
+    Math.floor(toLevelXp * xpFactor);
   }
 
   static monsterXp(

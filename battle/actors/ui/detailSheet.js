@@ -61,6 +61,9 @@ export class DetailSheet extends Modal {
       e.modal.update();
     });
 
+    vm.listenToEvent('closed', (e) => {
+      vm.#actor.gameLevel.raiseEvent('updated', vm.#actor.gameLevel);
+    });
   }
 
   #addSkill(skill) {

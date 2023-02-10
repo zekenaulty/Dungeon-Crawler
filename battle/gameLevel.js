@@ -172,10 +172,6 @@ export class GameLevel extends EventHandler {
     vm.#mazeMaxRooms += Math.ceil(vm.#mazeMaxRooms * vm.#roomGrowthFactor);
     vm.#resetMaze();
     vm.#randomMaze();
-    vm.raiseEvent('updated', vm);
-
-    vm.saveState();
-
   }
 
   #resetMaze() {
@@ -212,6 +208,8 @@ export class GameLevel extends EventHandler {
       g.listenToEvent('generated', () => {
         setTimeout(() => {
           vm.#renderer.draw();
+          vm.saveState();
+          vm.raiseEvent('updated', vm);
         }, vm.#breath);
       });
     });
@@ -235,7 +233,6 @@ export class GameLevel extends EventHandler {
       vm.teleport();
     }
     vm.raiseEvent('updated', vm);
-
   }
 
   teleport() {

@@ -17,7 +17,7 @@ export class ActorAttributes extends EventHandler {
   mp;
 
   available = 0;
-  pointsPerLevel = 5;
+  pointsPerLevel = 20;
 
   constructor(actor) {
     super();
