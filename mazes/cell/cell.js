@@ -12,10 +12,22 @@ export class Cell extends EventHandler {
   neighbors = new Neighbors(this);
   row = 0;
   column = 0;
-  north;
-  south;
-  east;
-  west;
+  
+  saveState() {
+    let vm = this;
+    return {
+      row: vm.row,
+      column: vm.column,
+      links: vm.links.saveState(),
+      neighbors: vm.neighbors.saveState()
+    };
+  }
+  
+  loadState(maze, state) {
+    let vm = this;
+    vm.links.loadState(maze, state.links);
+    vm.neighbors.loadState(maze, state.neighbors);
+  }
   
   constructor(row, column) {
     super();
@@ -28,6 +40,14 @@ export class Cell extends EventHandler {
   get key() {
     let vm = this;
     return vm.row + ',' + vm.column;
+  }
+  
+  get gridPosition() {
+    let vm = this;
+    return {
+      row: vm.row,
+      column: vm.column
+    };
   }
   
   distances() {

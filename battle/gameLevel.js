@@ -36,6 +36,19 @@ export class GameLevel extends EventHandler {
   #battle;
   #gameOverId = -1;
   
+  saveState() {
+    let vm = this;
+    let state = vm.#maze.saveState();
+    localStorage.setItem('DC_MAZE', JSON.stringify(state));
+  }
+  
+  loadState() {
+    let vm = this;
+    let state = JSON.parse(localStorage.getItem('DC_MAZE'));
+    vm.#maze.loadState(state);
+    vm.#renderer.draw();
+  }
+  
   get level() {
     let vm = this;
     return vm.#level;

@@ -15,6 +15,49 @@ export class Maze extends EventHandler {
   active;
   distances;
   solution;
+  
+  saveState() {
+    let vm = this;
+    let r = {
+      rows: vm.rows,
+      columns: vm.columns,
+      start: vm.start.gridPosition,
+      end: vm.end.gridPosition,
+      active: vm.active.gridPosition,
+      cells: new List(),
+      visited: new List()
+    };
+    
+    vm.eachCell((c) => {
+      r.cells.push(c.saveState());
+    });
+    
+    vm.visited.forEach((c) => {
+      r.visited.push(c.gridPosition);
+    });
+    
+    return r;
+  }
+  
+  loadState(state) {
+    let vm = this;
+    vm.resize(state.rows, state.columns);
+    vm.initialize();
+    
+    state.cells.forEach((c) => {
+      vm.cell(c.row, c.column).loadState(vm, c);
+    });
+    
+    state.visited.forEach((c) => {
+      vm.visited.push(vm.cell(c.row, c.column));
+    });
+    
+    vm.start = vm.cell(state.start.row, state.start.column);
+    vm.end = vm.cell(state.end.row, state.end.column);
+    vm.active = vm.cell(state.active.row, state.active.column);
+    vm.distances = vm.start.distances();
+    vm.solve();
+  }
 
   constructor(rows, columns) {
     super();

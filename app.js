@@ -33,7 +33,11 @@ import { Dice } from './battle/dice.js';
     const joystick = new JoyStick();
 
     header.addButton('SAVE', (e) => {
+      game.saveState();
+    });
 
+    header.addButton('LOAD', (e) => {
+      game.loadState();
     });
 
     header.addButton('NEW GAME', (e) => {

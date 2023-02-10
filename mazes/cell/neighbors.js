@@ -6,6 +6,35 @@ export class Neighbors extends EventHandler {
   items = new List();
   cell;
 
+  saveState() {
+    let vm = this;
+    let r = {
+      row: vm.cell.row,
+      column: vm.cell.column,
+      items: new List()
+    };
+
+    for (let i = 0; i < vm.items.length; i++) {
+      r.items.push({
+        row: vm.items[i].row,
+        column: vm.items[i].column
+      });
+    }
+
+    return r;
+  }
+
+  loadState(maze, state) {
+    let vm = this;
+    vm.cell = maze.cell(state.row, state.column);
+    for (let i = 0; i < state.items.length; i++) {
+      vm.items.push(maze.cell(
+        state.items[i].row,
+        state.items[i].column
+      ));
+    }
+  }
+
   constructor(cell) {
     super();
     let vm = this;
@@ -50,7 +79,7 @@ export class Neighbors extends EventHandler {
     if (!cell) {
       cell = vm.cell;
     }
-    
+
     let result = new List();
     for (let i = 0; i < vm.items.length; i++) {
       if (vm.items[i].links.items.includes(cell)) {
@@ -65,7 +94,7 @@ export class Neighbors extends EventHandler {
     if (!cell) {
       cell = vm.cell;
     }
-    
+
     let result = new List();
     for (let i = 0; i < vm.items.length; i++) {
       if (!vm.items[i].links.items.includes(cell)) {
