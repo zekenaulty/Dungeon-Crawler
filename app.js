@@ -6,10 +6,13 @@ import { JoyStick } from './layout/joystick/joystick.js';
 import { Modal } from './layout/modal/modal.js';
 import { GameLevel } from './battle/gameLevel.js';
 import { Dice } from './battle/dice.js';
+import { Loader } from './layout/loader/loader.js';
 
 (() => {
 
   go(() => {
+    
+    Loader.open();
     
     const game = new GameLevel();
     

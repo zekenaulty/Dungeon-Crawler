@@ -16,6 +16,7 @@ import { DetailSheet } from './actors/ui/detailSheet.js';
 import { Hero } from './actors/hero/hero.js';
 import { Battle } from './ui/battle.js';
 import { Dice } from './dice.js';
+import { Loader } from '../layout/loader/loader.js';
 
 export class GameLevel extends EventHandler {
 
@@ -68,9 +69,9 @@ export class GameLevel extends EventHandler {
 
     vm.#hero.loadState(heroState);
     vm.#maze.loadState(mazeState);
-
+    Loader.open();
     vm.#renderer.draw();
-
+    Loader.close(350);
     vm.raiseEvent('updated', vm);
 
   }
@@ -149,6 +150,7 @@ export class GameLevel extends EventHandler {
 
   #randomMaze() {
     let vm = this;
+    Loader.open();
     setTimeout(() => {
       vm.#randomGenerator().generate();
     }, vm.#breath);
@@ -207,8 +209,10 @@ export class GameLevel extends EventHandler {
     vm.#generators.forEach((g) => {
       g.listenToEvent('generated', () => {
         setTimeout(() => {
+          Loader.open();
           vm.#renderer.draw();
           vm.saveState();
+          Loader.close(350);
           vm.raiseEvent('updated', vm);
         }, vm.#breath);
       });
@@ -223,16 +227,26 @@ export class GameLevel extends EventHandler {
     } else {
       return;
     }
+    
+    if (vm.#maze.active == vm.#maze.end || vm.#maze.active == vm.#maze.start) {
+      return;
+    }
 
     let dice = Dice.many(20, 20, 20, 20);
     if (vm.#shouldBattle(dice)) {
-      vm.raiseEvent('battle starting', vm);
-      vm.#battle = new Battle(vm.#hero, vm);
-      vm.#battle.open();
+      vm.beginBattle();
     } else if (vm.#shouldTeleport(dice)) {
       vm.teleport();
     }
+    
     vm.raiseEvent('updated', vm);
+  }
+
+  beginBattle() {
+    let vm = this;
+    vm.raiseEvent('battle starting', vm);
+    vm.#battle = new Battle(vm.#hero, vm);
+    vm.#battle.open();
   }
 
   teleport() {
