@@ -49,26 +49,25 @@
   font-family: monospace;
   color: orange;
   background-color: black;
-  width: 110px;
+  width: 109px;
   height: 22px;
-  margin-right: 1px;
-  margin-top: 2px;
+  margin-bottom: 0.5px;
   font-size: 1.2em;
-  border: 0px solid black;
+  border: 0.5px solid black;
 }
 
 .header-menu-btn {
   position: fixed;
   top: 2px;
-  right: 2vw;
-  width: 55px;
-  border: 0px solid black;
+  right: 3vw;
+  width: 110px;
+  border: 0.5px solid black;
 }
 
 .header-menu {
   position: fixed;
-  top: 26px;
-  right: 2vw;
+  top: 28px;
+  right: 3vw;
   color: orange;
   font-family: monospace;
   z-index: 5000;
@@ -78,7 +77,8 @@
   justify-content: start;
   align-content: start;
   background-color: black;
-  border: 0px solid black;
+  border: 0.5px solid black;
+  padding-top: 0.5px;
 }
 
 .header-hide {

@@ -111,6 +111,11 @@ export class GameLevel extends EventHandler {
     );
 
   }
+  
+  isHero(actor) {
+    let vm = this;
+    return actor === vm.#hero;
+  }
 
   initialize(width, height, gfx) {
     let vm = this;
@@ -174,6 +179,7 @@ export class GameLevel extends EventHandler {
     vm.#mazeMaxRooms += Math.ceil(vm.#mazeMaxRooms * vm.#roomGrowthFactor);
     vm.#resetMaze();
     vm.#randomMaze();
+    vm.#hero.restore();
   }
 
   #resetMaze() {
