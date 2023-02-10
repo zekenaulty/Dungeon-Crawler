@@ -71,7 +71,7 @@ export class GameLevel extends EventHandler {
     
     vm.#renderer.draw();
     
-    vm.raiseEvent('updated', this);
+    vm.raiseEvent('updated', vm);
 
   }
   
@@ -113,7 +113,7 @@ export class GameLevel extends EventHandler {
     let vm = this;
     vm.#scaler = new CanvasRectangleScaler(width, height);
     vm.#maze = new Maze(vm.#scaler.rows, vm.#scaler.columns);
-    vm.#renderer = new CanvasRectangle(vm.#maze, vm.#scaler, gfx);
+    vm.#renderer = new CanvasRectangle(vm, vm.#maze, vm.#scaler, gfx);
     vm.#loadGenerators();
     vm.#maze.listenToEvent('solved', () => {
       vm.#nextLevel();
@@ -160,18 +160,19 @@ export class GameLevel extends EventHandler {
     vm.#randomMaze();
     vm.#hero = new Hero(vm);
     vm.#heroDetail = new DetailSheet(vm.#hero, true);
-    vm.raiseEvent('updated', this);
+    vm.raiseEvent('updated', vm);
   }
 
   #nextLevel() {
     let vm = this;
-    //vm.#hero.level.addXp(vm.#level * 100);
+    
     vm.#level++;
     vm.#mazeMaxRooms += Math.ceil(vm.#mazeMaxRooms * vm.#roomGrowthFactor);
     vm.#resetMaze();
     vm.#randomMaze();
+    vm.raiseEvent('updated', vm);
+
     vm.saveState();
-    vm.raiseEvent('updated', this);
 
   }
 
@@ -230,9 +231,15 @@ export class GameLevel extends EventHandler {
       vm.#battle.open();
     } else if (vm.#shouldTeleport(dice)) {
       vm.raiseEvent('teleporting', vm);
-
+      let f = vm.#maze.cell(vm.#maze.active.row, vm.#maze.active.column);
+      let n = vm.#maze.cells.sample();
+      while(n === vm.#maze.end || n === vm.#maze.active) {
+        n = vm.#maze.cells.sample();
+      }
+      vm.#maze.active = n;
+      vm.raiseEvent('teleported', vm, f, n, vm.#maze);
     }
-    vm.raiseEvent('updated', this);
+    vm.raiseEvent('updated', vm);
 
   }
 
@@ -256,7 +263,7 @@ export class GameLevel extends EventHandler {
         vm.#battle.close();
         vm.#battle = undefined;
         vm.#gameOverId = -1;
-        vm.raiseEvent('game over', this);
+        vm.raiseEvent('game over', vm);
 
         vm.#firstLevel();
       }

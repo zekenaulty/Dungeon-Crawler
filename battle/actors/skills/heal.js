@@ -26,7 +26,7 @@ export class Heal extends ActorSkill {
 
   invoke() {
     let vm = this;
-    let target = this.actor;
+    let target = vm.actor;
     if(!target) {
       target = vm.actor.getTarget(false);
     }

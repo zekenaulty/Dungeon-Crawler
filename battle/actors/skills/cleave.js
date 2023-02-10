@@ -35,7 +35,7 @@ export class Cleave extends ActorSkill {
   
   invoke() {
     let vm = this;
-    this.safeInvoke(() => {
+    vm.safeInvoke(() => {
       if (vm.#charges > 0) {
         vm.#charges--;
         let last = vm.actor.enemies.length - 1;

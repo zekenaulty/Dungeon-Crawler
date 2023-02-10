@@ -19,7 +19,7 @@ export class CanvasRectangle extends EventHandler {
   showSolution = false;
   showHistogram = false;
 
-  constructor(maze, scaler, gfx) {
+  constructor(game, maze, scaler, gfx) {
     super();
     let vm = this;
 
@@ -29,19 +29,28 @@ export class CanvasRectangle extends EventHandler {
     vm.#gfx = gfx;
 
     maze.listenToEvent('moved', (dir, from, to, $maze) => {
-      vm.eraseFloor(from.row, from.column);
-      vm.drawSolutionFloor(from.row, from.column);
-
-      if (from === $maze.start) {
-        vm.drawStart();
-      }
-
-      if (from === $maze.end) {
-        vm.drawEnd();
-      }
-
-      vm.drawActive();
+      vm.drawMove(from, $maze);
     });
+    
+    game.listenToEvent('teleported', (game, from, to, $maze) => {
+      vm.drawMove(from, $maze);
+    });
+  }
+  
+  drawMove(from, $maze){
+    let vm = this;
+    vm.eraseFloor(from.row, from.column);
+    vm.drawSolutionFloor(from.row, from.column);
+    
+    if (from === $maze.start) {
+      vm.drawStart();
+    }
+    
+    if (from === $maze.end) {
+      vm.drawEnd();
+    }
+    
+    vm.drawActive();
   }
 
   scaleLock(n, min = 0) {

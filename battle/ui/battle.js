@@ -136,7 +136,7 @@ export class Battle extends Modal {
 
     vm.#hero.listenToEvent('death', (e) => {
       vm.#paused = true;
-      vm.raiseEvent('end combat', this);
+      vm.raiseEvent('end combat', vm);
       e.gameLevel.gameOver();
     });
 
@@ -287,8 +287,8 @@ export class Battle extends Modal {
       e.enemy.battle.removeEnemy(e.enemy);
       vm.#hero.level.addXp(ActorLevel.monsterXp(e.enemy.level.level));
       if (vm.#enemies.length < 1) {
-        vm.raiseEvent('end combat', this);
-        vm.raiseEvent('won battle', this);
+        vm.raiseEvent('end combat', vm);
+        vm.raiseEvent('won battle', vm);
         vm.close();
       }
     });
