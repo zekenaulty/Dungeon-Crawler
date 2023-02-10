@@ -38,15 +38,41 @@ export class GameLevel extends EventHandler {
   
   saveState() {
     let vm = this;
-    let state = vm.#maze.saveState();
-    localStorage.setItem('DC_MAZE', JSON.stringify(state));
+    let heroState = vm.#hero.saveState();
+    let mazeState = vm.#maze.saveState();
+    localStorage.setItem('DC_LEVEL', JSON.stringify({
+      level: vm.#level,
+      mazeMaxRooms: vm.#mazeMaxRooms,
+      toTiny: vm.#toTiny,
+      roomGrowthFactor: vm.#roomGrowthFactor
+    }));
+    localStorage.setItem('DC_HERO', JSON.stringify(heroState));
+    localStorage.setItem('DC_MAZE', JSON.stringify(mazeState));
   }
   
   loadState() {
     let vm = this;
-    let state = JSON.parse(localStorage.getItem('DC_MAZE'));
-    vm.#maze.loadState(state);
+    let state = JSON.parse(localStorage.getItem('DC_LEVEL'));
+    let heroState = JSON.parse(localStorage.getItem('DC_HERO'));
+    let mazeState = JSON.parse(localStorage.getItem('DC_MAZE'));
+    
+    vm.#level = state.level;
+    vm.#mazeMaxRooms = state.mazeMaxRooms;
+    vm.#toTiny = state.toTiny;
+    vm.#roomGrowthFactor = state.roomGrowthFactor;
+    
+    vm.#resetMaze();
+    
+    vm.#hero = new Hero(vm);
+    vm.#heroDetail = new DetailSheet(vm.#hero, true);
+    
+    vm.#hero.loadState(heroState);
+    vm.#maze.loadState(mazeState);
+    
     vm.#renderer.draw();
+    
+    vm.raiseEvent('updated', this);
+
   }
   
   get level() {
@@ -96,10 +122,10 @@ export class GameLevel extends EventHandler {
 
   begin(newGame = false) {
     let vm = this;
-    let saveData = localStorage.getItem('DC_GAME_SAVE');
+    let saveData = localStorage.getItem('DC_LEVEL');
 
     if (saveData && !newGame) {
-
+      vm.loadState();
     } else {
       vm.#firstLevel();
     }
@@ -144,6 +170,7 @@ export class GameLevel extends EventHandler {
     vm.#mazeMaxRooms += Math.ceil(vm.#mazeMaxRooms * vm.#roomGrowthFactor);
     vm.#resetMaze();
     vm.#randomMaze();
+    vm.saveState();
     vm.raiseEvent('updated', this);
 
   }
@@ -190,6 +217,7 @@ export class GameLevel extends EventHandler {
   move(d) {
     let vm = this;
     if (vm.#maze.move(d)) {
+      vm.saveState();
       vm.raiseEvent('moved', vm);
     } else {
       return;

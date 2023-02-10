@@ -19,6 +19,40 @@ export class Actor extends EventHandler {
   casting;
   gameLevel;
 
+  saveState() {
+    let vm = this;
+    return {
+      xp: vm.level.xp,
+      hp: vm.attributes.hp,
+      mp: vm.attributes.mp,
+      gold: vm.inventory.gold,
+      points: vm.attributes.available,
+      strength: vm.attributes.strength,
+      intellect: vm.attributes.intellect,
+      vitality: vm.attributes.vitality,
+      baseDamage: vm.attributes.baseDamage,
+      baseHp: vm.attributes.baseHp,
+      baseMp: vm.attributes.baseMp,
+      pointsPerLevel: vm.attributes.pointsPerLevel,
+    }
+  }
+  
+  loadState(state) {
+    let vm = this;
+    vm.level.addXp(state.xp);
+    vm.attributes.hp = state.hp;
+    vm.attributes.mp = state.mp;
+    vm.attributes.available = state.points;
+    vm.inventory.gold = state.gold;
+    vm.attributes.strength = state.strength;
+    vm.attributes.intellect = state.intellect;
+    vm.attributes.vitality = state.vitality;
+    vm.attributes.baseDamage = state.baseDamage;
+    vm.attributes.baseHp = state.baseHp;
+    vm.attributes.baseMp = state.baseMp;
+    vm.attributes.pointsPerLevel = state.pointsPerLevel;
+  }
+
   constructor(gameLevel) {
     super();
     let vm = this;
