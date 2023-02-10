@@ -32,7 +32,7 @@ export class CanvasRectangle extends EventHandler {
       vm.drawMove(from, $maze);
     });
     
-    game.listenToEvent('teleported', (game, from, to, $maze) => {
+    game.listenToEvent('teleported', (from, to, $maze) => {
       vm.drawMove(from, $maze);
     });
   }

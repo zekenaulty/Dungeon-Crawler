@@ -24,8 +24,8 @@ export class Battle extends Modal {
   #enemies;
   #paused = true;
 
-  #combatDelayMin = 750;
-  #combatDelayMax = 1550;
+  #combatDelayMin = 400;
+  #combatDelayMax = 750;
 
   get #combatDelay() {
     let vm = this;
@@ -153,7 +153,7 @@ export class Battle extends Modal {
     let vm = this;
     for (let k in vm.#hero.skills) {
       let skill = vm.#hero.skills[k];
-      if (skill.register) {
+      if (skill.register && !skill.availableOutOfCombatOnly) {
         let btn = document.createElement('button');
         btn.innerHTML = skill.displayName;
         btn.classList.add('battle-hero-btn');
@@ -296,7 +296,7 @@ export class Battle extends Modal {
     vm.#battlefield.appendChild(e);
   }
 
-  removeEnemy(e, delay = 1550) {
+  removeEnemy(e, delay = 0) {
     let vm = this;
     e.stopAi();
     vm.#enemies.delete(e);
@@ -306,7 +306,7 @@ export class Battle extends Modal {
     }, delay);
   }
 
-  clearEnemies(delay = 1250) {
+  clearEnemies(delay = 0) {
     let vm = this;
     vm.#paused = true;
     let l = vm.#hero.enemies.length - 1;

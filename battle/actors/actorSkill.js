@@ -11,6 +11,7 @@ export class ActorSkill extends EventHandler {
   lock = false;
   register = false;
   availableOutOfCombat = false;
+  availableOutOfCombatOnly = false;
   bubble = true;
   triggerGcd = true;
   name = 'base skill';

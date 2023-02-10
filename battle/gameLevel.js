@@ -35,7 +35,7 @@ export class GameLevel extends EventHandler {
   #heroDetail;
   #battle;
   #gameOverId = -1;
-  
+
   saveState() {
     let vm = this;
     let heroState = vm.#hero.saveState();
@@ -49,37 +49,37 @@ export class GameLevel extends EventHandler {
     localStorage.setItem('DC_HERO', JSON.stringify(heroState));
     localStorage.setItem('DC_MAZE', JSON.stringify(mazeState));
   }
-  
+
   loadState() {
     let vm = this;
     let state = JSON.parse(localStorage.getItem('DC_LEVEL'));
     let heroState = JSON.parse(localStorage.getItem('DC_HERO'));
     let mazeState = JSON.parse(localStorage.getItem('DC_MAZE'));
-    
+
     vm.#level = state.level;
     vm.#mazeMaxRooms = state.mazeMaxRooms;
     vm.#toTiny = state.toTiny;
     vm.#roomGrowthFactor = state.roomGrowthFactor;
-    
+
     vm.#resetMaze();
-    
+
     vm.#hero = new Hero(vm);
     vm.#heroDetail = new DetailSheet(vm.#hero, true);
-    
+
     vm.#hero.loadState(heroState);
     vm.#maze.loadState(mazeState);
-    
+
     vm.#renderer.draw();
-    
+
     vm.raiseEvent('updated', vm);
 
   }
-  
+
   get level() {
     let vm = this;
     return vm.#level;
   }
-  
+
   get summary() {
     let vm = this;
     return `
@@ -104,7 +104,9 @@ export class GameLevel extends EventHandler {
       'saved',
       'loaded save',
       'moved',
-      'updated'
+      'updated',
+      'teleporting',
+      'teleported'
     );
 
   }
@@ -165,7 +167,7 @@ export class GameLevel extends EventHandler {
 
   #nextLevel() {
     let vm = this;
-    
+
     vm.#level++;
     vm.#mazeMaxRooms += Math.ceil(vm.#mazeMaxRooms * vm.#roomGrowthFactor);
     vm.#resetMaze();
@@ -230,17 +232,22 @@ export class GameLevel extends EventHandler {
       vm.#battle = new Battle(vm.#hero, vm);
       vm.#battle.open();
     } else if (vm.#shouldTeleport(dice)) {
-      vm.raiseEvent('teleporting', vm);
-      let f = vm.#maze.cell(vm.#maze.active.row, vm.#maze.active.column);
-      let n = vm.#maze.cells.sample();
-      while(n === vm.#maze.end || n === vm.#maze.active) {
-        n = vm.#maze.cells.sample();
-      }
-      vm.#maze.active = n;
-      vm.raiseEvent('teleported', vm, f, n, vm.#maze);
+      vm.teleport();
     }
     vm.raiseEvent('updated', vm);
 
+  }
+
+  teleport() {
+    let vm = this;
+    vm.raiseEvent('teleporting', vm);
+    let f = vm.#maze.cell(vm.#maze.active.row, vm.#maze.active.column);
+    let n = vm.#maze.cells.sample();
+    while (n === vm.#maze.end || n === vm.#maze.active) {
+      n = vm.#maze.cells.sample();
+    }
+    vm.#maze.active = n;
+    vm.raiseEvent('teleported', f, n, vm.#maze);
   }
 
   #shouldBattle(d) {
@@ -269,7 +276,7 @@ export class GameLevel extends EventHandler {
       }
     }, delay);
   }
-  
+
   histogram() {
     let vm = this;
     vm.#renderer.histogram();
