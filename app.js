@@ -44,6 +44,9 @@ import { Dice } from './battle/dice.js';
       game.solve();
     });
 
+    header.addButton('HISTOGRAM', (e) => {
+      game.histogram();
+    });
     header.addButton('CHARACTER', (e) => {
       game.heroInfo();
     });

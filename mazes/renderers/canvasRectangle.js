@@ -17,6 +17,7 @@ export class CanvasRectangle extends EventHandler {
   solveColor = 'cornflowerblue';
 
   showSolution = false;
+  showHistogram = false;
 
   constructor(maze, scaler, gfx) {
     super();
@@ -67,7 +68,7 @@ export class CanvasRectangle extends EventHandler {
     } else {
       vm.#gfx.strokeStyle = color;
     }
-    
+
     vm.#gfx.beginPath();
     vm.#gfx.ellipse(
       x + r,
@@ -168,6 +169,11 @@ export class CanvasRectangle extends EventHandler {
       .fill(vm.bgColor);
   }
 
+  normalize(value, min, max) {
+    let normalized = (value - min) / (max - min);
+    return normalized;
+  }
+
   draw() {
     let vm = this;
     vm.fillBg();
@@ -232,15 +238,15 @@ export class CanvasRectangle extends EventHandler {
     }
 
     for (let i = 0; i < vm.#maze.solution.items.length; i++) {
-      if(show) {
-      vm.drawSolutionFloor(
-        vm.#maze.solution.items[i].row, 
-        vm.#maze.solution.items[i].column, 
-        color);
+      if (show) {
+        vm.drawSolutionFloor(
+          vm.#maze.solution.items[i].row,
+          vm.#maze.solution.items[i].column,
+          color);
       } else {
         vm.eraseFloor(
-        vm.#maze.solution.items[i].row, 
-        vm.#maze.solution.items[i].column);
+          vm.#maze.solution.items[i].row,
+          vm.#maze.solution.items[i].column);
       }
     }
   }
@@ -260,45 +266,81 @@ export class CanvasRectangle extends EventHandler {
 
   eraseFloor(r, c) {
     let vm = this;
-    new Rectangle(
-        vm.#scaler.x(c) + 1,
-        vm.#scaler.y(r) + 1,
-        vm.#scaler.size - 2,
-        vm.#scaler.size - 2,
-        vm.#gfx)
-      .fill(vm.floorColor);
+    let color = vm.floorColor;
+    let floor = new Rectangle(
+      vm.#scaler.x(c) + 1,
+      vm.#scaler.y(r) + 1,
+      vm.#scaler.size - 2,
+      vm.#scaler.size - 2,
+      vm.#gfx);
+    if (vm.showHistogram) {
+      let cell = vm.#maze.cell(r, c);
+      let a = vm.normalize(
+        vm.#maze.distances.distance(cell),
+        vm.#maze.distances.distance(vm.#maze.end),
+        0
+      );
+      color = vm.histogramColor(a);
+      floor.fill(vm.floorColor);
+    }
+
+    floor.fill(color);
   }
 
 
   drawFloorEdges(r, c) {
     let vm = this;
     let cell = vm.#maze.cell(r, c);
-    if (!cell) {
-      return;
+    let color = vm.floorColor;
+    let draw = (color) => {
+      if (!cell) {
+        return;
+      }
+      if (cell.links.linked(cell.north)) {
+        vm.#drawNorthEdge(r, c, color);
+      }
+      if (cell.links.linked(cell.east)) {
+        vm.#drawEastEdge(r, c, color);
+      }
+      if (cell.links.linked(cell.south)) {
+        vm.#drawSouthEdge(r, c, color);
+      }
+      if (cell.links.linked(cell.west)) {
+        vm.#drawWestEdge(r, c, color);
+      }
+    };
+    if (vm.showHistogram) {
+      let a = vm.normalize(
+        vm.#maze.distances.distance(cell),
+        vm.#maze.distances.distance(vm.#maze.end),
+        0
+      );
+      color = vm.histogramColor(a);
+      draw(vm.floorColor);
     }
-    if (cell.links.linked(cell.north)) {
-      vm.#drawNorthEdge(r, c, vm.floorColor);
-    }
-    if (cell.links.linked(cell.east)) {
-      vm.#drawEastEdge(r, c, vm.floorColor);
-    }
-    if (cell.links.linked(cell.south)) {
-      vm.#drawSouthEdge(r, c, vm.floorColor);
-    }
-    if (cell.links.linked(cell.west)) {
-      vm.#drawWestEdge(r, c, vm.floorColor);
-    }
+    draw(color);
   }
 
   drawFloor(r, c) {
     let vm = this;
-    new Rectangle(
-        vm.#scaler.x(c),
-        vm.#scaler.y(r),
-        vm.#scaler.size,
-        vm.#scaler.size,
-        vm.#gfx)
-      .fill(vm.floorColor);
+    let color = vm.floorColor;
+    let floor = new Rectangle(
+      vm.#scaler.x(c),
+      vm.#scaler.y(r),
+      vm.#scaler.size,
+      vm.#scaler.size,
+      vm.#gfx);
+    if (vm.showHistogram) {
+      let cell = vm.#maze.cell(r, c);
+      let a = vm.normalize(
+        vm.#maze.distances.distance(cell),
+        vm.#maze.distances.distance(vm.#maze.end),
+        0
+      );
+      color = vm.histogramColor(a);
+      floor.fill(vm.floorColor);
+    }
+    floor.fill(color);
   }
 
   drawWalls(r, c) {
@@ -346,6 +388,16 @@ export class CanvasRectangle extends EventHandler {
     }
     let cell = vm.#maze.active;
     vm.#drawCircle(cell, vm.activeColor);
+  }
+
+  histogram() {
+    let vm = this;
+    vm.showHistogram = !vm.showHistogram;
+    vm.draw();
+  }
+
+  histogramColor(a) {
+    return `rgba(112,41,99,${a})`;
   }
 
 }

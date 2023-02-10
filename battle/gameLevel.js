@@ -221,4 +221,9 @@ export class GameLevel extends EventHandler {
       }
     }, delay);
   }
+  
+  histogram() {
+    let vm = this;
+    vm.#renderer.histogram();
+  }
 }
