@@ -72,9 +72,22 @@ export class Enemy extends Actor {
       let skill = vm.skills.attack;
       skill.invoke();
     }
+    
+    vm.#nextFrame();
 
   }
 
+  #nextFrame(){
+    /* 
+      how to implememt ascii frame animations...?
+      the bold and font scaling 
+      already make it look bad
+      
+      there has to be a way to make flex not change 
+      the bounds
+    */
+  }
+  
   startAi() {
     let vm = this;
     vm.#aiId = setInterval(() => {

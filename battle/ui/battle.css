@@ -7,7 +7,7 @@
   border: 1px solid white;
   border-radius: 13px 13px 13px 13px;
   color: white;
-  padding: 4px 1px 1px 6px;
+  /*padding: 4px 1px 1px 6px;*/
   display: flex;
   flex-flow: row;
   flex-wrap: wrap;
@@ -50,18 +50,25 @@
 }
 
 .battle-enemy {
-  color: greenyellow;
-  width: 155px;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
   text-align: center;
-  font-size: 1.5em;
-  height: 3em;
+  color: greenyellow;
+  width: 165px;
+  font-size: 1.6em;
+  min-height: 65px;
+  max-height: 65px;
   font-weight: bold;
+  overflow: hidden;
+  padding: 0px 0px 0px 0px;
+  margin: 0px 0px 0px 0px;
 }
 
 .battle-enemy-attack {
   color: darkred;
   font-weight: bolder;
-  font-size: 1.8em;
+  font-size: 1.95em;
 }
 
 .battle-dmg {
