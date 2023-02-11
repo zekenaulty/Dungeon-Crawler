@@ -102,6 +102,10 @@ export class ActorSkill extends EventHandler {
   }
 
   doAttack(target) {
+    if(!target) {
+      return;
+    }
+    
     let vm = this;
     let maxDmg = vm.max;
     let minDmg = vm.min;

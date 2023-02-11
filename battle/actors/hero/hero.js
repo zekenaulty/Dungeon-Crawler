@@ -7,8 +7,27 @@ import { ActorAttributes } from '../actorAttributes.js';
 import { Cleave } from '../skills/cleave.js';
 import { Heal } from '../skills/heal.js';
 import { Teleport } from '../skills/teleport.js';
+import { AutoBattle } from '../skills/autoBattle.js';
 
 export class Hero extends Actor {
+
+  autoBattle = true;
+
+  #aiIntervalMin = 500;
+  #aiIntervalMax = 1250;
+
+  /*  dexterity should factor 
+      into these numbers 
+      a.k.a. speed */
+  get #aiInterval() {
+    let vm = this;
+    let r = Math.floor(Math.random() * vm.#aiIntervalMax) + 1;
+    if (r < vm.#aiIntervalMin) {
+      r = vm.#aiIntervalMin;
+    }
+
+    return r;
+  }
 
   constructor(gameLevel) {
     super(gameLevel);
@@ -28,7 +47,49 @@ export class Hero extends Actor {
     vm.name = 'hero';
     vm.addSkill('cleave', new Cleave(vm));
     vm.addSkill('heal', new Heal(vm));
-    vm.addSkill('teleport', new Teleport(vm));
+    vm.addSkill('teleport', new Teleport(vm));    vm.addSkill('teleport', new Teleport(vm));
+    vm.addSkill('auto', new AutoBattle(vm));
+
   }
 
+  #aiId = -1;
+  startAi() {
+    let vm = this;
+    vm.#aiLoop(); /* of course the hero gets the drop on them  */
+    vm.#aiId = setInterval(() => {
+      vm.#aiLoop();
+    }, vm.#aiInterval);
+  }
+
+  #aiLoop() {
+    let vm = this;
+
+    if (
+      vm.attributes.hp <= Math.floor(vm.attributes.maxHp * 0.29) &&
+      vm.attributes.mp >= vm.skills.heal.mpCost &&
+      !vm.skills.heal.onCd
+    ) {
+      vm.skills.heal.invoke();
+      return;
+    }
+
+    if (
+      vm.enemies.length > 1 &&
+      vm.skills.cleave.charges > 0 &&
+      !vm.skills.cleave.onCd
+    ) {
+      vm.skills.cleave.invoke();
+      return;
+    } else if(!vm.skills.attack.onCd){
+      vm.skills.attack.invoke();
+      return;
+    }
+  }
+
+  stopAi() {
+    let vm = this;
+    if (vm.#aiId > -1) {
+      clearInterval(vm.#aiId);
+    }
+  }
 }

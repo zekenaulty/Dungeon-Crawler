@@ -53,6 +53,10 @@ import { Loader } from './layout/loader/loader.js';
       game.begin(true);
     });
 
+    header.addButton('WAVES', (e) => {
+      game.grind();
+    });
+    
     header.addButton('SOLVE', (e) => {
       game.solve();
     });

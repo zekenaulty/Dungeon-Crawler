@@ -37,6 +37,8 @@ export class GameLevel extends EventHandler {
   #battle;
   #gameOverId = -1;
 
+  #endGrind;
+
   saveState() {
     let vm = this;
     let heroState = vm.#hero.saveState();
@@ -98,6 +100,13 @@ export class GameLevel extends EventHandler {
     super();
     let vm = this;
 
+    vm.#endGrind = document.createElement('button');
+    vm.#endGrind.innerHTML = 'stop battles';
+    vm.#endGrind.classList.add('end-grind');
+    vm.#endGrind.addEventListener('click', () => {
+      vm.grind();
+    });
+
     vm.defineEvent(
       'game over',
       'won battle',
@@ -111,7 +120,7 @@ export class GameLevel extends EventHandler {
     );
 
   }
-  
+
   isHero(actor) {
     let vm = this;
     return actor === vm.#hero;
@@ -233,7 +242,7 @@ export class GameLevel extends EventHandler {
     } else {
       return;
     }
-    
+
     if (vm.#maze.active == vm.#maze.end || vm.#maze.active == vm.#maze.start) {
       return;
     }
@@ -244,15 +253,24 @@ export class GameLevel extends EventHandler {
     } else if (vm.#shouldTeleport(dice)) {
       vm.teleport();
     }
-    
+
     vm.raiseEvent('updated', vm);
   }
 
-  beginBattle() {
+  beginBattle(onVictory) {
     let vm = this;
     vm.raiseEvent('battle starting', vm);
     vm.#battle = new Battle(vm.#hero, vm);
+
+    if (onVictory) {
+      vm.#battle.listenToEvent('won battle', () => {
+        onVictory();
+      });
+    }
+
+    Loader.close(0);
     vm.#battle.open();
+
   }
 
   teleport() {
@@ -281,9 +299,15 @@ export class GameLevel extends EventHandler {
     if (vm.#gameOverId > -1 || !vm.#battle) {
       return;
     }
+
+    if (vm.#grind) {
+      vm.grind();
+    }
+
     //alert('GAME OVER');
     vm.#gameOverId = setTimeout(() => {
       if (vm.#battle) {
+        vm.#hero.stopAi();
         vm.#battle.clearEnemies();
         vm.#battle.close();
         vm.#battle = undefined;
@@ -298,5 +322,53 @@ export class GameLevel extends EventHandler {
   histogram() {
     let vm = this;
     vm.#renderer.histogram();
+  }
+
+  #grind = false;
+  #grindCount = 0;
+  #grindCap = 0;
+  #battleLoop(vm) {
+    if (!vm.#grind) {
+      return;
+    }
+
+    if (vm.#grindCap > 0 && vm.#grindCount == vm.#grindCap) {
+      vm.grind();
+      return;
+    }
+
+    vm.#grindCount++;
+
+    Loader.open();
+    setTimeout(() => {
+      if (!vm.#grind) {
+        return;
+      }
+      if (vm.#hero.attributes.hp > Math.floor(vm.#hero.attributes.hp * 0.25)) {
+        vm.beginBattle(() => {
+          vm.#battleLoop(vm);
+        });
+      } else {
+        vm.grind();
+      }
+    }, 350);
+  }
+
+  grind(cap = 0) {
+    let vm = this;
+    let body = document.querySelector('body');
+    vm.#grindCap = cap;
+    if (vm.#grind) {
+      vm.#grind = false;
+      body.removeChild(vm.#endGrind);
+      vm.#hero.recover();
+      alert(`Won ${vm.#grindCount} battles!`);
+      vm.#grindCount = 0;
+    } else {
+      vm.#grind = true;
+      vm.#grindCount = 0;
+      body.appendChild(vm.#endGrind);
+      vm.#battleLoop(vm);
+    }
   }
 }

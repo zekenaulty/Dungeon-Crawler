@@ -121,3 +121,15 @@
 .battle-hide {
   display: none !important;
 }
+
+.auto-battle {
+  position: fixed;
+  top: 9px;
+  right: 19px;
+  z-index: 20000;
+}
+
+.battle-green {
+  color: green;
+  border-color: green;
+}

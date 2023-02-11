@@ -45,7 +45,7 @@ export class Battle extends Modal {
   constructor(hero, level) {
     super();
     let vm = this;
-    
+
     vm.#hero = hero;
     vm.#level = level;
     vm.#enemies = new List();
@@ -137,6 +137,7 @@ export class Battle extends Modal {
     vm.#hero.listenToEvent('death', (e) => {
       vm.#paused = true;
       vm.raiseEvent('end combat', vm);
+      vm.#hero.stopAi();
       e.gameLevel.gameOver();
     });
 
@@ -171,20 +172,41 @@ export class Battle extends Modal {
           btn.classList.remove('battle-hero-btn-active');
         };
         let update = () => {
+          if (skill.displayName == 'auto-battle') {
+            if (vm.#hero.autoBattle) {
+              btn.classList.add('battle-green');
+              vm.#hero.startAi();
+            } else {
+              btn.classList.remove('battle-green');
+              vm.#hero.stopAi();
+            }
+            vm.appendChild(btn);
+          }
           btn.innerHTML = skill.displayName;
           vm.heroInfo();
         };
+
         skill.listenToEvent('begin cast', begin);
         skill.listenToEvent('end recoil', done);
         skill.listenToEvent('updated', update);
         skill.listenToEvent('end cast', update);
+
         vm.listenToEvent('closing', () => {
           skill.ignoreEvent('updated', update);
           skill.ignoreEvent('end cast', update);
           skill.ignoreEvent('end recoil', done);
           skill.ignoreEvent('begin cast', begin);
         });
-        vm.#heroSkills.appendChild(btn);
+
+        if (skill.displayName == 'auto-battle') {
+          btn.classList.add('auto-battle');
+          if (vm.#hero.autoBattle) {
+            btn.classList.add('battle-green');
+          }
+          vm.appendChild(btn);
+        } else {
+          vm.#heroSkills.appendChild(btn);
+        }
       }
     }
   }
@@ -233,14 +255,14 @@ export class Battle extends Modal {
       vm,
       vm.#hero
     );
-    
+
     let l = vm.mobLevel();
-    while(e.enemy.level.level < l) {
+    while (e.enemy.level.level < l) {
       e.enemy.level.levelUp();
     }
     e.enemy.spendPoints();
     e.enemy.recover();
-    
+
     e.enemy.id = e.id;
     e.enemy.div = e;
     e.enemy.target = vm.#hero;
@@ -291,6 +313,7 @@ export class Battle extends Modal {
       e.enemy.battle.removeEnemy(e.enemy);
       vm.#hero.level.addXp(ActorLevel.monsterXp(e.enemy.level.level));
       if (vm.#enemies.length < 1) {
+        vm.#hero.stopAi();
         vm.raiseEvent('end combat', vm);
         vm.raiseEvent('won battle', vm);
         vm.#level.saveState();
@@ -323,6 +346,9 @@ export class Battle extends Modal {
 
   startAi() {
     let vm = this;
+    if (vm.#hero.autoBattle) {
+      vm.#hero.startAi();
+    }
     for (let i = 0; i < vm.#hero.enemies.length; i++) {
       vm.#hero.enemies[i].startAi();
     }
