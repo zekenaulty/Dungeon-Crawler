@@ -41,24 +41,27 @@ export class GameLevel extends EventHandler {
   #endGrind;
 
   saveState() {
+
     let vm = this;
     let heroState = vm.#hero.saveState();
     let mazeState = vm.#maze.saveState();
-    localStorage.setItem('DC_LEVEL', JSON.stringify({
+    let state = {
       level: vm.#level,
       mazeMaxRooms: vm.#mazeMaxRooms,
       toTiny: vm.#toTiny,
-      roomGrowthFactor: vm.#roomGrowthFactor
-    }));
-    localStorage.setItem('DC_HERO', JSON.stringify(heroState));
-    localStorage.setItem('DC_MAZE', JSON.stringify(mazeState));
+      roomGrowthFactor: vm.#roomGrowthFactor,
+      hero: heroState,
+      maze: mazeState,
+    };
+    
+    return state;
   }
 
-  loadState() {
+  loadState(state) {
+
     let vm = this;
-    let state = JSON.parse(localStorage.getItem('DC_LEVEL'));
-    let heroState = JSON.parse(localStorage.getItem('DC_HERO'));
-    let mazeState = JSON.parse(localStorage.getItem('DC_MAZE'));
+    let heroState = state.hero;
+    let mazeState = state.maze;
 
     vm.#level = state.level;
     vm.#mazeMaxRooms = state.mazeMaxRooms;
@@ -76,7 +79,6 @@ export class GameLevel extends EventHandler {
     vm.#renderer.draw();
     Loader.close(350);
     vm.raiseEvent('updated', vm);
-
   }
 
   get level() {
@@ -140,10 +142,10 @@ export class GameLevel extends EventHandler {
 
   begin(newGame = false) {
     let vm = this;
-    let saveData = localStorage.getItem('DC_LEVEL');
+    let saved = SaveData.getState();
 
-    if (saveData && !newGame) {
-      vm.loadState();
+    if (saved && !newGame) {
+      vm.loadState(saved);
     } else {
       vm.#firstLevel();
     }
@@ -227,7 +229,6 @@ export class GameLevel extends EventHandler {
         setTimeout(() => {
           Loader.open();
           vm.#renderer.draw();
-          vm.saveState();
           Loader.close(350);
           vm.raiseEvent('updated', vm);
         }, vm.#breath);
@@ -239,7 +240,7 @@ export class GameLevel extends EventHandler {
     let vm = this;
     if (vm.#maze.move(d)) {
       vm.raiseEvent('moved', vm);
-      vm.saveState();
+      SaveData.save(vm);
     } else {
       return;
     }
@@ -283,8 +284,8 @@ export class GameLevel extends EventHandler {
       n = vm.#maze.cells.sample();
     }
     vm.#maze.active = n;
+    SaveData.save(vm);
     vm.raiseEvent('teleported', f, n, vm.#maze);
-    this.saveState();
   }
 
   #shouldBattle(d) {
@@ -349,7 +350,7 @@ export class GameLevel extends EventHandler {
       if (!vm.#grind) {
         return;
       }
-      
+
       if (vm.#hero.attributes.hp > Math.floor(vm.#hero.attributes.hp * 0.25)) {
         vm.beginBattle(() => {
           vm.#battleLoop(vm);

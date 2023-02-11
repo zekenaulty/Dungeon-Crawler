@@ -5,6 +5,7 @@ import { Slime } from '../actors/enemies/slime.js';
 import { ActorLevel } from '../actors/actorLevel.js';
 import { ActorInventory } from '../actors/actorInventory.js';
 import { DetailSheet } from '../actors/ui/detailSheet.js';
+import { SaveData } from '../saveData.js';
 
 export class Battle extends Modal {
 
@@ -336,7 +337,7 @@ export class Battle extends Modal {
         vm.#hero.stopAi();
         vm.raiseEvent('end combat', vm);
         vm.raiseEvent('won battle', vm);
-        vm.#level.saveState();
+        SaveData.save(vm.#level);
         vm.#level.raiseEvent('updated', vm.#level);
         vm.close();
       }

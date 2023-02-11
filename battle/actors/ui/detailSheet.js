@@ -1,5 +1,6 @@
 import { List } from '../../../core/list.js';
 import { Modal } from '../../../layout/modal/modal.js'
+import { SaveData } from '../../saveData.js';
 
 export class DetailSheet extends Modal {
 
@@ -66,6 +67,9 @@ export class DetailSheet extends Modal {
     });
 
     vm.listenToEvent('closed', (e) => {
+      if(vm.#actor.gameLevel.isHero(vm.#actor)) {
+        SaveData.save(vm.#actor.gameLevel);
+      }
       vm.#actor.gameLevel.raiseEvent('updated', vm.#actor.gameLevel);
     });
   }
