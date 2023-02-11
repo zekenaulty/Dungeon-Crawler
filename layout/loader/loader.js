@@ -4,6 +4,10 @@ export class Loader {
   static #loaderText;
   static #styles;
   static #open = false;
+  
+  static get isOpen() {
+    return Loader.#open;
+  }
 
   static #build() {
     let vm = Loader;

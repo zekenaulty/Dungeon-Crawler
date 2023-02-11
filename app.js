@@ -46,7 +46,15 @@ import { Saves } from './battle/ui/saves.js';
     header.addButton('FIGHT WAVES', (e) => {
       game.grind();
     });
-        
+
+    header.addButton('AUTO PLAY', (e) => {
+      if(game.autoPilot.running) {
+        game.autoPilot.stop();
+      } else {
+        game.autoPilot.start();
+      }
+    });
+    
     header.addButton('SAVES', (e) => {
       saves.open(true);
     });

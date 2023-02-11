@@ -18,6 +18,7 @@ import { Battle } from './ui/battle.js';
 import { Dice } from './dice.js';
 import { Loader } from '../layout/loader/loader.js';
 import { SaveData } from './saveData.js';
+import { AutoPilot } from './autoPilot.js';
 
 export class GameLevel extends EventHandler {
 
@@ -40,6 +41,8 @@ export class GameLevel extends EventHandler {
 
   #endGrind;
 
+  autoPilot;
+
   saveState() {
 
     let vm = this;
@@ -54,7 +57,7 @@ export class GameLevel extends EventHandler {
       maze: mazeState,
       summary: vm.summary
     };
-    
+
     return state;
   }
 
@@ -78,6 +81,12 @@ export class GameLevel extends EventHandler {
     vm.#maze.loadState(mazeState);
     Loader.open();
     vm.#renderer.draw();
+
+    if (vm.autoPilot) {
+      vm.autoPilot.stop();
+    }
+    vm.autoPilot = new AutoPilot(vm.#hero, vm, vm.#maze);
+
     Loader.close(350);
     vm.raiseEvent('updated', vm);
   }
@@ -183,6 +192,12 @@ export class GameLevel extends EventHandler {
     vm.#hero = new Hero(vm);
     vm.#heroDetail = new DetailSheet(vm.#hero, true);
     vm.raiseEvent('updated', vm);
+
+    if (vm.autoPilot) {
+      vm.autoPilot.stop();
+    }
+    vm.autoPilot = new AutoPilot(vm.#hero, vm, vm.#maze);
+
   }
 
   #nextLevel() {
@@ -265,11 +280,12 @@ export class GameLevel extends EventHandler {
     vm.raiseEvent('battle starting', vm);
     vm.#battle = new Battle(vm.#hero, vm);
 
-    if (onVictory) {
-      vm.#battle.listenToEvent('won battle', () => {
+    vm.#battle.listenToEvent('won battle', () => {
+      vm.raiseEvent('won battle');
+      if (onVictory) {
         onVictory();
-      });
-    }
+      }
+    });
 
     Loader.close(0);
     vm.#battle.open();

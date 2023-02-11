@@ -336,10 +336,10 @@ export class Battle extends Modal {
       if (vm.#enemies.length < 1) {
         vm.#hero.stopAi();
         vm.raiseEvent('end combat', vm);
-        vm.raiseEvent('won battle', vm);
         SaveData.save(vm.#level);
         vm.#level.raiseEvent('updated', vm.#level);
         vm.close();
+        vm.raiseEvent('won battle', vm);
       }
     });
 
