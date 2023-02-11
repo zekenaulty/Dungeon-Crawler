@@ -77,10 +77,5 @@ import { Loader } from './layout/loader/loader.js';
       game.move('east');
     });
     
-    for(let i = 0; i < 10; i++) {
-      let m = new Modal();
-      m.setHtml(`<div class="fill-parent center">${i + 1}</div>`);
-      m.open(true);
-    }
   });
 })();
