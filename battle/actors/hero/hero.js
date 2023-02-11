@@ -35,11 +35,11 @@ export class Hero extends Actor {
     
     vm.autoBattle = false;
 
-    vm.attributes.baseHp = 100;
+    vm.attributes.baseHp = 60;
 
     vm.attributes.baseDamage = 7;
-    vm.attributes.strength = 50;
-    vm.attributes.vitality = 40;
+    vm.attributes.strength = 25;
+    vm.attributes.vitality = 20;
     vm.attributes.intellect = 10;
     vm.attributes.pointsPerLevel = 5;
 
@@ -51,8 +51,15 @@ export class Hero extends Actor {
     vm.addSkill('slam', new Slam(vm));
     vm.addSkill('heal', new Heal(vm));
     vm.addSkill('teleport', new Teleport(vm));
-    vm.addSkill('teleport', new Teleport(vm));
     vm.addSkill('auto', new AutoBattle(vm));
+    
+    vm.listenToEvent('leveled up', (e) => {
+      if(e.level.level % 5 === 0) {
+        vm.attributes.baseHpLevel += 50;
+        vm.attributes.baseDamageLevel += 2;
+        vm.recover();
+      }
+    });
 
   }
 

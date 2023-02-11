@@ -21,16 +21,12 @@ export class ActorLevel extends EventHandler {
   static monsterXp(
     level = 1,
     factor = 0.05,
-    base = 10,
-    cap = 1000
+    base = 10
   ) {
     let amount = 0;
     for (let l = 1; l <= level; l++) {
-      if (amount >= cap) {
-        break;
-      }
       amount +=
-        Math.ceil(base * (level / 2)) +
+        Math.ceil(base * Math.ceil(l / 2)) +
         Math.floor(amount * factor);
     }
     return amount;
@@ -88,7 +84,15 @@ export class ActorLevel extends EventHandler {
         level: vm,
         actor: vm.#actor
       });
-    vm.#actor.recover();
+
+    vm.#actor.raiseEvent(
+      'leveled up',
+      {
+        level: vm,
+        actor: vm.#actor
+      });
+      
+      vm.#actor.recover();
 
   }
 }

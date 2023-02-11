@@ -79,7 +79,6 @@ export class Saves extends Modal {
   showSlot(slot) {
     let vm = this;
     let data = SaveData.getState(slot);
-    console.log(data);
     if (!data) {
       return;
     }

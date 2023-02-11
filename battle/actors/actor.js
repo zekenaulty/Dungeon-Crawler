@@ -42,7 +42,9 @@ export class Actor extends EventHandler {
   
   loadState(state) {
     let vm = this;
+    
     vm.level.addXp(state.xp);
+    
     vm.attributes.hp = state.hp;
     vm.attributes.mp = state.mp;
     vm.attributes.available = state.points;
@@ -87,6 +89,7 @@ export class Actor extends EventHandler {
     vm.addSkill('attack', new Attack(vm));
 
     vm.raiseEvent('actor constructed', vm);
+    
   }
   
   spendMp(amt) {
