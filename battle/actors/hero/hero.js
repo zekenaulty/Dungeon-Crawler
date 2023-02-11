@@ -4,6 +4,7 @@ import { ActorSkill } from '../actorSkill.js';
 import { ActorLevel } from '../actorLevel.js';
 import { ActorInventory } from '../actorInventory.js';
 import { ActorAttributes } from '../actorAttributes.js';
+import { Slam } from '../skills/slam.js';
 import { Cleave } from '../skills/cleave.js';
 import { Heal } from '../skills/heal.js';
 import { Teleport } from '../skills/teleport.js';
@@ -47,6 +48,7 @@ export class Hero extends Actor {
 
     vm.name = 'hero';
     vm.addSkill('cleave', new Cleave(vm));
+    vm.addSkill('slam', new Slam(vm));
     vm.addSkill('heal', new Heal(vm));
     vm.addSkill('teleport', new Teleport(vm));
     vm.addSkill('teleport', new Teleport(vm));
@@ -90,6 +92,13 @@ export class Hero extends Actor {
     }
 
     if (
+      vm.enemies.length > 2 &&
+      vm.skills.slam.charges > 0 &&
+      !vm.skills.slam.onCd
+    ) {
+      vm.skills.slam.invoke();
+      return;
+    } else if (
       vm.enemies.length > 1 &&
       vm.skills.cleave.charges > 0 &&
       !vm.skills.cleave.onCd
