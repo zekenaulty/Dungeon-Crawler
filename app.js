@@ -41,16 +41,8 @@ import { Loader } from './layout/loader/loader.js';
       game.heroInfo();
     });
     
-    header.addButton('SAVE', (e) => {
-      game.saveState();
-    });
+    header.addButton('SAVES', (e) => {
 
-    header.addButton('LOAD', (e) => {
-      game.loadState();
-    });
-
-    header.addButton('NEW GAME', (e) => {
-      game.begin(true);
     });
 
     header.addButton('FIGHT WAVES', (e) => {

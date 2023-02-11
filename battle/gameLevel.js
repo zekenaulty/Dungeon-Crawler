@@ -17,6 +17,7 @@ import { Hero } from './actors/hero/hero.js';
 import { Battle } from './ui/battle.js';
 import { Dice } from './dice.js';
 import { Loader } from '../layout/loader/loader.js';
+import { SaveData } from './saveData.js';
 
 export class GameLevel extends EventHandler {
 

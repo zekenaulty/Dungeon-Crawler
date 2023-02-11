@@ -80,7 +80,11 @@
 
 .detail-sheet-skill {
   font-size: 0.9em;
-  padding: 1px 2px 1px 2px;
+  padding: 3px 2px 4px 4px;
+}
+
+.detail-sheet-skill-edge {
+  border-top: 0.5px dotted white;
 }
 
 .detail-sheet-skill-active {

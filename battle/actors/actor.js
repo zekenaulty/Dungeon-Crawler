@@ -54,7 +54,7 @@ export class Actor extends EventHandler {
     vm.attributes.baseHp = state.baseHp;
     vm.attributes.baseMp = state.baseMp;
     vm.attributes.pointsPerLevel = state.pointsPerLevel;
-    vm.autoBattle = state.autoBattle ? false : true;
+    vm.autoBattle = state.autoBattle;
 
   }
 

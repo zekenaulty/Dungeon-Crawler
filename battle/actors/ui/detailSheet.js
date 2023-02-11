@@ -52,10 +52,12 @@ export class DetailSheet extends Modal {
     vm.#skills = document.createElement('div');
     vm.#skills.classList.add('detail-sheet-skills');
     vm.#container.appendChild(vm.#skills);
+    let edge = '';
     for (let p in vm.#actor.skills) {
       let skill = vm.#actor.skills[p];
       if (skill.register) {
-        vm.#addSkill(skill, isHero);
+        vm.#addSkill(skill, isHero, edge);
+        edge = 'detail-sheet-skill-edge';
       }
     }
 
@@ -68,7 +70,7 @@ export class DetailSheet extends Modal {
     });
   }
 
-  #addSkill(skill, isHero) {
+  #addSkill(skill, isHero, edge) {
     let vm = this;
     let e = {
       element: document.createElement('span'),
@@ -94,6 +96,9 @@ export class DetailSheet extends Modal {
 
     e.update();
     e.element.classList.add('detail-sheet-skill');
+    if(edge != '') {
+      e.element.classList.add(edge);
+    }
     vm.#elements.push(e);
     vm.#skills.appendChild(e.element);
   }
