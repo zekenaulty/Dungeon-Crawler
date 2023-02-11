@@ -10,7 +10,7 @@ export class Cleave extends ActorSkill {
   constructor(actor) {
     super(actor);
     let vm = this;
-    vm.cooldown = 500;
+    vm.cooldown = 750;
     vm.register = true;
     vm.name = 'Cleave';
     vm.#charges = vm.#maxCharges;

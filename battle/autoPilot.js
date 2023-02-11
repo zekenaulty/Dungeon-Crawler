@@ -61,9 +61,14 @@ export class AutoPilot extends EventHandler {
 
   #loop() {
     let vm = this;
-
+    let hero = vm.#hero;
+    
     if (vm.#canAct) {
-      vm.#nextMove();
+      if(hero.lowHealth() && hero.skills.heal.canCast) {
+        hero.skills.heal.invoke();
+      } else {
+        vm.#nextMove();
+      }
     }
 
     setTimeout(() => {

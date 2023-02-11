@@ -175,5 +175,11 @@ export class Actor extends EventHandler {
     vm.attributes.hp = vm.attributes.maxHp;
     vm.attributes.mp = vm.attributes.maxMp;
   }
+  
+  lowHealth(p = 0.3) {
+    let vm = this;
+    let low = Math.floor(vm.attributes.maxHp * p);
+    return vm.attributes.hp <= low;
+  }
 
 }

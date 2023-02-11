@@ -20,6 +20,11 @@ export class ActorSkill extends EventHandler {
   cdId;
   mpCost = 5;
   
+  get canCast() {
+    let vm = this;
+    
+    return vm.mpCost <= vm.actor.attributes.mp;
+  }
 
   get displayName() {
     return `base skill`;
