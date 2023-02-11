@@ -5,14 +5,21 @@ import { Modal } from '../layout/modal/modal.js';
 
 export class AutoPilot extends EventHandler {
 
+  #loopId = -1;
   #hero;
   #maze;
   #gameLevel;
 
-  #breathMin = 350;
-  #breathMax = 750;
+  #breathMin = 650;
+  #breathMax = 1250;
 
-  running = false;
+  #running = false;
+
+  get running() {
+    let vm = this;
+
+    return vm.#running;
+  }
 
   get #breath() {
     let vm = this;
@@ -32,74 +39,54 @@ export class AutoPilot extends EventHandler {
     vm.#hero = hero;
     vm.#gameLevel = game;
     vm.#maze = maze;
-
   }
 
   start() {
-
     let vm = this;
 
-    if (vm.running) {
+    if (vm.#running) {
       return;
     }
-    vm.running = true;
+    vm.#running = true;
 
-    vm.#maze.listenToEvent('solved', vm.glSolved);
-    vm.#gameLevel.listenToEvent('moved', vm.glMoved);
-    vm.#gameLevel.listenToEvent('teleported', vm.glMoved);
-    vm.#gameLevel.listenToEvent('won battle', vm.glWonBattle);
-    vm.#gameLevel.listenToEvent('game over', vm.glGameOver);
-    vm.#hero.listenToEvent('leveled up', vm.heroLevel);
+    if (vm.#loopId > -1) {
+      clearInterval(vm.#loopId);
+      vm.#loopId = -1;
+    }
 
-    vm.runAction(() => {
-      vm.nextMove();
-    });
+    vm.#loopId = setInterval(() => {
+      vm.#loop();
+    }, vm.#breath);
+  }
+
+  #loop() {
+    let vm = this;
+
+    if (vm.#canAct) {
+      vm.#nextMove();
+    }
+
+    setTimeout(() => {
+      vm.#levelUp();
+    }, 50);
   }
 
   stop() {
-
     let vm = this;
 
-    if (!vm.running) {
-      return;
+    vm.#running = false;
+    if (vm.#loopId > -1) {
+      clearInterval(vm.#loopId);
+      vm.#loopId = -1;
     }
-
-    vm.#maze.ignoreEvent('solved', vm.glSolved);
-    vm.#gameLevel.ignoreEvent('moved', vm.glMoved);
-    vm.#gameLevel.ignoreEvent('teleported', vm.glMoved);
-    vm.#gameLevel.ignoreEvent('won battle', vm.glWonBattle);
-    vm.#gameLevel.ignoreEvent('game over', vm.glGameOver);
-    vm.#hero.ignoreEvent('leveled up', vm.heroLevel);
-
-    vm.running = false;
-
   }
 
-  get canAct() {
+  get #canAct() {
     let vm = this;
     if (Modal.openCount > 0 || Loader.isOpen) {
       return false;
     }
-    return vm.running;
-  }
-
-  runAction(action, force) {
-    let vm = this;
-    let runAction = () => {
-      if (vm.canAct) {
-        setTimeout(() => {
-          action();
-        }, vm.#breath);
-      } else {
-        setTimeout(() => {
-          runAction(action);
-        }, vm.#breath);
-      }
-    };
-
-    if (vm.canAct || force) {
-      runAction();
-    }
+    return vm.#running;
   }
 
   #distances() {
@@ -107,11 +94,11 @@ export class AutoPilot extends EventHandler {
     return vm.#maze.active.distances();
   }
 
-  nextMove() {
+  #nextMove() {
     let vm = this;
     let cells = vm.#distances().pathTo(vm.#maze.end);
     let cell = cells.items[cells.items.length - 2];
-    if(cells.items.length <= 2){
+    if (cells.items.length <= 2) {
       cell = vm.#maze.end;
     }
     let dir = vm.#maze.active.directionOf(cell);
@@ -119,50 +106,22 @@ export class AutoPilot extends EventHandler {
     vm.#gameLevel.move(dir);
   }
 
-  glMoved() {
-    let gl = this;
-    gl.autoPilot.runAction(() => {
-      gl.autoPilot.nextMove();
-    });
-  }
-
-  glWonBattle() {
-    let gl = this;
-    gl.autoPilot.runAction(() => {
-      gl.autoPilot.nextMove();
-    });
-  }
-
-  glSolved() {
-    let gl = this;
-    gl.autoPilot.runAction(() => {
-      gl.autoPilot.nextMove();
-    }, true);
-  }
-  
-  glGameOver() {
-    let gl = this;
-
-    gl.autoPilot.stop();
-  }
-
-  heroLevel() {
-    let hero = this;
-    let gl = hero.gameLevel;
+  #levelUp() {
+    let vm = this;
+    let hero = vm.#hero;
     let buy = (s) => {
       if (hero.attributes.available > 0) {
         hero.attributes.available--;
-        hero.attributes.available[a]++;
+        hero.attributes[s]++;
       }
     };
-
-    gl.autoPilot.runAction(() => {
+    while (hero.attributes.available > 0) {
       buy('vitality');
       buy('vitality');
       buy('strength');
       buy('strength');
       buy('strength');
-    });
+    }
   }
 
 }
