@@ -18,6 +18,8 @@ export class Actor extends EventHandler {
   enemies = new List();
   casting;
   gameLevel;
+  battle;
+  autoBattle = true;
 
   saveState() {
     let vm = this;
@@ -34,6 +36,7 @@ export class Actor extends EventHandler {
       baseHp: vm.attributes.baseHp,
       baseMp: vm.attributes.baseMp,
       pointsPerLevel: vm.attributes.pointsPerLevel,
+      autoBattle: vm.autoBattle,
     }
   }
   
@@ -51,6 +54,8 @@ export class Actor extends EventHandler {
     vm.attributes.baseHp = state.baseHp;
     vm.attributes.baseMp = state.baseMp;
     vm.attributes.pointsPerLevel = state.pointsPerLevel;
+    vm.autoBattle = state.autoBattle ? false : true;
+
   }
 
   constructor(gameLevel) {

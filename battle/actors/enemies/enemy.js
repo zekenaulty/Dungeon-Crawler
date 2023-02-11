@@ -10,9 +10,8 @@ import { Modal } from '../../../layout/modal/modal.js';
 export class Enemy extends Actor {
 
   #aiId;
-  #aiIntervalMin = 1250;
-  #aiIntervalMax = 2250;
-  battle;
+  #aiIntervalMin = 1750;
+  #aiIntervalMax = 2750;
 
   /*  dexterity should factor 
       into these numbers 
@@ -20,11 +19,12 @@ export class Enemy extends Actor {
   get #aiInterval() {
     let vm = this;
     let r = Math.floor(Math.random() * vm.#aiIntervalMax) + 1;
+    let v = Math.floor(Math.random() * 400);
     if (r < vm.#aiIntervalMin) {
       r = vm.#aiIntervalMin;
     }
-
-    return r;
+    
+    return r + v;
   }
 
   constructor(gameLevel, battle, hero) {

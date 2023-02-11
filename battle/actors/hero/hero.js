@@ -8,13 +8,12 @@ import { Cleave } from '../skills/cleave.js';
 import { Heal } from '../skills/heal.js';
 import { Teleport } from '../skills/teleport.js';
 import { AutoBattle } from '../skills/autoBattle.js';
+import { Modal } from '../../../layout/modal/modal.js';
 
 export class Hero extends Actor {
 
-  autoBattle = true;
-
-  #aiIntervalMin = 500;
-  #aiIntervalMax = 1250;
+  #aiIntervalMin = 1250;
+  #aiIntervalMax = 1750;
 
   /*  dexterity should factor 
       into these numbers 
@@ -32,6 +31,8 @@ export class Hero extends Actor {
   constructor(gameLevel) {
     super(gameLevel);
     let vm = this;
+    
+    vm.autoBattle = false;
 
     vm.attributes.baseHp = 100;
 
@@ -47,10 +48,21 @@ export class Hero extends Actor {
     vm.name = 'hero';
     vm.addSkill('cleave', new Cleave(vm));
     vm.addSkill('heal', new Heal(vm));
-    vm.addSkill('teleport', new Teleport(vm));    vm.addSkill('teleport', new Teleport(vm));
+    vm.addSkill('teleport', new Teleport(vm));
+    vm.addSkill('teleport', new Teleport(vm));
     vm.addSkill('auto', new AutoBattle(vm));
 
   }
+
+  aiCanAct() {
+    let vm = this;
+
+    if (vm.casting || vm.battle.paused || Modal.openCount > 1) {
+      return false;
+    }
+    return true;
+  }
+
 
   #aiId = -1;
   startAi() {
@@ -63,6 +75,10 @@ export class Hero extends Actor {
 
   #aiLoop() {
     let vm = this;
+    
+    if(!vm.aiCanAct()) {
+      return;
+    }
 
     if (
       vm.attributes.hp <= Math.floor(vm.attributes.maxHp * 0.29) &&
@@ -80,7 +96,7 @@ export class Hero extends Actor {
     ) {
       vm.skills.cleave.invoke();
       return;
-    } else if(!vm.skills.attack.onCd){
+    } else if (!vm.skills.attack.onCd) {
       vm.skills.attack.invoke();
       return;
     }

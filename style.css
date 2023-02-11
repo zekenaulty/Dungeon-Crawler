@@ -58,8 +58,8 @@ body {
 
 .end-grind {
   position: fixed;
-  top: 9px;
-  right: 106px;
+  top: 14px;
+  right: 224px;
   z-index: 20000;
   background-color: black;
   color: white;
@@ -68,4 +68,5 @@ body {
   margin-top: 2px;
   margin-right: 4px;
   padding: 4px 6px 4px 6px;
+  min-width: 90px;
 }

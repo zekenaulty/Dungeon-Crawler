@@ -101,7 +101,7 @@ export class GameLevel extends EventHandler {
     let vm = this;
 
     vm.#endGrind = document.createElement('button');
-    vm.#endGrind.innerHTML = 'stop battles';
+    vm.#endGrind.innerHTML = 'end waves';
     vm.#endGrind.classList.add('end-grind');
     vm.#endGrind.addEventListener('click', () => {
       vm.grind();
@@ -339,11 +339,16 @@ export class GameLevel extends EventHandler {
 
     vm.#grindCount++;
 
+    if (vm.#grindCount % 10 == 0) {
+      vm.#hero.recover();
+    }
+
     Loader.open();
     setTimeout(() => {
       if (!vm.#grind) {
         return;
       }
+      
       if (vm.#hero.attributes.hp > Math.floor(vm.#hero.attributes.hp * 0.25)) {
         vm.beginBattle(() => {
           vm.#battleLoop(vm);
@@ -362,7 +367,7 @@ export class GameLevel extends EventHandler {
       vm.#grind = false;
       body.removeChild(vm.#endGrind);
       vm.#hero.recover();
-      alert(`Won ${vm.#grindCount} battles!`);
+      //alert(`Won ${vm.#grindCount} battles!`);
       vm.#grindCount = 0;
     } else {
       vm.#grind = true;

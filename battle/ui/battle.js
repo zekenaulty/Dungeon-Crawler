@@ -16,6 +16,7 @@ export class Battle extends Modal {
   #heroMp;
   #heroLevel;
   #heroDmg;
+  #pauseBtn;
 
   #hero;
   #level;
@@ -47,6 +48,8 @@ export class Battle extends Modal {
     let vm = this;
 
     vm.#hero = hero;
+    vm.#hero.battle = vm;
+
     vm.#level = level;
     vm.#enemies = new List();
     vm.#paused = true;
@@ -70,10 +73,14 @@ export class Battle extends Modal {
     vm.#battlefield = document.createElement('div');
     vm.#heroInfo = document.createElement('div');
     vm.#heroSkills = document.createElement('div');
+    vm.#pauseBtn = document.createElement('button');
+    vm.#pauseBtn.innerHTML = 'pause';
 
     vm.#battlefield.classList.add('battle-battlefield');
     vm.#heroInfo.classList.add('battle-hero-info');
     vm.#heroSkills.classList.add('battle-hero-skills');
+    vm.#pauseBtn.classList.add('battle-hero-btn');
+    vm.#pauseBtn.classList.add('battle-pause');
 
     vm.#heroHp = document.createElement('span');
     vm.#heroMp = document.createElement('span');
@@ -95,9 +102,22 @@ export class Battle extends Modal {
     vm.heroInfo();
     vm.heroSkills();
 
+    vm.#pauseBtn.addEventListener('click', () => {
+      if (vm.#paused) {
+        vm.#paused = false;
+        vm.#pauseBtn.classList.remove('battle-green');
+        vm.#pauseBtn.innerHTML = 'pause';
+      } else {
+        vm.#pauseBtn.classList.add('battle-green');
+        vm.#pauseBtn.innerHTML = 'paused';
+        vm.#paused = true;
+      }
+    });
+
     vm.appendChild(vm.#battlefield);
     vm.appendChild(vm.#heroInfo);
     vm.appendChild(vm.#heroSkills);
+    vm.appendChild(vm.#pauseBtn);
 
     vm.defineEvent(
       'begin combat',
