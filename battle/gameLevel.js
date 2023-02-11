@@ -254,36 +254,43 @@ export class GameLevel extends EventHandler {
 
   move(d) {
     let vm = this;
-    if (vm.#maze.move(d)) {
-      vm.raiseEvent('moved', vm);
-      SaveData.save(vm);
-    } else {
-      return;
-    }
+    setTimeout(() => {
 
-    if (vm.#maze.active == vm.#maze.end || vm.#maze.active == vm.#maze.start) {
-      return;
-    }
+      if (vm.#maze.move(d)) {
+        vm.raiseEvent('moved', vm);
+        SaveData.save(vm);
+      } else {
+        return;
+      }
 
-    let dice = Dice.many(20, 20, 20, 20);
-    if (vm.#shouldBattle(dice)) {
-      vm.beginBattle();
-    } else if (vm.#shouldTeleport(dice)) {
-      vm.teleport();
-    }
+      if (vm.#maze.active == vm.#maze.end || vm.#maze.active == vm.#maze.start) {
+        return;
+      }
 
-    vm.raiseEvent('updated', vm);
+      let dice = Dice.many(20, 20, 20, 20);
+      if (vm.#shouldBattle(dice)) {
+        Loader.open('BATTLE');
+        setTimeout(() => {
+          vm.beginBattle();
+        }, 650);
+      } else if (vm.#shouldTeleport(dice)) {
+        vm.teleport();
+      }
+
+      vm.raiseEvent('updated', vm);
+    }, 100);
+
   }
 
-  beginBattle(onVictory) {
+  beginBattle(action) {
     let vm = this;
     vm.raiseEvent('battle starting', vm);
     vm.#battle = new Battle(vm.#hero, vm);
 
     vm.#battle.listenToEvent('won battle', () => {
       vm.raiseEvent('won battle');
-      if (onVictory) {
-        onVictory();
+      if (action) {
+        action();
       }
     });
 
@@ -361,20 +368,20 @@ export class GameLevel extends EventHandler {
       vm.#hero.recover();
     }
 
-    Loader.open();
+    Loader.open('BATTLE ' + vm.#grindCount);
     setTimeout(() => {
       if (!vm.#grind) {
         return;
       }
 
-      if (vm.#hero.lowHealth(0.25)) {
+      if (!vm.#hero.lowHealth(0.25)) {
         vm.beginBattle(() => {
           vm.#battleLoop(vm);
         });
       } else {
         vm.stopGrind();
       }
-    }, 350);
+    }, 650);
   }
 
   get grinding() {
@@ -389,6 +396,7 @@ export class GameLevel extends EventHandler {
       body.removeChild(vm.#endGrind);
       vm.#hero.recover();
       vm.#grindCount = 0;
+      vm.#battleLoop(vm);
     }
   }
 

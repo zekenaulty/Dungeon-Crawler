@@ -2,6 +2,7 @@ export class Loader {
 
   static #loaderBg;
   static #loaderText;
+  static #text;
   static #styles;
   static #open = false;
   
@@ -44,6 +45,7 @@ export class Loader {
       let inner = document.createElement('div');
       inner.classList.add('loader-msg');
       inner.innerHTML = 'LOADING';
+      vm.#text = inner;
       text.appendChild(inner);
       
       vm.#loaderText = text;
@@ -52,7 +54,7 @@ export class Loader {
     }
   }
 
-  static open() {
+  static open(msg = 'LOADING') {
     let vm = Loader;
 
     vm.#build();
@@ -62,6 +64,8 @@ export class Loader {
     }
 
     vm.#open = true;
+    
+    vm.#text.innerHTML = msg;
 
     vm.#loaderText.classList.remove('loader-hide');
     vm.#loaderBg.classList.remove('loader-hide');

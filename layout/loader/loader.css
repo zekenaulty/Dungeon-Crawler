@@ -15,7 +15,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 99999999999;
+  z-index: 30000;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -27,7 +27,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 99999999999;
+  z-index: 30010;
   display: flex;
   align-items: center;
   justify-content: center;
