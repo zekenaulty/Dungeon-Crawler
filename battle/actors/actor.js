@@ -39,12 +39,12 @@ export class Actor extends EventHandler {
       autoBattle: vm.autoBattle,
     }
   }
-  
+
   loadState(state) {
     let vm = this;
-    
+
     vm.level.addXp(state.xp);
-    
+
     vm.attributes.hp = state.hp;
     vm.attributes.mp = state.mp;
     vm.attributes.available = state.points;
@@ -89,16 +89,16 @@ export class Actor extends EventHandler {
     vm.addSkill('attack', new Attack(vm));
 
     vm.raiseEvent('actor constructed', vm);
-    
+
   }
-  
+
   spendMp(amt) {
     let vm = this;
-    if(amt <= vm.attributes.mp) {
+    if (amt <= vm.attributes.mp) {
       vm.attributes.mp -= amt;
       return true
     }
-    
+
     return false;
   }
 
@@ -106,7 +106,7 @@ export class Actor extends EventHandler {
     let vm = this;
     let hp = vm.attributes.hp + amt;
     let over = 0;
-    if(vm.attributes.maxHp < hp) {
+    if (vm.attributes.maxHp < hp) {
       over = hp - vm.attributes.maxHp;
       vm.attributes.hp += (amt - over);
     } else {
@@ -114,7 +114,7 @@ export class Actor extends EventHandler {
     }
     vm.raiseEvent('healed', vm, amt, over);
   }
-  
+
   takeDamage(dmg) {
     let vm = this;
     vm.attributes.hp -= dmg;
@@ -163,19 +163,19 @@ export class Actor extends EventHandler {
 
   getTarget(hostile = true) {
     let vm = this;
-    if(vm.target && hostile && vm.target.attributes.hp > 1 && vm.enemies.includes(vm.target)) {
+    if (vm.target && hostile && vm.target.attributes.hp > 1 && vm.enemies.includes(vm.target)) {
       return vm.target;
     }
     return hostile ? vm.enemies.sample() : vm;
   }
-  
+
   recover() {
     let vm = this;
 
     vm.attributes.hp = vm.attributes.maxHp;
     vm.attributes.mp = vm.attributes.maxMp;
   }
-  
+
   lowHealth(p = 0.3) {
     let vm = this;
     let low = Math.floor(vm.attributes.maxHp * p);

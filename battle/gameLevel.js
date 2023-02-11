@@ -117,7 +117,7 @@ export class GameLevel extends EventHandler {
     vm.#endGrind.innerHTML = 'end waves';
     vm.#endGrind.classList.add('end-grind');
     vm.#endGrind.addEventListener('click', () => {
-      vm.grind();
+      vm.stopGrind();
     });
 
     vm.defineEvent(
@@ -319,9 +319,8 @@ export class GameLevel extends EventHandler {
       return;
     }
 
-    if (vm.#grind) {
-      vm.grind();
-    }
+    vm.stopGrind();
+    vm.autoPilot.stop();
 
     //alert('GAME OVER');
     vm.#gameOverId = setTimeout(() => {
@@ -351,8 +350,8 @@ export class GameLevel extends EventHandler {
       return;
     }
 
-    if (vm.#grindCap > 0 && vm.#grindCount == vm.#grindCap) {
-      vm.grind();
+    if (vm.#grindCap > 0 && vm.#grindCount >= vm.#grindCap) {
+      vm.stopGrind();
       return;
     }
 
@@ -368,31 +367,49 @@ export class GameLevel extends EventHandler {
         return;
       }
 
-      if (vm.#hero.attributes.hp > Math.floor(vm.#hero.attributes.hp * 0.25)) {
+      if (vm.#hero.lowHealth(0.25)) {
         vm.beginBattle(() => {
           vm.#battleLoop(vm);
         });
       } else {
-        vm.grind();
+        vm.stopGrind();
       }
     }, 350);
   }
 
-  grind(cap = 0) {
+  get grinding() {
     let vm = this;
-    let body = document.querySelector('body');
-    vm.#grindCap = cap;
+    return vm.#grind;
+  }
+  stopGrind() {
+    let vm = this;
     if (vm.#grind) {
+      let body = document.querySelector('body');
       vm.#grind = false;
       body.removeChild(vm.#endGrind);
       vm.#hero.recover();
-      //alert(`Won ${vm.#grindCount} battles!`);
       vm.#grindCount = 0;
-    } else {
+    }
+  }
+
+  startGrind(cap = 0) {
+    let vm = this;
+    if (!vm.#grind) {
+      let body = document.querySelector('body');
+      vm.#grindCap = cap;
       vm.#grind = true;
       vm.#grindCount = 0;
       body.appendChild(vm.#endGrind);
       vm.#battleLoop(vm);
+    }
+  }
+
+  grind(cap = 0) {
+    let vm = this;
+    if (vm.#grind) {
+      vm.stopGrind();
+    } else {
+      vm.startGrind(cap);
     }
   }
 }

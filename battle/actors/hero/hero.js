@@ -32,7 +32,7 @@ export class Hero extends Actor {
   constructor(gameLevel) {
     super(gameLevel);
     let vm = this;
-    
+
     vm.autoBattle = false;
 
     vm.attributes.baseHp = 60;
@@ -52,9 +52,9 @@ export class Hero extends Actor {
     vm.addSkill('heal', new Heal(vm));
     vm.addSkill('teleport', new Teleport(vm));
     vm.addSkill('auto', new AutoBattle(vm));
-    
+
     vm.listenToEvent('leveled up', (e) => {
-      if(e.level.level % 5 === 0) {
+      if (e.level.level % 5 === 0) {
         vm.attributes.baseHpLevel += 50;
         vm.attributes.baseDamageLevel += 2;
         vm.recover();
@@ -84,13 +84,13 @@ export class Hero extends Actor {
 
   #aiLoop() {
     let vm = this;
-    
-    if(!vm.aiCanAct()) {
+
+    if (!vm.aiCanAct()) {
       return;
     }
 
     if (
-      vm.attributes.hp <= Math.floor(vm.attributes.maxHp * 0.29) &&
+      vm.lowHealth() &&
       vm.attributes.mp >= vm.skills.heal.mpCost &&
       !vm.skills.heal.onCd
     ) {

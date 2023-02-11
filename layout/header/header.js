@@ -4,7 +4,6 @@ export class Header extends EventHandler {
 
   #header;
   #left;
-  #menuButton;
   #menu;
   #styles;
 
@@ -16,7 +15,6 @@ export class Header extends EventHandler {
     vm.#header = document.createElement('nav');
     vm.#left = document.createElement('div');
     vm.#menu = document.createElement('div');
-    vm.#menuButton = document.createElement('button');
     vm.#styles = document.createElement('link');
 
     vm.#styles.rel = 'stylesheet';
@@ -26,24 +24,11 @@ export class Header extends EventHandler {
 
     vm.#header.classList.add('head');
     vm.#left.classList.add('header-info');
-
-    vm.#menuButton.classList.add('header-button');
-    vm.#menuButton.classList.add('header-menu-btn');
-    vm.#menuButton.innerHTML = 'MENU';
-    vm.#menuButton.addEventListener('click', () => {
-      if (vm.#menu.classList.contains('header-hide')) {
-        vm.#menu.classList.remove('header-hide');
-      } else {
-        vm.#menu.classList.add('header-hide');
-      }
-    });
     vm.#menu.classList.add('header-menu');
-    vm.#menu.classList.add('header-hide');
 
     vm.#header.appendChild(vm.#left);
-    
+
     document.querySelector('body').appendChild(vm.#header);
-    document.querySelector('body').appendChild(vm.#menuButton);
     document.querySelector('body').appendChild(vm.#menu);
 
   }
@@ -59,9 +44,18 @@ export class Header extends EventHandler {
     btn.innerText = txt;
     btn.classList.add('header-button');
     btn.addEventListener('click', () => {
-      vm.#menu.classList.add('header-hide');
-      action();
+      action(btn);
     });
     vm.#menu.appendChild(btn);
+
+    return btn;
+  }
+
+  activate(btn) {
+    btn.classList.remove('header-button-active');
+  }
+
+  deactivate(btn) {
+    btn.classList.remove('header-button-active');
   }
 }

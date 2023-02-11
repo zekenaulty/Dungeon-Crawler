@@ -39,6 +39,8 @@ export class AutoPilot extends EventHandler {
     vm.#hero = hero;
     vm.#gameLevel = game;
     vm.#maze = maze;
+    
+    vm.#hero.autoBattle = true;
   }
 
   start() {

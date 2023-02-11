@@ -12,18 +12,18 @@ import { Saves } from './battle/ui/saves.js';
 (() => {
 
   go(() => {
-    
+
     Loader.open();
-    
+
     history.replaceState(0, 'root');
-    
+
     const game = new GameLevel();
     const saves = new Saves(game);
-    
+
     game.listenToEvent('updated', () => {
       header.info(game.summary);
     });
-    
+
     const stageReady = (gfx) => {
 
       game.initialize(
@@ -39,36 +39,32 @@ import { Saves } from './battle/ui/saves.js';
     const stage = new Stage(stageReady);
     const joystick = new JoyStick();
 
-    header.addButton('CHARACTER', (e) => {
+    const character = header.addButton('CHARACTER', (e) => {
       game.heroInfo();
     });
 
-    header.addButton('FIGHT WAVES', (e) => {
-      game.grind();
-    });
-
-    header.addButton('AUTO PLAY', (e) => {
-      if(game.autoPilot.running) {
-        game.autoPilot.stop();
-      } else {
-        game.autoPilot.start();
-      }
-    });
-    
-    header.addButton('SAVES', (e) => {
+    const states = header.addButton('SAVES', (e) => {
       saves.open(true);
     });
 
-    /*
-    header.addButton('SOLVE', (e) => {
-      game.solve();
+    const waves = header.addButton('FIGHT WAVES', (e) => {
+      if (game.grinding) {
+        game.stopGrind();
+      } else {
+        game.autoPilot.stop();
+        game.startGrind();
+      }
     });
 
-    header.addButton('HISTOGRAM', (e) => {
-      game.histogram();
+    const player = header.addButton('AUTO PLAY', (e) => {
+      if (game.autoPilot.running) {
+        game.autoPilot.stop();
+      } else {
+        game.stopGrind();
+        game.autoPilot.start();
+      }
     });
-    */
-    
+
     joystick.listenToEvent('up', () => {
       game.move('north');
     });
@@ -84,6 +80,6 @@ import { Saves } from './battle/ui/saves.js';
     joystick.listenToEvent('right', () => {
       game.move('east');
     });
-    
+
   });
 })();
