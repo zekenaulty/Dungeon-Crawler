@@ -52,6 +52,7 @@ export class GameLevel extends EventHandler {
       roomGrowthFactor: vm.#roomGrowthFactor,
       hero: heroState,
       maze: mazeState,
+      summary: vm.summary
     };
     
     return state;

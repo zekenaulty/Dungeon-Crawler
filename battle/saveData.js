@@ -1,7 +1,7 @@
 export class SaveData {
 
   static #slots = 'DC-GAME-SAVE-SLOTS';
-  
+
   static addSlot(slot = 'auto') {
     let slots = JSON.parse(localStorage.getItem(SaveData.#slots));
     if (!slots) {
@@ -12,7 +12,7 @@ export class SaveData {
       slots.push(slot);
     }
 
-    localStorage.setItem(SaveData.#slots, JSON.stringify(slot));
+    localStorage.setItem(SaveData.#slots, JSON.stringify(slots));
   }
 
   static getSlots() {
@@ -42,6 +42,14 @@ export class SaveData {
       localStorage.getItem(
         SaveData.slotName(useSlot)
       ));
+  }
+
+  static remove(slot) {
+    let slots = SaveData.getSlots().filter((e) => {
+      return slot != e;
+    });
+    localStorage.setItem(SaveData.#slots, JSON.stringify(slots));
+    localStorage.removeItem(SaveData.slotName(slot));
   }
 
 }

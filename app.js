@@ -7,6 +7,7 @@ import { Modal } from './layout/modal/modal.js';
 import { GameLevel } from './battle/gameLevel.js';
 import { Dice } from './battle/dice.js';
 import { Loader } from './layout/loader/loader.js';
+import { Saves } from './battle/ui/saves.js';
 
 (() => {
 
@@ -17,6 +18,7 @@ import { Loader } from './layout/loader/loader.js';
     history.replaceState(0, 'root');
     
     const game = new GameLevel();
+    const saves = new Saves(game);
     
     game.listenToEvent('updated', () => {
       header.info(game.summary);
@@ -40,15 +42,16 @@ import { Loader } from './layout/loader/loader.js';
     header.addButton('CHARACTER', (e) => {
       game.heroInfo();
     });
-    
-    header.addButton('SAVES', (e) => {
-
-    });
 
     header.addButton('FIGHT WAVES', (e) => {
       game.grind();
     });
-    
+        
+    header.addButton('SAVES', (e) => {
+      saves.open(true);
+    });
+
+    /*
     header.addButton('SOLVE', (e) => {
       game.solve();
     });
@@ -56,7 +59,8 @@ import { Loader } from './layout/loader/loader.js';
     header.addButton('HISTOGRAM', (e) => {
       game.histogram();
     });
-
+    */
+    
     joystick.listenToEvent('up', () => {
       game.move('north');
     });
