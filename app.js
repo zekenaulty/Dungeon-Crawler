@@ -14,6 +14,8 @@ import { Loader } from './layout/loader/loader.js';
     
     Loader.open();
     
+    history.replaceState(0, 'root');
+    
     const game = new GameLevel();
     
     game.listenToEvent('updated', () => {
@@ -74,6 +76,11 @@ import { Loader } from './layout/loader/loader.js';
     joystick.listenToEvent('right', () => {
       game.move('east');
     });
-
+    
+    for(let i = 0; i < 10; i++) {
+      let m = new Modal();
+      m.setHtml(`<div class="fill-parent center">${i + 1}</div>`);
+      m.open(true);
+    }
   });
 })();

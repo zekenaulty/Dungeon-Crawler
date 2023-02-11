@@ -64,13 +64,8 @@ export class Enemy extends Actor {
       return;
     }
 
-    if (!vm.target) {
-      vm.target = vm.battle.getTarget(false);
-    }
-
     if (d > 3) {
-      let skill = vm.skills.attack;
-      skill.invoke();
+      vm.skills.attack.invoke();
     }
     
     vm.#nextFrame();

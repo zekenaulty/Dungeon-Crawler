@@ -9,8 +9,12 @@ export class Modal extends EventHandler {
 
   #isOpen = false;
 
+  id = 0;
+  previous = -1;
+  intervalId = -1;
+
   static #openCount = 0;
-  
+
   static get openCount() {
     return Modal.#openCount;
   }
@@ -83,6 +87,18 @@ export class Modal extends EventHandler {
       if (Modal.#openCount < 1) {
         body.classList.remove('modal-body-lock');
       }
+
+      if(vm.intervalId > -1) {
+        clearInterval(vm.intervalId);
+        vm.intervalId = -1;
+      }
+      
+      if (vm.id > 0 && vm.previous > -1) {
+        if (history.state == vm.id) {
+          history.back();
+        }
+      }
+
       vm.raiseEvent('closed', vm);
     }
   }
@@ -110,6 +126,20 @@ export class Modal extends EventHandler {
       if (showClose) {
         body.appendChild(vm.#closeButton);
       }
+
+      if (showClose) {
+        vm.previous = history.state;
+        vm.id = vm.previous + 1
+        history.pushState(vm.id, `modal ${vm.id}`);
+        vm.intervalId = setInterval(() => {
+          if (history.state == vm.previous) {
+            clearInterval(vm.intervalId);
+            vm.intervalId = -1;
+            vm.close();
+          }
+        }, 150);
+      }
+
       vm.raiseEvent('opened', vm);
     }
   }

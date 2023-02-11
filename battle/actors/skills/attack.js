@@ -13,11 +13,11 @@ export class Attack extends ActorSkill {
     vm.bubble = true;
     vm.mpCost = 0;
   }
-  
+
   get displayName() {
     return `attack`;
   }
-  
+
   get summary() {
     let vm = this;
     return `Hit the selected target for ${vm.min}-${vm.max} damage.`;
@@ -25,12 +25,9 @@ export class Attack extends ActorSkill {
 
   invoke() {
     let vm = this;
-    let target = vm.actor.target;
-    if(!target) {
-      target = vm.actor.getTarget();
-    }
+    vm.actor.target = vm.actor.getTarget();
     vm.safeInvoke(() => {
-      vm.doAttack(target);
+      vm.doAttack(vm.actor.target);
     });
   }
 

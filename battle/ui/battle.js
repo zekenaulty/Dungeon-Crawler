@@ -45,7 +45,7 @@ export class Battle extends Modal {
   constructor(hero, level) {
     super();
     let vm = this;
-
+    
     vm.#hero = hero;
     vm.#level = level;
     vm.#enemies = new List();
@@ -90,7 +90,7 @@ export class Battle extends Modal {
     vm.#heroInfo.appendChild(vm.#heroLevel);
     vm.#heroInfo.appendChild(vm.#heroHp);
     vm.#heroInfo.appendChild(vm.#heroMp);
-    vm.#heroInfo.appendChild(vm.#heroDmg);
+    vm.appendChild(vm.#heroDmg);
 
     vm.heroInfo();
     vm.heroSkills();
@@ -106,21 +106,21 @@ export class Battle extends Modal {
     );
 
     vm.listenToEvent('opening', (e) => {
-      let count = e.modal.toSpwan();
+      let count = vm.toSpwan();
       for (let i = 0; i < count; i++) {
-        e.modal.spawn(i);
+        vm.spawn(i);
       }
-      let delay = e.modal.#combatDelay;
+      let delay = vm.#combatDelay;
       setTimeout(() => {
-          e.modal.#paused = false;
-          e.modal.raiseEvent(
+          vm.#paused = false;
+          vm.raiseEvent(
             'begin combat',
             {
-              battle: e.modal,
-              level: e.modal.#level
+              battle: vm,
+              level: vm.#level
             });
 
-          e.modal.startAi();
+          vm.startAi();
         },
         delay
       );
@@ -261,8 +261,12 @@ export class Battle extends Modal {
     e.innerHTML = e.enemy.ascii;
     e.classList.add('battle-enemy');
 
-    e.addEventListener('click', () => {
+    e.addEventListener('dblclick', () => {
       e.details.open(true);
+    });
+
+    e.addEventListener('click', () => {
+      vm.#hero.target = e.enemy;
     });
 
     e.enemy.listenToEvent('begin cast', (n) => {
@@ -304,7 +308,7 @@ export class Battle extends Modal {
     vm.#enemies.delete(e);
     vm.#hero.enemies.delete(e);
     setTimeout(() => {
-      vm.#battlefield.removeChild(e.div);
+      e.div.style.color = 'black';
     }, delay);
   }
 

@@ -112,6 +112,7 @@ export class Actor extends EventHandler {
     vm.attributes.hp -= dmg;
     vm.raiseEvent('damaged', vm, dmg);
     if (vm.attributes.hp < 1) {
+      vm.attributes.hp = 0;
       vm.raiseEvent(
         'death',
         {
@@ -154,6 +155,9 @@ export class Actor extends EventHandler {
 
   getTarget(hostile = true) {
     let vm = this;
+    if(vm.target && hostile && vm.target.attributes.hp > 1 && vm.enemies.includes(vm.target)) {
+      return vm.target;
+    }
     return hostile ? vm.enemies.sample() : vm;
   }
   
