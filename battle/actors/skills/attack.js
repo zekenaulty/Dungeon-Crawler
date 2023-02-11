@@ -27,9 +27,7 @@ export class Attack extends ActorSkill {
     let vm = this;
     vm.actor.target = vm.actor.getTarget();
     vm.safeInvoke(() => {
-      if (vm.actor.target) {
-        vm.doAttack(vm.actor.target);
-      }
+      vm.doAttack(vm.actor.target);
     });
   }
 

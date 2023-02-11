@@ -41,9 +41,7 @@ export class Cleave extends ActorSkill {
         vm.#charges--;
         let last = vm.actor.enemies.length - 1;
         for (let i = last; i > -1; i--) {
-          if (vm.actor.enemies && vm.actor.length > i) {
-            vm.doAttack(vm.actor.enemies[i]);
-          }
+          vm.doAttack(vm.actor.enemies[i]);
         }
         setTimeout(() => {
           if (vm.#charges < vm.#maxCharges) {
