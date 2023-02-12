@@ -8,6 +8,7 @@ import { GameLevel } from './battle/gameLevel.js';
 import { Dice } from './battle/dice.js';
 import { Loader } from './layout/loader/loader.js';
 import { Saves } from './battle/ui/saves.js';
+import { Gauge } from './battle/actors/ui/gauge.js';
 
 (() => {
 
@@ -80,6 +81,6 @@ import { Saves } from './battle/ui/saves.js';
     joystick.listenToEvent('right', () => {
       game.move('east');
     });
-
+    
   });
 })();
