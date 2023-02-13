@@ -14,10 +14,6 @@ export class Battle extends Modal {
   #battlefield;
   #heroInfo;
   #heroSkills;
-  #heroHp;
-  #heroMp;
-  #heroLevel;
-  #heroDmg;
   #pauseBtn;
 
   #plate;
@@ -87,23 +83,6 @@ export class Battle extends Modal {
     vm.#heroSkills.classList.add('battle-hero-skills');
     vm.#pauseBtn.classList.add('battle-hero-btn');
     vm.#pauseBtn.classList.add('battle-pause');
-
-    vm.#heroHp = document.createElement('span');
-    vm.#heroMp = document.createElement('span');
-    vm.#heroLevel = document.createElement('span');
-    vm.#heroDmg = document.createElement('span');
-    vm.#heroDmg.innerHTML = '&nbsp;';
-
-    vm.#heroHp.classList.add('battle-hero-info-text');
-    vm.#heroMp.classList.add('battle-hero-info-text');
-    vm.#heroLevel.classList.add('battle-hero-info-text');
-    vm.#heroDmg.classList.add('battle-hero-info-text');
-    vm.#heroDmg.classList.add('battle-hero-dmg');
-
-    //vm.#heroInfo.appendChild(vm.#heroLevel);
-    //vm.#heroInfo.appendChild(vm.#heroHp);
-    //vm.#heroInfo.appendChild(vm.#heroMp);
-    //vm.appendChild(vm.#heroDmg);
 
     vm.#plate = new Nameplate(vm.#heroInfo, vm.#hero);
 
@@ -194,9 +173,6 @@ export class Battle extends Modal {
 
   heroInfo() {
     let vm = this;
-    vm.#heroHp.innerHTML = 'Health: ' + vm.#hero.attributes.health;
-    vm.#heroMp.innerHTML = 'Mana: ' + vm.#hero.attributes.mana;
-    vm.#heroLevel.innerHTML = 'Level: ' + vm.#hero.level.level;
 
     vm.#plate.update();
   }
@@ -280,6 +256,7 @@ export class Battle extends Modal {
     let vm = this;
     let d = Dice.d20();
     let m = 1;
+    
     if (d > 17) {
       m = 8;
     } else if (d > 15) {
@@ -359,14 +336,11 @@ export class Battle extends Modal {
     });
 
     e.enemy.listenToEvent('damaged', (actor, dmg) => {
-      //let ascii = e.innerHTML;
       e.enemyDiv.classList.add('battle-dmg');
       e.plate.update();
-      //e.innerHTML = '-' + dmg;
       setTimeout(() => {
         e.enemyDiv.classList.remove('battle-dmg');
-        //e.innerHTML = ascii;
-      }, 850);
+      }, 250);
     });
 
     e.enemy.listenToEvent('death', (n) => {
