@@ -19,7 +19,7 @@ export class Battle extends Modal {
   #heroLevel;
   #heroDmg;
   #pauseBtn;
-  
+
   #plate;
 
   #hero;
@@ -31,6 +31,8 @@ export class Battle extends Modal {
 
   #combatDelayMin = 400;
   #combatDelayMax = 750;
+
+  #endGrind;
 
   get #combatDelay() {
     let vm = this;
@@ -102,7 +104,7 @@ export class Battle extends Modal {
     //vm.#heroInfo.appendChild(vm.#heroHp);
     //vm.#heroInfo.appendChild(vm.#heroMp);
     //vm.appendChild(vm.#heroDmg);
-    
+
     vm.#plate = new Nameplate(vm.#heroInfo, vm.#hero);
 
     vm.heroInfo();
@@ -167,6 +169,27 @@ export class Battle extends Modal {
       e.gameLevel.gameOver();
     });
 
+    if (vm.#level.grinding) {
+      vm.#endGrind = document.createElement('button');
+      vm.#endGrind.innerHTML = 'stop waves';
+      vm.#endGrind.classList.add('battle-end-grind');
+      vm.#endGrind.classList.add('battle-green');
+
+      vm.appendChild(vm.#endGrind);
+
+      vm.#endGrind.addEventListener('click', () => {
+        if (vm.#level.grinding) {
+          vm.#level.stopGrind();
+          vm.#endGrind.innerHTML = 'fight waves';
+          vm.#endGrind.classList.remove('battle-green');
+        } else {
+          vm.#level.startGrind();
+          vm.#endGrind.innerHTML = 'stop waves';
+          vm.#endGrind.classList.add('battle-green');
+        }
+      });
+    }
+
   }
 
   heroInfo() {
@@ -174,7 +197,7 @@ export class Battle extends Modal {
     vm.#heroHp.innerHTML = 'Health: ' + vm.#hero.attributes.health;
     vm.#heroMp.innerHTML = 'Mana: ' + vm.#hero.attributes.mana;
     vm.#heroLevel.innerHTML = 'Level: ' + vm.#hero.level.level;
-    
+
     vm.#plate.update();
   }
 
@@ -298,7 +321,7 @@ export class Battle extends Modal {
     e.plate.hideLevel();
     e.plate.hideName();
     e.plate.hideMana();
-    
+
     e.enemy.id = e.id;
     e.enemy.div = e;
     e.enemy.target = vm.#hero;
@@ -363,14 +386,11 @@ export class Battle extends Modal {
     vm.#battlefield.appendChild(e);
   }
 
-  removeEnemy(e, delay = 0) {
+  removeEnemy(e) {
     let vm = this;
     e.stopAi();
     vm.#enemies.delete(e);
     vm.#hero.enemies.delete(e);
-    setTimeout(() => {
-      e.div.style.color = 'black';
-    }, delay);
   }
 
   clearEnemies(delay = 0) {

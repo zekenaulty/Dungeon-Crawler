@@ -50,7 +50,7 @@ export class Hero extends Actor {
     vm.addSkill('cleave', new Cleave(vm));
     vm.addSkill('slam', new Slam(vm));
     vm.addSkill('heal', new Heal(vm));
-    vm.addSkill('teleport', new Teleport(vm));
+    //vm.addSkill('teleport', new Teleport(vm));
     vm.addSkill('auto', new AutoBattle(vm));
 
     vm.listenToEvent('leveled up', (e) => {

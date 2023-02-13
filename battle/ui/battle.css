@@ -138,6 +138,22 @@
 }
 
 .battle-green {
-  color: green;
-  border-color: green;
+  color: green !important;
+  border-color: green !important;
+}
+
+
+.battle-end-grind {
+  position: fixed;
+  top: 14px;
+  right: 224px;
+  z-index: 200;
+  background-color: black;
+  color: white;
+  border: 1px solid white;
+  border-radius: 13px 13px 13px 13px;
+  margin-top: 2px;
+  margin-right: 4px;
+  padding: 4px 6px 4px 6px;
+  min-width: 90px;
 }
