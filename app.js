@@ -9,6 +9,7 @@ import { Dice } from './battle/dice.js';
 import { Loader } from './layout/loader/loader.js';
 import { Saves } from './battle/ui/saves.js';
 import { Gauge } from './battle/actors/ui/gauge.js';
+import { Nameplate } from './battle/actors/ui/nameplate.js';
 
 (() => {
 
@@ -51,18 +52,24 @@ import { Gauge } from './battle/actors/ui/gauge.js';
     const waves = header.addButton('FIGHT WAVES', (e) => {
       if (game.grinding) {
         game.stopGrind();
+        waves.innerHTML = 'FIGHT WAVES';
+
       } else {
         game.autoPilot.stop();
         game.startGrind();
+        waves.innerHTML = 'STOP WAVES';
       }
     });
 
     const player = header.addButton('AUTO PLAY', (e) => {
       if (game.autoPilot.running) {
         game.autoPilot.stop();
+        player.innerHTML = 'AUTO PLAY';
       } else {
-        game.stopGrind();
+        game.stopGrind();        
+        waves.innerHTML = 'FIGHT WAVES';
         game.autoPilot.start();
+        player.innerHTML = 'MANUAL PLAY';
       }
     });
 

@@ -60,7 +60,7 @@ body {
   position: fixed;
   top: 14px;
   right: 224px;
-  z-index: 20000;
+  z-index: 200;
   background-color: black;
   color: white;
   border: 1px solid white;

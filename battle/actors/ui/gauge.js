@@ -103,6 +103,52 @@ export class Gauge extends EventHandler {
     return vm.#box.style.width;
   }
 
+  barWidth(v) {
+    let vm = this;
+    if (v) {
+      vm.#outer.style.width = v;
+    }
+
+    return vm.#outer.style.width;
+  }
+
+  labelWidth(v) {
+    let vm = this;
+    if (v) {
+      vm.#label.style.width = v;
+    }
+
+    return vm.#label.style.width;
+  }
+  
+  height(v) {
+    let vm = this;
+    if (v) {
+      vm.#box.style.height = v;
+    }
+
+    return vm.#box.style.height;
+  }
+
+  barHeight(v) {
+    let vm = this;
+    if (v) {
+      vm.#outer.style.height = v;
+    }
+
+    return vm.#outer.style.height;
+  }
+
+  labelHeight(v) {
+    let vm = this;
+    if (v) {
+      vm.#label.style.height = v;
+    }
+
+    return vm.#label.style.height;
+  }
+
+
   textColor(v) {
     let vm = this;
     if (v) {
