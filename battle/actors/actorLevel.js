@@ -10,26 +10,20 @@ export class ActorLevel extends EventHandler {
 
   static xpForNextLevel(
     level = 1,
-    toLevelXp = 25,
-    xpFactor = 0.25,
-    baseXpToLevel = 25
+    factor = 0.07,
+    base = 50
   ) {
-    return baseXpToLevel * level + 
-    Math.floor(toLevelXp * xpFactor);
+    let l = Math.ceil(base * level);
+    return l + Math.floor(l * factor);
   }
 
   static monsterXp(
     level = 1,
-    factor = 0.05,
-    base = 10
+    factor = 0.02,
+    base = 5
   ) {
-    let amount = 0;
-    for (let l = 1; l <= level; l++) {
-      amount +=
-        Math.ceil(base * Math.ceil(l / 2)) +
-        Math.floor(amount * factor);
-    }
-    return amount;
+    let l = Math.ceil(base * level / 3);
+    return l + Math.floor(l / 2 * factor);
   }
 
   constructor(actor) {
@@ -44,7 +38,7 @@ export class ActorLevel extends EventHandler {
       'lost xp'
     );
   }
-  
+
   get xpRequired() {
     let vm = this;
     return `${vm.xp}/${vm.toLevelXp} (${vm.toLevelXp - vm.xp})`;
@@ -70,13 +64,17 @@ export class ActorLevel extends EventHandler {
     vm.level++;
     vm.#actor.attributes.available += vm.#actor.attributes.pointsPerLevel;
     vm.#actor.recover();
+
+    vm.xp = vm.toLevelXp - vm.xp;
+    if(vm.xp < 0) {
+      vm.xp = 0;
+    }
     
-    vm.toLevelXp += ActorLevel.xpForNextLevel(
-        vm.level,
-        vm.toLevelXp,
-        vm.xpFactor,
-        vm.baseXpToLevel
-      );
+    vm.toLevelXp = ActorLevel.xpForNextLevel(
+      vm.level,
+      vm.xpFactor,
+      vm.baseXpToLevel
+    );
 
     vm.raiseEvent(
       'leveled up',
@@ -91,8 +89,8 @@ export class ActorLevel extends EventHandler {
         level: vm,
         actor: vm.#actor
       });
-      
-      vm.#actor.recover();
 
+    vm.#actor.recover();
   }
+  
 }
