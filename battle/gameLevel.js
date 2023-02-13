@@ -129,7 +129,9 @@ export class GameLevel extends EventHandler {
       'moved',
       'updated',
       'teleporting',
-      'teleported'
+      'teleported',
+      'grind started',
+      'grind stopped'
     );
 
   }
@@ -404,7 +406,9 @@ export class GameLevel extends EventHandler {
       vm.#grind = false;
       vm.#hero.recover();
       vm.#grindCount = 0;
-      vm.#battleLoop(vm);
+      vm.raiseEvent('grind stopped');
+      vm.#endGrind.innerHTML = 'fight waves';
+      vm.#endGrind.classList.remove('battle-green');
     }
   }
 
@@ -413,7 +417,10 @@ export class GameLevel extends EventHandler {
     if (!vm.#grind) {
       vm.#grindCap = cap;
       vm.#grind = true;
-      vm.#grindCount = 0;
+      vm.#grindCount = 0;      
+      vm.raiseEvent('grind started');
+      vm.#endGrind.innerHTML = 'stop waves';
+      vm.#endGrind.classList.add('battle-green');
       vm.#battleLoop(vm);
     }
   }

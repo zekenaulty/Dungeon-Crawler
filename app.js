@@ -61,12 +61,19 @@ import { Nameplate } from './battle/actors/ui/nameplate.js';
       }
     });
 
+    game.listenToEvent('grind started', () => {
+      waves.innerHTML = 'STOP WAVES';
+    });
+    game.listenToEvent('grind stopped', () => {
+      waves.innerHTML = 'FIGHT WAVES';
+    });
+
     const player = header.addButton('AUTO PLAY', (e) => {
       if (game.autoPilot.running) {
         game.autoPilot.stop();
         player.innerHTML = 'AUTO PLAY';
       } else {
-        game.stopGrind();        
+        game.stopGrind();
         waves.innerHTML = 'FIGHT WAVES';
         game.autoPilot.start();
         player.innerHTML = 'MANUAL PLAY';
@@ -88,6 +95,6 @@ import { Nameplate } from './battle/actors/ui/nameplate.js';
     joystick.listenToEvent('right', () => {
       game.move('east');
     });
-    
+
   });
 })();

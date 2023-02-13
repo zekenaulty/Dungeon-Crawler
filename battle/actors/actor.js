@@ -25,6 +25,7 @@ export class Actor extends EventHandler {
     let vm = this;
     return {
       xp: vm.level.xp,
+      level: vm.level.level,
       hp: vm.attributes.hp,
       mp: vm.attributes.mp,
       gold: vm.inventory.gold,
@@ -43,8 +44,11 @@ export class Actor extends EventHandler {
   loadState(state) {
     let vm = this;
 
-    vm.level.addXp(state.xp);
-
+    while (vm.level.level < state.level) {
+      vm.level.levelUp();
+    }
+    
+    vm.level.xp = state.xp;
     vm.attributes.hp = state.hp;
     vm.attributes.mp = state.mp;
     vm.attributes.available = state.points;

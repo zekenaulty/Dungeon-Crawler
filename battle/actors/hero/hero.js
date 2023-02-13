@@ -59,6 +59,7 @@ export class Hero extends Actor {
         vm.attributes.baseDamageLevel += 2;
         vm.recover();
       }
+      vm.attributes.strengthLevel++;
     });
 
   }
