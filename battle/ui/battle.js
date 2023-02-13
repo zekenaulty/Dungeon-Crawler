@@ -6,6 +6,7 @@ import { ActorLevel } from '../actors/actorLevel.js';
 import { ActorInventory } from '../actors/actorInventory.js';
 import { DetailSheet } from '../actors/ui/detailSheet.js';
 import { SaveData } from '../saveData.js';
+import { Nameplate } from '../actors/ui/nameplate.js';
 
 export class Battle extends Modal {
 
@@ -18,6 +19,8 @@ export class Battle extends Modal {
   #heroLevel;
   #heroDmg;
   #pauseBtn;
+  
+  #plate;
 
   #hero;
   #level;
@@ -95,10 +98,12 @@ export class Battle extends Modal {
     vm.#heroDmg.classList.add('battle-hero-info-text');
     vm.#heroDmg.classList.add('battle-hero-dmg');
 
-    vm.#heroInfo.appendChild(vm.#heroLevel);
-    vm.#heroInfo.appendChild(vm.#heroHp);
-    vm.#heroInfo.appendChild(vm.#heroMp);
-    vm.appendChild(vm.#heroDmg);
+    //vm.#heroInfo.appendChild(vm.#heroLevel);
+    //vm.#heroInfo.appendChild(vm.#heroHp);
+    //vm.#heroInfo.appendChild(vm.#heroMp);
+    //vm.appendChild(vm.#heroDmg);
+    
+    vm.#plate = new Nameplate(vm.#heroInfo, vm.#hero);
 
     vm.heroInfo();
     vm.heroSkills();
@@ -169,6 +174,8 @@ export class Battle extends Modal {
     vm.#heroHp.innerHTML = 'Health: ' + vm.#hero.attributes.health;
     vm.#heroMp.innerHTML = 'Mana: ' + vm.#hero.attributes.mana;
     vm.#heroLevel.innerHTML = 'Level: ' + vm.#hero.level.level;
+    
+    vm.#plate.update();
   }
 
   heroSkills() {
@@ -270,6 +277,10 @@ export class Battle extends Modal {
   spawn(index) {
     let vm = this;
     let e = document.createElement('div');
+    e.plateDiv = document.createElement('div');
+    e.enemyDiv = document.createElement('div');
+    e.appendChild(e.plateDiv);
+    e.appendChild(e.enemyDiv);
     e.id = `enemy${index}`;
     e.enemy = new Slime(
       vm.#level,
@@ -283,7 +294,11 @@ export class Battle extends Modal {
     }
     e.enemy.spendPoints();
     e.enemy.recover();
-
+    e.plate = new Nameplate(e, e.enemy);
+    e.plate.hideLevel();
+    e.plate.hideName();
+    e.plate.hideMana();
+    
     e.enemy.id = e.id;
     e.enemy.div = e;
     e.enemy.target = vm.#hero;
@@ -301,8 +316,8 @@ export class Battle extends Modal {
     });
     vm.#hero.enemies.push(e.enemy);
     vm.#enemies.push(e.enemy);
-    e.innerHTML = e.enemy.ascii;
-    e.classList.add('battle-enemy');
+    e.enemyDiv.innerHTML = e.enemy.ascii;
+    e.enemyDiv.classList.add('battle-enemy');
 
     e.addEventListener('dblclick', () => {
       e.details.open(true);
@@ -313,25 +328,27 @@ export class Battle extends Modal {
     });
 
     e.enemy.listenToEvent('begin cast', (n) => {
-      n.actor.div.classList.add('battle-enemy-attack');
+      n.actor.div.enemyDiv.classList.add('battle-enemy-attack');
     });
 
     e.enemy.listenToEvent('end recoil', (n) => {
-      n.actor.div.classList.remove('battle-enemy-attack');
+      n.actor.div.enemyDiv.classList.remove('battle-enemy-attack');
     });
 
     e.enemy.listenToEvent('damaged', (actor, dmg) => {
-      let ascii = e.innerHTML;
-      e.classList.add('battle-dmg');
-      e.innerHTML = '-' + dmg;
+      //let ascii = e.innerHTML;
+      e.enemyDiv.classList.add('battle-dmg');
+      e.plate.update();
+      //e.innerHTML = '-' + dmg;
       setTimeout(() => {
-        e.classList.remove('battle-dmg');
-        e.innerHTML = ascii;
+        e.enemyDiv.classList.remove('battle-dmg');
+        //e.innerHTML = ascii;
       }, 850);
     });
 
     e.enemy.listenToEvent('death', (n) => {
       e.enemy.battle.removeEnemy(e.enemy);
+      e.style.visibility = 'hidden';
       vm.#hero.level.addXp(ActorLevel.monsterXp(e.enemy.level.level));
       if (vm.#enemies.length < 1) {
         vm.#hero.stopAi();

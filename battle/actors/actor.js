@@ -86,7 +86,8 @@ export class Actor extends EventHandler {
       'end recoil',
       'interupted',
       'begin gcd',
-      'end gcd'
+      'end gcd',
+      'changed'
     );
 
     vm.addSkill('GCD', new GCD(vm));
@@ -100,6 +101,7 @@ export class Actor extends EventHandler {
     let vm = this;
     if (amt <= vm.attributes.mp) {
       vm.attributes.mp -= amt;
+      vm.raiseEvent('changed', vm);
       return true
     }
 
@@ -117,12 +119,14 @@ export class Actor extends EventHandler {
       vm.attributes.hp += amt;
     }
     vm.raiseEvent('healed', vm, amt, over);
+    vm.raiseEvent('changed', vm);
   }
 
   takeDamage(dmg) {
     let vm = this;
     vm.attributes.hp -= dmg;
     vm.raiseEvent('damaged', vm, dmg);
+    vm.raiseEvent('changed', vm);
     if (vm.attributes.hp < 1) {
       vm.attributes.hp = 0;
       vm.raiseEvent(
@@ -178,6 +182,8 @@ export class Actor extends EventHandler {
 
     vm.attributes.hp = vm.attributes.maxHp;
     vm.attributes.mp = vm.attributes.maxMp;
+    
+    vm.raiseEvent('changed', vm);
   }
 
   lowHealth(p = 0.3) {

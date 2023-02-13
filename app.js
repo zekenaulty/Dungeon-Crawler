@@ -10,6 +10,7 @@ import { Loader } from './layout/loader/loader.js';
 import { Saves } from './battle/ui/saves.js';
 import { Gauge } from './battle/actors/ui/gauge.js';
 import { Nameplate } from './battle/actors/ui/nameplate.js';
+import { Actor } from './battle/actors/actor.js';
 
 (() => {
 
@@ -95,6 +96,10 @@ import { Nameplate } from './battle/actors/ui/nameplate.js';
     joystick.listenToEvent('right', () => {
       game.move('east');
     });
-
+    /*
+    let plate = new Nameplate(
+      document.querySelector('body'), 
+      new Actor(game));
+      */
   });
 })();

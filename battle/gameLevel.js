@@ -43,6 +43,11 @@ export class GameLevel extends EventHandler {
 
   autoPilot;
 
+  get hero() {
+    let vm = this;
+    return vm.#hero;
+  }
+
   saveState() {
 
     let vm = this;
@@ -287,14 +292,16 @@ export class GameLevel extends EventHandler {
   beginBattle(action) {
     let vm = this;
     vm.raiseEvent('battle starting', vm);
-    
-    if(vm.grinding && vm.#battle) {
-      vm.#battle.removeChild(vm.#endGrind);
+
+    if (vm.grinding && vm.#battle) {
+      try {
+        vm.#battle.removeChild(vm.#endGrind);
+      } catch (ex) {}
     }
-    
+
     vm.#battle = new Battle(vm.#hero, vm);
-    
-    if(vm.grinding) {
+
+    if (vm.grinding) {
       vm.#battle.appendChild(vm.#endGrind);
     }
 
@@ -399,7 +406,7 @@ export class GameLevel extends EventHandler {
     let vm = this;
     return vm.#grind;
   }
-  
+
   stopGrind() {
     let vm = this;
     if (vm.#grind) {
@@ -417,7 +424,7 @@ export class GameLevel extends EventHandler {
     if (!vm.#grind) {
       vm.#grindCap = cap;
       vm.#grind = true;
-      vm.#grindCount = 0;      
+      vm.#grindCount = 0;
       vm.raiseEvent('grind started');
       vm.#endGrind.innerHTML = 'stop waves';
       vm.#endGrind.classList.add('battle-green');

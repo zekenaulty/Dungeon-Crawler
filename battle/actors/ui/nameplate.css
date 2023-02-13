@@ -1,0 +1,8 @@
+.nameplate {
+  display: flex;
+  flex-flow: column;
+  flex-wrap: nowrap;
+  justify-content: start;
+  align-content: start;
+  z-index: 3;
+}

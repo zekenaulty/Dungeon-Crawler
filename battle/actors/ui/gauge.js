@@ -62,6 +62,19 @@ export class Gauge extends EventHandler {
 
     container.appendChild(vm.#box);
   }
+  
+  hide() {
+    let vm = this;
+    vm.#box.style.display='none';
+  }
+
+  setMax(max, val) {
+    let vm = this;
+    vm.#max = max;
+    if(val) {
+      vm.update(val);
+    }
+  }
 
   update(val) {
     let vm = this;
@@ -120,7 +133,7 @@ export class Gauge extends EventHandler {
 
     return vm.#label.style.width;
   }
-  
+
   height(v) {
     let vm = this;
     if (v) {
@@ -174,5 +187,15 @@ export class Gauge extends EventHandler {
     }
 
     return vm.#fill.style.backgroundColor;
+  }
+
+
+  borderColor(v) {
+    let vm = this;
+    if (v) {
+      vm.#outer.style.borderColor = v;
+    }
+
+    return vm.#outer.style.borderColor;
   }
 }
