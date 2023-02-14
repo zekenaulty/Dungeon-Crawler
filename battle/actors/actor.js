@@ -50,7 +50,7 @@ export class Actor extends EventHandler {
     while (vm.level.level < state.level) {
       vm.level.levelUp();
     }
-    
+
     vm.level.xp = state.xp;
     vm.attributes.hp = state.hp;
     vm.attributes.mp = state.mp;
@@ -187,7 +187,7 @@ export class Actor extends EventHandler {
 
     vm.attributes.hp = vm.attributes.maxHp;
     vm.attributes.mp = vm.attributes.maxMp;
-    
+
     vm.raiseEvent('changed', vm);
   }
 
@@ -196,7 +196,9 @@ export class Actor extends EventHandler {
     let low = Math.floor(vm.attributes.maxHp * p);
     return vm.attributes.hp <= low;
   }
-  
-  reset(){}
+
+  reset() {}
+
+
 
 }

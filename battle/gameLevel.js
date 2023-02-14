@@ -55,6 +55,11 @@ export class GameLevel extends EventHandler {
     let vm = this;
     return vm.#healer;
   }
+  
+  get battle() {
+    let vm = this;
+    return vm.#battle;
+  }
 
   saveState() {
 
@@ -319,8 +324,7 @@ export class GameLevel extends EventHandler {
     vm.raiseEvent('battle starting', vm);
 
     vm.#battle = new Battle(
-      vm.#warrior,
-      vm.#healer,
+      vm.#warrior.party,
       vm);
 
     vm.#battle.listenToEvent('won battle', () => {

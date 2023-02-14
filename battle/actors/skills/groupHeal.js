@@ -15,7 +15,7 @@ export class GroupHeal extends ActorSkill {
   }
   
   get displayName() {
-    return `heal`;
+    return `group heal`;
   }
   
   get summary() {

@@ -11,8 +11,8 @@ export class Slime extends Enemy {
 
   #slimes;
   
-  constructor(gameLevel, battle, warrior) {
-    super(gameLevel, battle, warrior);
+  constructor(gameLevel, battle) {
+    super(gameLevel, battle);
     let vm = this;
     
     vm.name = 'slime';

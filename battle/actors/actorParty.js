@@ -101,4 +101,8 @@ export class ActorParty extends EventHandler {
     });
   }
 
+  first() {
+    let vm = this;
+    return vm.#members[0];
+  }
 }

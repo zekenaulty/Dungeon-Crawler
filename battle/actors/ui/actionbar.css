@@ -1,0 +1,16 @@
+
+.actionbar-btn {
+  background-color: black;
+  color: white;
+  border: 1px solid white;
+  border-radius: 13px 13px 13px 13px;
+  margin-top: 2px;
+  margin-right: 4px;
+  padding: 4px 6px 4px 6px;
+  min-width: 90px;
+}
+
+.actionbar-btn-active {
+  color: red;
+  border: 1px solid red;
+}
