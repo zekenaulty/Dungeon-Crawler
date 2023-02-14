@@ -20,13 +20,13 @@ export class GroupHeal extends ActorSkill {
   
   get summary() {
     let vm = this;
-    return `Heal for 25% of max health (${Math.ceil(vm.actor.attributes.maxHp * 0.25)}).`;
+    return `Heal party for 25% of max health (${Math.ceil(vm.actor.attributes.maxHp * 0.25)}).`;
   }
 
   invoke() {
     let vm = this;
     vm.safeInvoke(() => {
-      vm.party.each((actor) => {
+      vm.actor.party.each((actor) => {
         vm.doHeal(actor, 0.25, vm.mpCost);
       });
     });

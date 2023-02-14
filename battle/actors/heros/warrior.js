@@ -71,7 +71,7 @@ export class Warrior extends Actor {
   aiCanAct() {
     let vm = this;
 
-    if (vm.casting || vm.battle.paused || Modal.openCount > 1) {
+    if (vm.casting || !vm.battle || vm.battle.paused || Modal.openCount > 1) {
       return false;
     }
     return true;

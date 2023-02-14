@@ -1,5 +1,6 @@
 import { List } from '../../../core/list.js';
 import { EventHandler } from '../../../core/eventHandler.js'
+import { Modal } from '../../../layout/modal/modal.js'
 
 export class Actionbar extends EventHandler {
 
@@ -50,13 +51,13 @@ export class Actionbar extends EventHandler {
 
   #buttonHooks(btn, skill) {
     let vm = this;
-
-    btn.addEventListener('click', () => {
-      if (vm.gameLevel.paused || Modal.openCount > 1) {
+    
+    let doClick = () => {
+      if (!vm.#battle || vm.#battle.paused || Modal.openCount > 1) {
         return;
       }
       skill.invoke();
-    });
+    };
 
     let begin = () => {
       btn.classList.add('actionbar-btn-active');
@@ -76,8 +77,10 @@ export class Actionbar extends EventHandler {
       skill.ignoreEvent('end recoil', done);
       skill.ignoreEvent('begin cast', begin);
       vm.#actor.gameLevel.battle.ignoreEvent('closing', release);
+      btn.removeEventListener('click', doClick);
     }
-
+    
+    btn.addEventListener('click', doClick);
     skill.listenToEvent('begin cast', begin);
     skill.listenToEvent('end recoil', done);
     skill.listenToEvent('updated', update);

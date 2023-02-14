@@ -26,7 +26,7 @@ export class Battle extends Modal {
 
   #party;
 
-  #open = false;
+  #isOpen = false;
 
   #partyDamaged;
   #partyDeath;
@@ -94,6 +94,7 @@ export class Battle extends Modal {
         },
         500
       );
+      vm.#isOpen = true;
     };
     
     vm.#closing = () => {
@@ -104,6 +105,7 @@ export class Battle extends Modal {
         a.ignoreEvent('death', vm.#partyDeath);
         a.battle = undefined;
       });
+      vm.#isOpen = false;
     };
 
     vm.listenToEvent('opening', vm.#opening);
@@ -113,7 +115,7 @@ export class Battle extends Modal {
 
   get isOpen() {
     let vm = this;
-    return vm.#open;
+    return vm.#isOpen;
   }
 
   get paused() {
@@ -164,7 +166,7 @@ export class Battle extends Modal {
       
       let ab = document.createElement('div');
       
-      ab.classList.add('battle-actionbar');
+      ab.classList.add('actionbar');
       ab.bar = new Actionbar(ab, a, vm);
       ab.bar.populate();
       vm.#actionbars.push(ab);
@@ -234,8 +236,9 @@ export class Battle extends Modal {
   removeEnemy(e) {
     let vm = this;
     e.stopAi();
-    e.enemies.forEach((a) => {
-      a.enemies.delete(a);
+    vm.#party.each((a) => {
+      e.enemies.delete(a);
+      a.enemies.delete(e);
     });
   }
 

@@ -175,22 +175,25 @@ export class Spawner extends EventHandler {
     };
 
     e.beginCast = (n) => {
-      n.actor.div.enemyDiv.classList.add('battle-enemy-attack');
+      e.enemyDiv.classList.add('battle-enemy-attack');
     };
 
     e.endRecoil = (n) => {
-      n.actor.div.enemyDiv.classList.remove('battle-enemy-attack');
+      e.enemyDiv.classList.remove('battle-enemy-attack');
     };
 
-    e.damaged = () => (actor, dmg) => {
+    e.damaged = (actor, dmg) => {
       e.enemyDiv.classList.add('battle-dmg');
       e.plate.update();
       setTimeout(() => {
-        e.enemyDiv.classList.remove('battle-dmg');
+        if(e && e.enemyDiv) {
+          e.enemyDiv.classList.remove('battle-dmg');
+        }
       }, 250);
     };
 
     e.death = (n) => {
+
       vm.#battle.removeEnemy(e.enemy);
       e.div.style.visibility = 'hidden';
 
@@ -199,15 +202,13 @@ export class Spawner extends EventHandler {
           a.level.addXp(ActorLevel.monsterXp(e.enemy.level.level));
         }
       });
-
+      
       let h = vm.#party.first();
       if (h.enemies.length < 1) {
         vm.#battle.stopAi();
         vm.#battle.raiseEvent('end combat', vm);
-        SaveData.save(vm.#gameLevel);
         vm.#gameLevel.raiseEvent('updated', vm.#gameLevel);
-        vm.close();
-        vm.#battle.raiseEvent('won battle', vm);
+        vm.#battle.raiseEvent('won battle', vm.#battle);
       }
     };
 
@@ -226,7 +227,7 @@ export class Spawner extends EventHandler {
     
     e.battleClosing = () => {
       let vm = this;
-      e.removeEventListener('dblclick', e.dblClick);
+      e.div.removeEventListener('dblclick', e.dblClick);
       e.details.ignoreEvent('opening', e.detailsOpening);
       e.details.ignoreEvent('closing', e.detailsClosing);
       e.enemy.ignoreEvent('begin cast', e.beginCast);

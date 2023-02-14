@@ -55,7 +55,7 @@ export class GameLevel extends EventHandler {
     let vm = this;
     return vm.#healer;
   }
-  
+
   get battle() {
     let vm = this;
     return vm.#battle;
@@ -154,7 +154,7 @@ export class GameLevel extends EventHandler {
     vm.#healer = new Healer(vm);
     vm.#warrior.party.add(vm.#healer);
     vm.#healer.party.add(vm.#warrior);
-    
+
     vm.#warriorDetail = new DetailSheet(vm.#warrior, true);
     vm.autoPilot = new AutoPilot(vm.#warrior.party);
 
@@ -164,17 +164,17 @@ export class GameLevel extends EventHandler {
     let vm = this;
     return actor === vm.#warrior;
   }
-  
+
   isHealer(actor) {
     let vm = this;
     return actor === vm.#healer;
   }
-  
+
   isHero(actor) {
     let vm = this;
     return vm.isWarrior(actor) || vm.isHealer(actor);
   }
-  
+
   initialize(width, height, gfx) {
     let vm = this;
     vm.#scaler = new CanvasRectangleScaler(width, height);
@@ -225,7 +225,7 @@ export class GameLevel extends EventHandler {
     vm.#mazeMaxRooms = 32;
     vm.#resetMaze();
     vm.#randomMaze();
-    
+
     vm.#warrior.reset();
     vm.#healer.reset();
 
@@ -328,7 +328,12 @@ export class GameLevel extends EventHandler {
       vm);
 
     vm.#battle.listenToEvent('won battle', () => {
+
+      vm.#battle.close();
+      
+      SaveData.save(vm);
       vm.raiseEvent('won battle');
+
       if (action) {
         action();
       }
