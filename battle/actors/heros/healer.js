@@ -78,7 +78,6 @@ export class Healer extends Actor {
   #aiId = -1;
   startAi() {
     let vm = this;
-    vm.#aiLoop(); /* of course the warrior gets the drop on them  */
     vm.#aiId = setInterval(() => {
       vm.#aiLoop();
     }, vm.#aiInterval);

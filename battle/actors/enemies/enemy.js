@@ -51,17 +51,17 @@ export class Enemy extends Actor {
     let w = vm.enemies.find((e) => {
       return e.name == 'warrior';
     });
-
+    
     let h = vm.enemies.find((e) => {
       return e.name == 'healer';
     });
-
+    
     while (l.length < 30) {
-      l.push(vm.enemies[w]);
-      l.push(vm.enemies[w]);
-      l.push(vm.enemies[w]);
-      l.push(vm.enemies[h]);
-      l.push(vm.enemies[w]);
+      l.push(w);
+      l.push(w);
+      l.push(w);
+      l.push(h);
+      l.push(w);
     }
     
     return l;
@@ -77,7 +77,8 @@ export class Enemy extends Actor {
       return vm.target;
     }
 
-    return hostile ? vm.#weightedTargets.sample() : vm.party.random();
+    let t = hostile ? vm.#weightedTargets.sample() : vm.party.random();
+    return t;
   }
 
   aiCanAct(d) {

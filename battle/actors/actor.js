@@ -128,6 +128,9 @@ export class Actor extends EventHandler {
 
   takeDamage(dmg) {
     let vm = this;
+    if(vm.name != 'slime') {
+      console.log(`${vm.name} took ${dmg} damage.`);
+    }
     vm.attributes.hp -= dmg;
     vm.raiseEvent('damaged', vm, dmg);
     vm.raiseEvent('changed', vm);
