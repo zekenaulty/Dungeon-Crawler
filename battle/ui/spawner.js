@@ -137,8 +137,7 @@ export class Spawner extends EventHandler {
 
     e.enemy = new Slime(
       vm.#gameLevel,
-      vm,
-      vm.#party
+      vm.#battle
     );
 
     let l = vm.#mobLevel();
