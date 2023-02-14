@@ -51,13 +51,13 @@ import { Actor } from './battle/actors/actor.js';
     });
 
     const waves = header.addButton('FIGHT WAVES', (e) => {
-      if (game.grinding) {
-        game.stopGrind();
+      if (game.fightWaves.running) {
+        game.fightWaves.stop();
         waves.innerHTML = 'FIGHT WAVES';
 
       } else {
         game.autoPilot.stop();
-        game.startGrind();
+        game.fightWaves.start();
         waves.innerHTML = 'STOP WAVES';
       }
     });
@@ -65,6 +65,7 @@ import { Actor } from './battle/actors/actor.js';
     game.listenToEvent('grind started', () => {
       waves.innerHTML = 'STOP WAVES';
     });
+    
     game.listenToEvent('grind stopped', () => {
       waves.innerHTML = 'FIGHT WAVES';
     });
@@ -74,7 +75,7 @@ import { Actor } from './battle/actors/actor.js';
         game.autoPilot.stop();
         player.innerHTML = 'AUTO PLAY';
       } else {
-        game.stopGrind();
+        game.fightWaves.stop();
         waves.innerHTML = 'FIGHT WAVES';
         game.autoPilot.start();
         player.innerHTML = 'MANUAL PLAY';

@@ -22,10 +22,10 @@
   flex-wrap: nowrap;
   justify-content: start;
   align-content: start;
-  top: 71vh;
+  top: 70vh;
   left: 2vw;
   right: 60vw;
-  height: 26vh;
+  height: 28vh;
   border: 1px solid white;
   border-radius: 13px 13px 13px 13px;
   color: white;
@@ -39,10 +39,10 @@
   align-content: start;
   flex-flow: column;
   flex-wrap: nowrap;
-  top: 71vh;
+  top: 70vh;
   left: 42vw;
   right: 2vw;
-  height: 26vh;
+  height: 28vh;
   border: 1px solid white;
   border-radius: 13px 13px 13px 13px;
   color: white;
@@ -81,7 +81,7 @@
   display: none !important;
 }
 
-.auto-battle {
+.battle-auto-battle {
   position: fixed;
   top: 14px;
   right: 18px;

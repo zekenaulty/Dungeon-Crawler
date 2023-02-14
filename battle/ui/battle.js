@@ -9,6 +9,7 @@ import { SaveData } from '../saveData.js';
 import { Nameplate } from '../actors/ui/nameplate.js';
 import { Spawner } from './spawner.js';
 import { Actionbar } from '../actors/ui/actionbar.js'
+
 export class Battle extends Modal {
 
   #stylesheet;
@@ -16,6 +17,7 @@ export class Battle extends Modal {
   #partyInfo;
   #actions;
   #pauseBtn;
+  #autoBattleBtn;
 
   #gameLevel;
   #paused = true;
@@ -32,7 +34,7 @@ export class Battle extends Modal {
   #partyDeath;
   #closing;
   #opening;
-  
+
   #spawner;
 
   constructor(party, gameLevel) {
@@ -72,6 +74,7 @@ export class Battle extends Modal {
 
     vm.#createPauseButton();
     vm.#createGrindButton();
+    vm.#createAutoBattleButton();
 
     vm.defineEvent(
       'begin combat',
@@ -96,7 +99,7 @@ export class Battle extends Modal {
       );
       vm.#isOpen = true;
     };
-    
+
     vm.#closing = () => {
       vm.ignoreEvent('opening', vm.#opening);
       vm.ignoreEvent('closing', vm.#closing);
@@ -122,17 +125,17 @@ export class Battle extends Modal {
     let vm = this;
     return vm.#paused;
   }
-  
+
   get battlefield() {
     let vm = this;
     return vm.#battlefield;
   }
-  
+
   get infoPanel() {
     let vm = this;
     return vm.#partyInfo;
   }
-  
+
   get actonbars() {
     let vm = this;
     return vm.#actions;
@@ -140,7 +143,7 @@ export class Battle extends Modal {
 
   #registerParty() {
     let vm = this;
-    
+
     vm.#actionbars = new List();
 
     vm.#partyDamaged = () => {
@@ -163,9 +166,9 @@ export class Battle extends Modal {
       a.listenToEvent('damaged', vm.#partyDamaged);
       a.listenToEvent('death', vm.#partyDeath);
       a.battle = vm;
-      
+
       let ab = document.createElement('div');
-      
+
       ab.classList.add('actionbar');
       ab.bar = new Actionbar(ab, a, vm);
       ab.bar.populate();
@@ -197,9 +200,35 @@ export class Battle extends Modal {
     vm.appendChild(vm.#pauseBtn);
   }
 
+  #createAutoBattleButton() {
+    let vm = this;
+    vm.#autoBattleBtn = document.createElement('button');
+    vm.#autoBattleBtn.innerHTML = 'auto battle';
+    vm.#autoBattleBtn.classList.add('battle-btn');
+    vm.#autoBattleBtn.classList.add('battle-auto-battle');
+    if (vm.#party.first().autoBattle) {
+      vm.#autoBattleBtn.classList.add('battle-green');
+    }
+    vm.#autoBattleBtn.addEventListener('click', () => {
+      if (vm.#party.first().autoBattle) {
+        vm.#autoBattleBtn.classList.remove('battle-green');
+        vm.#party.each((a) => {
+          a.autoBattle = false;
+        });
+      } else {
+        vm.#autoBattleBtn.classList.add('battle-green');
+        vm.#party.each((a) => {
+          a.autoBattle = true;
+        });
+      }
+    });
+
+    vm.appendChild(vm.#autoBattleBtn);
+  }
+
   #createGrindButton() {
     let vm = this;
-    if (vm.#gameLevel.grinding) {
+    if (vm.#gameLevel.fightWaves.running) {
       vm.#endGrind = document.createElement('button');
       vm.#endGrind.innerHTML = 'stop waves';
       vm.#endGrind.classList.add('battle-end-grind');
@@ -208,12 +237,12 @@ export class Battle extends Modal {
       vm.appendChild(vm.#endGrind);
 
       vm.#endGrind.addEventListener('click', () => {
-        if (vm.#gameLevel.grinding) {
-          vm.#gameLevel.stopGrind();
+        if (vm.#gameLevel.fightWaves.running) {
+          vm.#gameLevel.fightWaves.stop();
           vm.#endGrind.innerHTML = 'fight waves';
           vm.#endGrind.classList.remove('battle-green');
         } else {
-          vm.#gameLevel.startGrind();
+          vm.#gameLevel.fightWaves.start();
           vm.#endGrind.innerHTML = 'stop waves';
           vm.#endGrind.classList.add('battle-green');
         }
@@ -256,13 +285,13 @@ export class Battle extends Modal {
     vm.#paused = false;
     let h;
     vm.#party.each((a) => {
-      if(a.autoBattle) {
+      if (a.autoBattle) {
         a.startAi();
       }
       h = a;
     });
-    
-    if(h) {
+
+    if (h) {
       h.enemies.forEach((e) => {
         e.startAi();
       });
@@ -274,13 +303,13 @@ export class Battle extends Modal {
     vm.#paused = true;
     let h;
     vm.#party.each((a) => {
-      if(a.autoBattle) {
+      if (a.autoBattle) {
         a.stopAi();
       }
       h = a;
     });
-    
-    if(h) {
+
+    if (h) {
       h.enemies.forEach((e) => {
         e.stopAi();
       });

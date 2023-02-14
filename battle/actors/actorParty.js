@@ -13,6 +13,7 @@ export class ActorParty extends EventHandler {
     
     vm.#actor = actor;
     vm.#members = new List();
+    vm.#members.push(vm.#actor);
     
     //maybe
     vm.defineEvent(
@@ -105,4 +106,10 @@ export class ActorParty extends EventHandler {
     let vm = this;
     return vm.#members[0];
   }
+  
+  random() {
+    let vm = this;
+    
+    return vm.#members.sample();
+  } 
 }

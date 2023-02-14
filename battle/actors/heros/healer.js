@@ -122,4 +122,16 @@ export class Healer extends Actor {
       clearInterval(vm.#aiId);
     }
   }
+  
+  spendPoints() {
+    let vm = this;
+    
+    vm.buyAttribute('intellect');
+    vm.buyAttribute('intellect');
+    vm.buyAttribute('intellect');
+    vm.buyAttribute('vitality');
+    vm.buyAttribute('vitality');
+    
+  }
+  
 }

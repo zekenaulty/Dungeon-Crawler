@@ -77,7 +77,6 @@ export class Actor extends EventHandler {
     vm.attributes = new ActorAttributes(vm);
     vm.inventory = new ActorInventory(vm);
     vm.party = new ActorParty(vm);
-    vm.party.add(vm);
 
     vm.defineEvent(
       'actor constructed',
@@ -179,7 +178,7 @@ export class Actor extends EventHandler {
     if (vm.target && hostile && vm.target.attributes.hp > 1 && vm.enemies.includes(vm.target)) {
       return vm.target;
     }
-    return hostile ? vm.enemies.sample() : vm;
+    return hostile ? vm.enemies.sample() : vm.party.random();
   }
 
   recover() {
@@ -199,6 +198,20 @@ export class Actor extends EventHandler {
 
   reset() {}
 
-
+  buyAttribute(attributeName) {
+    let vm = this;
+    let a = attributeName.toLowerCase();
+    let allowed = [
+      'strength',
+      'vitality',
+      'intellect'
+      ];
+    if (allowed.includes(a) && vm.attributes.available > 0) {
+        vm.attributes.available--;
+        vm.attributes[a]++;
+      }
+  }
+  
+  spendPoints() {}
 
 }

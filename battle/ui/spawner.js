@@ -193,7 +193,6 @@ export class Spawner extends EventHandler {
     };
 
     e.death = (n) => {
-
       vm.#battle.removeEnemy(e.enemy);
       e.div.style.visibility = 'hidden';
 
@@ -213,16 +212,16 @@ export class Spawner extends EventHandler {
     };
 
     e.detailsClosing = () => {
-      vm.battlefield.classList.add('battle-hide');
-      vm.infoPanel.classList.add('battle-hide');
-      vm.actionbars.classList.add('battle-hide');
+      vm.#battle.battlefield.classList.add('battle-hide');
+      vm.#battle.infoPanel.classList.add('battle-hide');
+      vm.#battle.actionbars.classList.add('battle-hide');
 
     };
 
     e.detailsOpening = () => {
-      vm.battlefield.classList.remove('battle-hide');
-      vm.infoPanel.classList.remove('battle-hide');
-      vm.actionbars.classList.remove('battle-hide');
+      vm.#battle.battlefield.classList.remove('battle-hide');
+      vm.#battle.infoPanel.classList.remove('battle-hide');
+      vm.#battle.actionbars.classList.remove('battle-hide');
     };
     
     e.battleClosing = () => {

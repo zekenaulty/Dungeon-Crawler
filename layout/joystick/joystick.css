@@ -1,8 +1,8 @@
 .foot {
   position: fixed;
-  top: 76vh;
+  top: 82vh;
   left: 0vw;
-  height: 24vh;
+  height: 20vh;
   width: 100vw;
   display: flex;
   justify-content: end;

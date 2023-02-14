@@ -4,10 +4,10 @@
   display: flex;
   align-content: space-around;
   justify-items: start;
-  top: 15vh;
+  top: 10vh;
   left: 4vw;
   width: 92vw;
-  height: 60vh;
+  height: 70vh;
 }
 
 .stage-toggle {

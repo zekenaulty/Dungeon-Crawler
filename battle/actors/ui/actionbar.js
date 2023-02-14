@@ -76,7 +76,7 @@ export class Actionbar extends EventHandler {
       skill.ignoreEvent('end cast', update);
       skill.ignoreEvent('end recoil', done);
       skill.ignoreEvent('begin cast', begin);
-      vm.#actor.gameLevel.battle.ignoreEvent('closing', release);
+      vm.#battle.ignoreEvent('closing', release);
       btn.removeEventListener('click', doClick);
     }
     

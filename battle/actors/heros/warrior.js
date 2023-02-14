@@ -129,4 +129,16 @@ export class Warrior extends Actor {
       clearInterval(vm.#aiId);
     }
   }
+  
+  spendPoints() {
+    let vm = this;
+    
+    vm.buyAttribute('strength');
+    vm.buyAttribute('strength');
+    vm.buyAttribute('strength');
+    vm.buyAttribute('vitality');
+    vm.buyAttribute('vitality');
+    
+  }
+  
 }

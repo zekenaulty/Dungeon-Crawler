@@ -12,6 +12,7 @@ export class Enemy extends Actor {
   #aiId;
   #aiIntervalMin = 1750;
   #aiIntervalMax = 2750;
+  #weightedTargets;
 
   /*  dexterity should factor 
       into these numbers 
@@ -23,7 +24,7 @@ export class Enemy extends Actor {
     if (r < vm.#aiIntervalMin) {
       r = vm.#aiIntervalMin;
     }
-    
+
     return r + v;
   }
 
@@ -43,21 +44,68 @@ export class Enemy extends Actor {
 
   }
 
+  #getWeightedTargets() {
+    let vm = this;
+    let l = new List();
+
+    let w = vm.enemies.find((e) => {
+      return e.name == 'warrior';
+    });
+
+    let h = vm.enemies.find((e) => {
+      return e.name == 'healer';
+    });
+
+    while (l.length < 30) {
+      l.push(vm.enemies[w]);
+      l.push(vm.enemies[w]);
+      l.push(vm.enemies[w]);
+      l.push(vm.enemies[h]);
+      l.push(vm.enemies[w]);
+    }
+    
+    return l;
+  }
+
+  getTarget(hostile = true) {
+    let vm = this;
+    if (!vm.#weightedTargets || vm.#weightedTargets.length < 30) {
+      vm.#weightedTargets = vm.#getWeightedTargets();
+    }
+
+    if (vm.target && hostile && vm.target.attributes.hp > 1 && vm.enemies.includes(vm.target)) {
+      return vm.target;
+    }
+
+    return hostile ? vm.#weightedTargets.sample() : vm.party.random();
+  }
+
   aiCanAct(d) {
     let vm = this;
     if (!d) {
       d = Dice.roll(20);
     }
 
-    if (d > 18 || vm.casting || vm.battle.paused || Modal.openCount > 1) {
+    if (d > 18 ||
+      vm.casting ||
+      vm.battle.paused ||
+      Modal.openCount > 1 ||
+      vm.attributes.hp < 1) {
       return false;
     }
+
     return true;
   }
 
   aiLoop() {
     let vm = this;
     let d = Dice.roll(20);
+
+    if (vm.attributes.hp < 1) {
+      vm.stopAi();
+      return;
+    }
+
     if (!vm.aiCanAct(d)) {
       return;
     }
@@ -65,27 +113,24 @@ export class Enemy extends Actor {
     if (d > 3) {
       vm.skills.attack.invoke();
     }
-    
+
     vm.#nextFrame();
 
   }
 
-  #nextFrame(){
+  #nextFrame() {
     /* 
       how to implememt ascii frame animations...?
-      the bold and font scaling 
-      already make it look bad
-      
-      there has to be a way to make flex not change 
-      the bounds
     */
   }
-  
+
   startAi() {
     let vm = this;
     vm.#aiId = setInterval(() => {
-      vm.aiLoop();
-    }, vm.#aiInterval);
+        vm.aiLoop();
+      },
+      vm.#aiInterval
+    );
   }
 
   stopAi() {
@@ -102,7 +147,7 @@ export class Enemy extends Actor {
     stats.push('strength');
     stats.push('strength');
     stats.push('vitality');
-    while(vm.attributes.available > 0) {
+    while (vm.attributes.available > 0) {
       vm.attributes.available--;
       vm.attributes[stats.sample()]++;
     }

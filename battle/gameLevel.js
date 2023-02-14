@@ -20,6 +20,7 @@ import { Dice } from './dice.js';
 import { Loader } from '../layout/loader/loader.js';
 import { SaveData } from './saveData.js';
 import { AutoPilot } from './autoPilot.js';
+import { FightWaves } from './ui/fightWaves.js';
 
 export class GameLevel extends EventHandler {
 
@@ -45,6 +46,35 @@ export class GameLevel extends EventHandler {
   #endGrind;
 
   autoPilot;
+  fightWaves;
+
+  constructor() {
+    super();
+    let vm = this;
+
+    vm.defineEvent(
+      'game over',
+      'won battle',
+      'completed level',
+      'saved',
+      'loaded save',
+      'moved',
+      'updated',
+      'teleporting',
+      'teleported',
+      'grind started',
+      'grind stopped'
+    );
+
+    vm.#warrior = new Warrior(vm);
+    vm.#healer = new Healer(vm);
+
+    vm.#warrior.party.add(vm.#healer);
+    vm.#healer.party.add(vm.#warrior);
+
+    vm.#warriorDetail = new DetailSheet(vm.#warrior, true);
+
+  }
 
   get warrior() {
     let vm = this;
@@ -123,41 +153,15 @@ export class GameLevel extends EventHandler {
     let vm = this;
     return `
       <span><span class="bolder">Dungeon Level: </span>${vm.level}</span>
+      `;
+    /*     <span><span></span>${}</span>  */
+    /*
       <span><span class="bolder">Warrior</span></span>
       <span><span class="bolder pl-1">Level: </span>${vm.#warrior.level.level}</span>
       <span><span class="bolder pl-1">Health: </span>${vm.#warrior.attributes.health}</span>
       <span><span class="bolder pl-1">Mana: </span>${vm.#warrior.attributes.mana}</span>
-    `;
-    //      <span><span></span>${}</span>
-
-  }
-
-  constructor() {
-    super();
-    let vm = this;
-
-    vm.defineEvent(
-      'game over',
-      'won battle',
-      'completed level',
-      'saved',
-      'loaded save',
-      'moved',
-      'updated',
-      'teleporting',
-      'teleported',
-      'grind started',
-      'grind stopped'
-    );
-
-    vm.#warrior = new Warrior(vm);
-    vm.#healer = new Healer(vm);
-    vm.#warrior.party.add(vm.#healer);
-    vm.#healer.party.add(vm.#warrior);
-
-    vm.#warriorDetail = new DetailSheet(vm.#warrior, true);
-    vm.autoPilot = new AutoPilot(vm.#warrior.party);
-
+    
+    */
   }
 
   isWarrior(actor) {
@@ -180,6 +184,9 @@ export class GameLevel extends EventHandler {
     vm.#scaler = new CanvasRectangleScaler(width, height);
     vm.#maze = new Maze(vm.#scaler.rows, vm.#scaler.columns);
     vm.#renderer = new CanvasRectangle(vm, vm.#maze, vm.#scaler, gfx);
+    vm.autoPilot = new AutoPilot(vm.#warrior.party, vm, vm.#maze);
+    vm.fightWaves = new FightWaves(vm.#warrior.party, vm);
+
     vm.#loadGenerators();
     vm.#maze.listenToEvent('solved', () => {
       vm.#nextLevel();
@@ -280,11 +287,13 @@ export class GameLevel extends EventHandler {
     vm.#generators.forEach((g) => {
       g.listenToEvent('generated', () => {
         setTimeout(() => {
-          Loader.open();
-          vm.#renderer.draw();
-          Loader.close(350);
-          vm.raiseEvent('updated', vm);
-        }, vm.#breath);
+            Loader.open();
+            vm.#renderer.draw();
+            Loader.close(350);
+            vm.raiseEvent('updated', vm);
+          },
+          vm.#breath
+        );
       });
     });
   }
@@ -319,7 +328,7 @@ export class GameLevel extends EventHandler {
 
   }
 
-  beginBattle(action) {
+  beginBattle() {
     let vm = this;
     vm.raiseEvent('battle starting', vm);
 
@@ -328,15 +337,9 @@ export class GameLevel extends EventHandler {
       vm);
 
     vm.#battle.listenToEvent('won battle', () => {
-
       vm.#battle.close();
-      
       SaveData.save(vm);
       vm.raiseEvent('won battle');
-
-      if (action) {
-        action();
-      }
     });
 
     Loader.close(0);
@@ -394,73 +397,5 @@ export class GameLevel extends EventHandler {
     vm.#renderer.histogram();
   }
 
-  #grind = false;
-  #grindCount = 0;
-  #grindCap = 0;
-  #battleLoop(vm) {
-    if (!vm.#grind) {
-      return;
-    }
-
-    if (vm.#grindCap > 0 && vm.#grindCount >= vm.#grindCap) {
-      vm.stopGrind();
-      return;
-    }
-
-    vm.#grindCount++;
-
-    if (vm.#grindCount % 10 == 0) {
-      vm.#warrior.recover();
-    }
-
-    Loader.open('BATTLE ' + vm.#grindCount);
-    setTimeout(() => {
-      if (!vm.#grind) {
-        return;
-      }
-
-      if (!vm.#warrior.lowHealth(0.25)) {
-        vm.beginBattle(() => {
-          vm.#battleLoop(vm);
-        });
-      } else {
-        vm.stopGrind();
-      }
-    }, 650);
-  }
-
-  get grinding() {
-    let vm = this;
-    return vm.#grind;
-  }
-
-  stopGrind() {
-    let vm = this;
-    if (vm.#grind) {
-      vm.#grind = false;
-      vm.#warrior.recover();
-      vm.#grindCount = 0;
-      vm.raiseEvent('grind stopped');
-    }
-  }
-
-  startGrind(cap = 0) {
-    let vm = this;
-    if (!vm.#grind) {
-      vm.#grindCap = cap;
-      vm.#grind = true;
-      vm.#grindCount = 0;
-      vm.raiseEvent('grind started');
-      vm.#battleLoop(vm);
-    }
-  }
-
-  grind(cap = 0) {
-    let vm = this;
-    if (vm.#grind) {
-      vm.stopGrind();
-    } else {
-      vm.startGrind(cap);
-    }
-  }
+  
 }

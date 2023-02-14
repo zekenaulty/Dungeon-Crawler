@@ -113,10 +113,7 @@ export class AutoPilot extends EventHandler {
     let vm = this;
 
     let buy = (s, a) => {
-      if (a.attributes.available > 0) {
-        a.attributes.available--;
-        a.attributes[s]++;
-      }
+      
     };
 /*
     while (warrior.attributes.available > 0) {
