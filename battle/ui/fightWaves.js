@@ -38,7 +38,7 @@ export class FightWaves extends EventHandler {
       setTimeout(() => {
           vm.#beginBattle();
         },
-        250
+        350
       );
     };
 
@@ -83,7 +83,7 @@ export class FightWaves extends EventHandler {
         Loader.close(0);
         vm.#battle.open();
       },
-      550
+      750
     );
   }
 
