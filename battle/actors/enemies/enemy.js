@@ -27,12 +27,12 @@ export class Enemy extends Actor {
     return r + v;
   }
 
-  constructor(gameLevel, battle, hero) {
+  constructor(gameLevel, battle, warrior) {
     super(gameLevel);
     let vm = this;
 
     vm.battle = battle;
-    vm.target = hero;
+    vm.target = warrior;
 
     vm.name = 'enemy';
 

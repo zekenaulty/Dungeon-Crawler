@@ -12,13 +12,16 @@ export class Battle extends Modal {
 
   #stylesheet;
   #battlefield;
-  #heroInfo;
-  #heroSkills;
+  #partyInfo;
+  #warriorSkills;
   #pauseBtn;
 
-  #plate;
+  #warriorPlate;
+  #healerPlate;
 
-  #hero;
+  #warrior;
+  #healer;
+  
   #level;
   #minMobLevel;
   #maxMobLevel;
@@ -45,12 +48,13 @@ export class Battle extends Modal {
     return vm.#paused;
   }
 
-  constructor(hero, level) {
+  constructor(warrior, healer, level) {
     super();
     let vm = this;
 
-    vm.#hero = hero;
-    vm.#hero.battle = vm;
+    vm.#warrior = warrior;
+    vm.#healer = healer;
+    vm.#warrior.battle = vm;
 
     vm.#level = level;
     vm.#enemies = new List();
@@ -73,21 +77,22 @@ export class Battle extends Modal {
     }
 
     vm.#battlefield = document.createElement('div');
-    vm.#heroInfo = document.createElement('div');
-    vm.#heroSkills = document.createElement('div');
+    vm.#partyInfo = document.createElement('div');
+    vm.#warriorSkills = document.createElement('div');
     vm.#pauseBtn = document.createElement('button');
     vm.#pauseBtn.innerHTML = 'pause';
 
     vm.#battlefield.classList.add('battle-battlefield');
-    vm.#heroInfo.classList.add('battle-hero-info');
-    vm.#heroSkills.classList.add('battle-hero-skills');
-    vm.#pauseBtn.classList.add('battle-hero-btn');
+    vm.#partyInfo.classList.add('battle-warrior-info');
+    vm.#warriorSkills.classList.add('battle-warrior-skills');
+    vm.#pauseBtn.classList.add('battle-warrior-btn');
     vm.#pauseBtn.classList.add('battle-pause');
 
-    vm.#plate = new Nameplate(vm.#heroInfo, vm.#hero);
+    vm.#warriorPlate = new Nameplate(vm.#partyInfo, vm.#warrior);
+    vm.#healerPlate = new Nameplate(vm.#partyInfo, vm.#healer);
 
-    vm.heroInfo();
-    vm.heroSkills();
+    vm.partyInfo();
+    vm.warriorSkills();
 
     vm.#pauseBtn.addEventListener('click', () => {
       if (vm.#paused) {
@@ -102,8 +107,8 @@ export class Battle extends Modal {
     });
 
     vm.appendChild(vm.#battlefield);
-    vm.appendChild(vm.#heroInfo);
-    vm.appendChild(vm.#heroSkills);
+    vm.appendChild(vm.#partyInfo);
+    vm.appendChild(vm.#warriorSkills);
     vm.appendChild(vm.#pauseBtn);
 
     vm.defineEvent(
@@ -133,18 +138,18 @@ export class Battle extends Modal {
       );
     });
 
-    vm.#hero.listenToEvent('damaged', (actor, dmg) => {
-      vm.#heroDmg.innerHTML = '-' + dmg;
-      vm.heroInfo();
-      setTimeout(() => {
-        vm.#heroDmg.innerHTML = '&nbsp;';
-      }, 750);
+    vm.#warrior.listenToEvent('damaged', (actor, dmg) => {
+      vm.partyInfo();
     });
 
-    vm.#hero.listenToEvent('death', (e) => {
+    vm.#healer.listenToEvent('damaged', (actor, dmg) => {
+      vm.partyInfo();
+    });
+
+    vm.#warrior.listenToEvent('death', (e) => {
       vm.#paused = true;
       vm.raiseEvent('end combat', vm);
-      vm.#hero.stopAi();
+      vm.#warrior.stopAi();
       e.gameLevel.gameOver();
     });
 
@@ -171,20 +176,22 @@ export class Battle extends Modal {
 
   }
 
-  heroInfo() {
+  partyInfo() {
     let vm = this;
 
-    vm.#plate.update();
+    vm.#warriorPlate.update();
+    vm.#healerPlate.update();
+
   }
 
-  heroSkills() {
+  warriorSkills() {
     let vm = this;
-    for (let k in vm.#hero.skills) {
-      let skill = vm.#hero.skills[k];
+    for (let k in vm.#warrior.skills) {
+      let skill = vm.#warrior.skills[k];
       if (skill.register && !skill.availableOutOfCombatOnly) {
         let btn = document.createElement('button');
         btn.innerHTML = skill.displayName;
-        btn.classList.add('battle-hero-btn');
+        btn.classList.add('battle-warrior-btn');
         btn.addEventListener('click', () => {
           if (vm.#paused || Modal.openCount > 1) {
             return;
@@ -193,24 +200,24 @@ export class Battle extends Modal {
           skill.invoke();
         });
         let begin = () => {
-          btn.classList.add('battle-hero-btn-active');
+          btn.classList.add('battle-warrior-btn-active');
         };
         let done = () => {
-          btn.classList.remove('battle-hero-btn-active');
+          btn.classList.remove('battle-warrior-btn-active');
         };
         let update = () => {
           if (skill.displayName == 'auto-battle') {
-            if (vm.#hero.autoBattle) {
+            if (vm.#warrior.autoBattle) {
               btn.classList.add('battle-green');
-              vm.#hero.startAi();
+              vm.#warrior.startAi();
             } else {
               btn.classList.remove('battle-green');
-              vm.#hero.stopAi();
+              vm.#warrior.stopAi();
             }
             vm.appendChild(btn);
           }
           btn.innerHTML = skill.displayName;
-          vm.heroInfo();
+          vm.partyInfo();
         };
 
         skill.listenToEvent('begin cast', begin);
@@ -227,12 +234,12 @@ export class Battle extends Modal {
 
         if (skill.displayName == 'auto-battle') {
           btn.classList.add('auto-battle');
-          if (vm.#hero.autoBattle) {
+          if (vm.#warrior.autoBattle) {
             btn.classList.add('battle-green');
           }
           vm.appendChild(btn);
         } else {
-          vm.#heroSkills.appendChild(btn);
+          vm.#warriorSkills.appendChild(btn);
         }
       }
     }
@@ -256,7 +263,7 @@ export class Battle extends Modal {
     let vm = this;
     let d = Dice.d20();
     let m = 1;
-    
+
     if (d > 17) {
       m = 8;
     } else if (d > 15) {
@@ -285,7 +292,7 @@ export class Battle extends Modal {
     e.enemy = new Slime(
       vm.#level,
       vm,
-      vm.#hero
+      vm.#warrior
     );
 
     let l = vm.mobLevel();
@@ -301,20 +308,20 @@ export class Battle extends Modal {
 
     e.enemy.id = e.id;
     e.enemy.div = e;
-    e.enemy.target = vm.#hero;
-    e.enemy.enemies.push(vm.#hero);
+    e.enemy.target = vm.#warrior;
+    e.enemy.enemies.push(vm.#warrior);
     e.details = new DetailSheet(e.enemy);
     e.details.listenToEvent('opening', () => {
       vm.#battlefield.classList.add('battle-hide');
-      vm.#heroInfo.classList.add('battle-hide');
-      vm.#heroSkills.classList.add('battle-hide');
+      vm.#partyInfo.classList.add('battle-hide');
+      vm.#warriorSkills.classList.add('battle-hide');
     });
     e.details.listenToEvent('closed', () => {
       vm.#battlefield.classList.remove('battle-hide');
-      vm.#heroInfo.classList.remove('battle-hide');
-      vm.#heroSkills.classList.remove('battle-hide');
+      vm.#partyInfo.classList.remove('battle-hide');
+      vm.#warriorSkills.classList.remove('battle-hide');
     });
-    vm.#hero.enemies.push(e.enemy);
+    vm.#warrior.enemies.push(e.enemy);
     vm.#enemies.push(e.enemy);
     e.enemyDiv.innerHTML = e.enemy.ascii;
     e.enemyDiv.classList.add('battle-enemy');
@@ -324,7 +331,7 @@ export class Battle extends Modal {
     });
 
     e.addEventListener('click', () => {
-      vm.#hero.target = e.enemy;
+      vm.#warrior.target = e.enemy;
     });
 
     e.enemy.listenToEvent('begin cast', (n) => {
@@ -346,9 +353,9 @@ export class Battle extends Modal {
     e.enemy.listenToEvent('death', (n) => {
       e.enemy.battle.removeEnemy(e.enemy);
       e.style.visibility = 'hidden';
-      vm.#hero.level.addXp(ActorLevel.monsterXp(e.enemy.level.level));
+      vm.#warrior.level.addXp(ActorLevel.monsterXp(e.enemy.level.level));
       if (vm.#enemies.length < 1) {
-        vm.#hero.stopAi();
+        vm.#warrior.stopAi();
         vm.raiseEvent('end combat', vm);
         SaveData.save(vm.#level);
         vm.#level.raiseEvent('updated', vm.#level);
@@ -364,25 +371,25 @@ export class Battle extends Modal {
     let vm = this;
     e.stopAi();
     vm.#enemies.delete(e);
-    vm.#hero.enemies.delete(e);
+    vm.#warrior.enemies.delete(e);
   }
 
   clearEnemies(delay = 0) {
     let vm = this;
     vm.#paused = true;
-    let l = vm.#hero.enemies.length - 1;
+    let l = vm.#warrior.enemies.length - 1;
     for (let i = l; i >= 0; i--) {
-      vm.removeEnemy(vm.#hero.enemies[i], delay);
+      vm.removeEnemy(vm.#warrior.enemies[i], delay);
     }
   }
 
   startAi() {
     let vm = this;
-    if (vm.#hero.autoBattle) {
-      vm.#hero.startAi();
+    if (vm.#warrior.autoBattle) {
+      vm.#warrior.startAi();
     }
-    for (let i = 0; i < vm.#hero.enemies.length; i++) {
-      vm.#hero.enemies[i].startAi();
+    for (let i = 0; i < vm.#warrior.enemies.length; i++) {
+      vm.#warrior.enemies[i].startAi();
     }
   }
 

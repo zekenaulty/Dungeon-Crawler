@@ -47,8 +47,8 @@ export class DetailSheet extends Modal {
     vm.#add('Intellect', vm.#actor.attributes, 'intellect', true && editable);
     vm.#spacer();
 
-    let isHero = vm.#actor.gameLevel.isHero(vm.#actor);
-    let txt = isHero ? 'Skills <span class="tiny-text">(☆ castable)</span>': 'Skills';
+    let isWarrior = vm.#actor.gameLevel.isWarrior(vm.#actor);
+    let txt = isWarrior ? 'Skills <span class="tiny-text">(☆ castable)</span>': 'Skills';
     vm.#text(txt);
     vm.#skills = document.createElement('div');
     vm.#skills.classList.add('detail-sheet-skills');
@@ -57,7 +57,7 @@ export class DetailSheet extends Modal {
     for (let p in vm.#actor.skills) {
       let skill = vm.#actor.skills[p];
       if (skill.register) {
-        vm.#addSkill(skill, isHero, edge);
+        vm.#addSkill(skill, isWarrior, edge);
         edge = 'detail-sheet-skill-edge';
       }
     }
@@ -67,14 +67,14 @@ export class DetailSheet extends Modal {
     });
 
     vm.listenToEvent('closed', (e) => {
-      if(vm.#actor.gameLevel.isHero(vm.#actor)) {
+      if(vm.#actor.gameLevel.isWarrior(vm.#actor)) {
         SaveData.save(vm.#actor.gameLevel);
       }
       vm.#actor.gameLevel.raiseEvent('updated', vm.#actor.gameLevel);
     });
   }
 
-  #addSkill(skill, isHero, edge) {
+  #addSkill(skill, isWarrior, edge) {
     let vm = this;
     let e = {
       element: document.createElement('span'),
@@ -85,7 +85,7 @@ export class DetailSheet extends Modal {
       }
     };
 
-    if (isHero && skill.availableOutOfCombat && vm.#editable) {
+    if (isWarrior && skill.availableOutOfCombat && vm.#editable) {
       e.element.addEventListener('click', () => {
         e.element.classList.add('detail-sheet-skill-active');
         let clear = () => {

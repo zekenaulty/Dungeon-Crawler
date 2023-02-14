@@ -13,7 +13,8 @@ import { RecursiveBacktracker } from '../mazes/generators/recursiveBacktracker.j
 import { SimplePrims } from '../mazes/generators/prims.js';
 import { GrowingTree } from '../mazes/generators/growingTree.js';
 import { DetailSheet } from './actors/ui/detailSheet.js';
-import { Hero } from './actors/hero/hero.js';
+import { Warrior } from './actors/heros/warrior.js';
+import { Healer } from './actors/heros/healer.js';
 import { Battle } from './ui/battle.js';
 import { Dice } from './dice.js';
 import { Loader } from '../layout/loader/loader.js';
@@ -34,8 +35,10 @@ export class GameLevel extends EventHandler {
 
   #breath = 250;
 
-  #hero;
-  #heroDetail;
+  #warrior;
+  #healer;
+
+  #warriorDetail;
   #battle;
   #gameOverId = -1;
 
@@ -43,22 +46,29 @@ export class GameLevel extends EventHandler {
 
   autoPilot;
 
-  get hero() {
+  get warrior() {
     let vm = this;
-    return vm.#hero;
+    return vm.#warrior;
+  }
+
+  get healer() {
+    let vm = this;
+    return vm.#healer;
   }
 
   saveState() {
 
     let vm = this;
-    let heroState = vm.#hero.saveState();
+    let warriorState = vm.#warrior.saveState();
+    let healerState = vm.#healer.saveState();
     let mazeState = vm.#maze.saveState();
     let state = {
       level: vm.#level,
       mazeMaxRooms: vm.#mazeMaxRooms,
       toTiny: vm.#toTiny,
       roomGrowthFactor: vm.#roomGrowthFactor,
-      hero: heroState,
+      warrior: warriorState,
+      healer: healerState,
       maze: mazeState,
       summary: vm.summary
     };
@@ -67,9 +77,16 @@ export class GameLevel extends EventHandler {
   }
 
   loadState(state) {
-
     let vm = this;
-    let heroState = state.hero;
+
+    if (vm.autoPilot) {
+      vm.autoPilot.stop();
+    }
+
+    Loader.open();
+
+    let warriorState = state.warrior;
+    let healerState = state.healer;
     let mazeState = state.maze;
 
     vm.#level = state.level;
@@ -79,18 +96,14 @@ export class GameLevel extends EventHandler {
 
     vm.#resetMaze();
 
-    vm.#hero = new Hero(vm);
-    vm.#heroDetail = new DetailSheet(vm.#hero, true);
+    vm.#warrior.reset();
+    vm.#healer.reset();
 
-    vm.#hero.loadState(heroState);
+    vm.#warrior.loadState(warriorState);
+    vm.#healer.loadState(healerState);
     vm.#maze.loadState(mazeState);
-    Loader.open();
-    vm.#renderer.draw();
 
-    if (vm.autoPilot) {
-      vm.autoPilot.stop();
-    }
-    vm.autoPilot = new AutoPilot(vm.#hero, vm, vm.#maze);
+    vm.#renderer.draw();
 
     Loader.close(350);
     vm.raiseEvent('updated', vm);
@@ -105,10 +118,10 @@ export class GameLevel extends EventHandler {
     let vm = this;
     return `
       <span><span class="bolder">Dungeon Level: </span>${vm.level}</span>
-      <span><span class="bolder">Hero</span></span>
-      <span><span class="bolder pl-1">Level: </span>${vm.#hero.level.level}</span>
-      <span><span class="bolder pl-1">Health: </span>${vm.#hero.attributes.health}</span>
-      <span><span class="bolder pl-1">Mana: </span>${vm.#hero.attributes.mana}</span>
+      <span><span class="bolder">Warrior</span></span>
+      <span><span class="bolder pl-1">Level: </span>${vm.#warrior.level.level}</span>
+      <span><span class="bolder pl-1">Health: </span>${vm.#warrior.attributes.health}</span>
+      <span><span class="bolder pl-1">Mana: </span>${vm.#warrior.attributes.mana}</span>
     `;
     //      <span><span></span>${}</span>
 
@@ -117,7 +130,6 @@ export class GameLevel extends EventHandler {
   constructor() {
     super();
     let vm = this;
-
 
     vm.defineEvent(
       'game over',
@@ -133,13 +145,31 @@ export class GameLevel extends EventHandler {
       'grind stopped'
     );
 
+    vm.#warrior = new Warrior(vm);
+    vm.#healer = new Healer(vm);
+    vm.#warrior.party.add(vm.#healer);
+    vm.#healer.party.add(vm.#warrior);
+    
+    vm.#warriorDetail = new DetailSheet(vm.#warrior, true);
+    vm.autoPilot = new AutoPilot(vm.#warrior.party);
+
   }
 
+  isWarrior(actor) {
+    let vm = this;
+    return actor === vm.#warrior;
+  }
+  
+  isHealer(actor) {
+    let vm = this;
+    return actor === vm.#healer;
+  }
+  
   isHero(actor) {
     let vm = this;
-    return actor === vm.#hero;
+    return vm.isWarrior(actor) || vm.isHealer(actor);
   }
-
+  
   initialize(width, height, gfx) {
     let vm = this;
     vm.#scaler = new CanvasRectangleScaler(width, height);
@@ -171,9 +201,9 @@ export class GameLevel extends EventHandler {
     }
   }
 
-  heroInfo() {
+  warriorInfo() {
     let vm = this;
-    vm.#heroDetail.open(true);
+    vm.#warriorDetail.open(true);
   }
 
   #randomMaze() {
@@ -190,14 +220,15 @@ export class GameLevel extends EventHandler {
     vm.#mazeMaxRooms = 32;
     vm.#resetMaze();
     vm.#randomMaze();
-    vm.#hero = new Hero(vm);
-    vm.#heroDetail = new DetailSheet(vm.#hero, true);
+    
+    vm.#warrior.reset();
+    vm.#healer.reset();
+
     vm.raiseEvent('updated', vm);
 
     if (vm.autoPilot) {
       vm.autoPilot.stop();
     }
-    vm.autoPilot = new AutoPilot(vm.#hero, vm, vm.#maze);
 
   }
 
@@ -208,7 +239,7 @@ export class GameLevel extends EventHandler {
     vm.#mazeMaxRooms += Math.ceil(vm.#mazeMaxRooms * vm.#roomGrowthFactor);
     vm.#resetMaze();
     vm.#randomMaze();
-    vm.#hero.recover();
+    vm.#warrior.recover();
   }
 
   #resetMaze() {
@@ -287,7 +318,10 @@ export class GameLevel extends EventHandler {
     let vm = this;
     vm.raiseEvent('battle starting', vm);
 
-    vm.#battle = new Battle(vm.#hero, vm);
+    vm.#battle = new Battle(
+      vm.#warrior,
+      vm.#healer,
+      vm);
 
     vm.#battle.listenToEvent('won battle', () => {
       vm.raiseEvent('won battle');
@@ -334,7 +368,7 @@ export class GameLevel extends EventHandler {
     //alert('GAME OVER');
     vm.#gameOverId = setTimeout(() => {
       if (vm.#battle) {
-        vm.#hero.stopAi();
+        vm.#warrior.stopAi();
         vm.#battle.clearEnemies();
         vm.#battle.close();
         vm.#battle = undefined;
@@ -367,7 +401,7 @@ export class GameLevel extends EventHandler {
     vm.#grindCount++;
 
     if (vm.#grindCount % 10 == 0) {
-      vm.#hero.recover();
+      vm.#warrior.recover();
     }
 
     Loader.open('BATTLE ' + vm.#grindCount);
@@ -376,7 +410,7 @@ export class GameLevel extends EventHandler {
         return;
       }
 
-      if (!vm.#hero.lowHealth(0.25)) {
+      if (!vm.#warrior.lowHealth(0.25)) {
         vm.beginBattle(() => {
           vm.#battleLoop(vm);
         });
@@ -395,7 +429,7 @@ export class GameLevel extends EventHandler {
     let vm = this;
     if (vm.#grind) {
       vm.#grind = false;
-      vm.#hero.recover();
+      vm.#warrior.recover();
       vm.#grindCount = 0;
       vm.raiseEvent('grind stopped');
     }

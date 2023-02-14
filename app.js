@@ -43,7 +43,7 @@ import { Actor } from './battle/actors/actor.js';
     const joystick = new JoyStick();
 
     const character = header.addButton('CHARACTER', (e) => {
-      game.heroInfo();
+      game.warriorInfo();
     });
 
     const states = header.addButton('SAVES', (e) => {

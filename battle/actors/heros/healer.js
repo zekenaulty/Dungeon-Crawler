@@ -7,11 +7,12 @@ import { ActorAttributes } from '../actorAttributes.js';
 import { Slam } from '../skills/slam.js';
 import { Cleave } from '../skills/cleave.js';
 import { Heal } from '../skills/heal.js';
+import { GroupHeal } from '../skills/groupHeal.js';
 import { Teleport } from '../skills/teleport.js';
 import { AutoBattle } from '../skills/autoBattle.js';
 import { Modal } from '../../../layout/modal/modal.js';
 
-export class Hero extends Actor {
+export class Healer extends Actor {
 
   #aiIntervalMin = 1250;
   #aiIntervalMax = 1750;
@@ -33,36 +34,36 @@ export class Hero extends Actor {
     super(gameLevel);
     let vm = this;
 
-    vm.autoBattle = false;
-
-    vm.attributes.baseHp = 60;
-
-    vm.attributes.baseDamage = 7;
-    vm.attributes.strength = 25;
-    vm.attributes.vitality = 20;
-    vm.attributes.intellect = 10;
-    vm.attributes.pointsPerLevel = 5;
-
-    vm.attributes.hp = vm.attributes.maxHp;
-    vm.attributes.mp = vm.attributes.maxMp;
-
-    vm.name = 'hero';
-    vm.addSkill('cleave', new Cleave(vm));
-    vm.addSkill('slam', new Slam(vm));
+    vm.reset();
+    vm.name = 'healer';
     vm.addSkill('heal', new Heal(vm));
-    //vm.addSkill('teleport', new Teleport(vm));
-    vm.addSkill('auto', new AutoBattle(vm));
+    vm.addSkill('groupHeal', new GroupHeal(vm));
 
     vm.listenToEvent('leveled up', (e) => {
       if (e.level.level % 5 === 0) {
         vm.attributes.baseHpLevel += 50;
-        vm.attributes.baseDamageLevel += 2;
+        vm.attributes.baseMp += 20;
         vm.recover();
       }
-      vm.attributes.strengthLevel++;
+      vm.attributes.intellectLevel++;
     });
 
   }
+  
+  reset(){
+    let vm = this;
+    
+    vm.attributes.baseHp = 60;
+
+    vm.attributes.baseDamage = 7;
+    vm.attributes.strength = 10;
+    vm.attributes.vitality = 20;
+    vm.attributes.intellect = 40;
+    vm.attributes.pointsPerLevel = 5;
+
+    vm.attributes.hp = vm.attributes.maxHp;
+    vm.attributes.mp = vm.attributes.maxMp;
+}
 
   aiCanAct() {
     let vm = this;
@@ -77,7 +78,7 @@ export class Hero extends Actor {
   #aiId = -1;
   startAi() {
     let vm = this;
-    vm.#aiLoop(); /* of course the hero gets the drop on them  */
+    vm.#aiLoop(); /* of course the warrior gets the drop on them  */
     vm.#aiId = setInterval(() => {
       vm.#aiLoop();
     }, vm.#aiInterval);
@@ -89,29 +90,25 @@ export class Hero extends Actor {
     if (!vm.aiCanAct()) {
       return;
     }
-
-    if (
-      vm.lowHealth() &&
+    
+    let critical = vm.party.lowestHealthMember();
+    if(critical && !critical.lowHealth()) {
+      critical = undefined;
+    }
+    
+    if(
+      vm.party.lowHealth() && 
+      vm.attributes.mp >= vm.skills.groupHeal.mpCost &&
+      !vm.skills.groupHeal.onCd
+    ) {
+      vm.skills.groupHeal.invoke();
+    } else if (
+      critical &&
       vm.attributes.mp >= vm.skills.heal.mpCost &&
       !vm.skills.heal.onCd
     ) {
+      vm.friendlyTarget = critical;
       vm.skills.heal.invoke();
-      return;
-    }
-
-    if (
-      vm.enemies.length > 2 &&
-      vm.skills.slam.charges > 0 &&
-      !vm.skills.slam.onCd
-    ) {
-      vm.skills.slam.invoke();
-      return;
-    } else if (
-      vm.enemies.length > 1 &&
-      vm.skills.cleave.charges > 0 &&
-      !vm.skills.cleave.onCd
-    ) {
-      vm.skills.cleave.invoke();
       return;
     } else if (!vm.skills.attack.onCd) {
       vm.skills.attack.invoke();

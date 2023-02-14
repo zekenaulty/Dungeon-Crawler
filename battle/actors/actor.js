@@ -4,6 +4,7 @@ import { ActorSkill } from './actorSkill.js';
 import { ActorLevel } from './actorLevel.js';
 import { ActorAttributes } from './actorAttributes.js';
 import { ActorInventory } from './actorInventory.js';
+import { ActorParty } from './actorParty.js';
 import { Attack } from './skills/attack.js';
 import { GCD } from './skills/gcd.js';
 
@@ -15,11 +16,13 @@ export class Actor extends EventHandler {
   inventory;
   skills = {};
   target;
+  friendlyTarget;
   enemies = new List();
   casting;
   gameLevel;
   battle;
   autoBattle = true;
+  party;
 
   saveState() {
     let vm = this;
@@ -73,6 +76,8 @@ export class Actor extends EventHandler {
     vm.level = new ActorLevel(vm);
     vm.attributes = new ActorAttributes(vm);
     vm.inventory = new ActorInventory(vm);
+    vm.party = new ActorParty(vm);
+    vm.party.add(vm);
 
     vm.defineEvent(
       'actor constructed',
@@ -191,5 +196,7 @@ export class Actor extends EventHandler {
     let low = Math.floor(vm.attributes.maxHp * p);
     return vm.attributes.hp <= low;
   }
+  
+  reset(){}
 
 }

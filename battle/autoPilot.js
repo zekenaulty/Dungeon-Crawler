@@ -6,7 +6,7 @@ import { Modal } from '../layout/modal/modal.js';
 export class AutoPilot extends EventHandler {
 
   #loopId = -1;
-  #hero;
+  #party;
   #maze;
   #gameLevel;
 
@@ -31,16 +31,17 @@ export class AutoPilot extends EventHandler {
     return r;
   }
 
-  constructor(hero, game, maze) {
+  constructor(party, game, maze) {
     super();
 
     let vm = this;
 
-    vm.#hero = hero;
+    vm.#party = party;
+
     vm.#gameLevel = game;
     vm.#maze = maze;
     
-    vm.#hero.autoBattle = true;
+    vm.#party.autoBattle();
   }
 
   start() {
@@ -63,14 +64,9 @@ export class AutoPilot extends EventHandler {
 
   #loop() {
     let vm = this;
-    let hero = vm.#hero;
-    
+
     if (vm.#canAct) {
-      if(hero.lowHealth() && hero.skills.heal.canCast) {
-        hero.skills.heal.invoke();
-      } else {
-        vm.#nextMove();
-      }
+      vm.#nextMove();
     }
 
     setTimeout(() => {
@@ -115,20 +111,23 @@ export class AutoPilot extends EventHandler {
 
   #levelUp() {
     let vm = this;
-    let hero = vm.#hero;
-    let buy = (s) => {
-      if (hero.attributes.available > 0) {
-        hero.attributes.available--;
-        hero.attributes[s]++;
+
+    let buy = (s, a) => {
+      if (a.attributes.available > 0) {
+        a.attributes.available--;
+        a.attributes[s]++;
       }
     };
-    while (hero.attributes.available > 0) {
-      buy('vitality');
-      buy('vitality');
-      buy('strength');
-      buy('strength');
-      buy('strength');
+/*
+    while (warrior.attributes.available > 0) {
+      buy('strength', warrior);
+      buy('strength', warrior);
+      buy('strength', warrior);
+      buy('strength', warrior);
+      buy('strength', warrior);
     }
+*/
+
   }
 
 }

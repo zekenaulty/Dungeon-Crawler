@@ -25,7 +25,7 @@ export class AutoBattle extends ActorSkill {
   get summary() {
     let vm = this;
     let state = vm.actor.autoBattle ? 'ON' : 'OFF';
-    return `Hero will fight automatically. (${state})`;
+    return `Warrior will fight automatically. (${state})`;
   }
 
   invoke() {
