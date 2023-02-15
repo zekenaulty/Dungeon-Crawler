@@ -153,6 +153,8 @@ export class GameLevel extends EventHandler {
     let vm = this;
     return `
       <span><span class="bolder">Dungeon Level: </span>${vm.level}</span>
+      <span class="small-text"><span class="bolder pl-1">Warrior Level: </span>${vm.#warrior.level.level}</span>
+      <span class="small-text"><span class="bolder pl-1">Healer Level: </span>${vm.#warrior.level.level}</span>
       `;
     /*     <span><span></span>${}</span>  */
     /*

@@ -26,7 +26,10 @@ export class Heal extends ActorSkill {
   invoke() {
     let vm = this;
     vm.safeInvoke(() => {
-      vm.doHeal(vm.friendlyTarget, 0.35, vm.mpCost);
+      if(!vm.actor.friendlyTarget) {
+        vm.actor.friendlyTarget = vm.actor.party.lowestHealthMember();
+      }
+      vm.doHeal(vm.actor.friendlyTarget, 0.35, vm.mpCost);
     });
   }
 

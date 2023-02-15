@@ -91,7 +91,7 @@ export class Healer extends Actor {
     }
     
     let critical = vm.party.lowestHealthMember();
-    if(critical && !critical.lowHealth()) {
+    if(critical && !critical.lowHealth(0.5)) {
       critical = undefined;
     }
     

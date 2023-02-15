@@ -94,10 +94,12 @@ export class Warrior extends Actor {
     }
 
     if (
+      vm.skills.heal &&
       vm.lowHealth() &&
       vm.attributes.mp >= vm.skills.heal.mpCost &&
       !vm.skills.heal.onCd
     ) {
+      vm.friendlyTarget = vm;
       vm.skills.heal.invoke();
       return;
     }

@@ -107,9 +107,13 @@ export class ActorParty extends EventHandler {
     return vm.#members[0];
   }
   
+  last() {
+    let vm = this;
+    return vm.#members[vm.#members.length - 1];
+  }
+  
   random() {
     let vm = this;
-    
     return vm.#members.sample();
   } 
 }
