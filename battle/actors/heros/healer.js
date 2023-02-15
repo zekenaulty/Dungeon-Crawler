@@ -41,29 +41,40 @@ export class Healer extends Actor {
 
     vm.listenToEvent('leveled up', (e) => {
       if (e.level.level % 5 === 0) {
-        vm.attributes.baseHpLevel += 50;
-        vm.attributes.baseMp += 20;
+        vm.attributes.baseHpLevel += 25;
+        vm.attributes.baseMp += 10;
+        vm.attributes.strengthLevel++;
+
         vm.recover();
       }
+
+      if (e.level.level % 10) {
+        vm.attributes.baseDamageLevel += 3;
+      }
+
       vm.attributes.intellectLevel++;
     });
 
   }
-  
-  reset(){
-    let vm = this;
-    
-    vm.attributes.baseHp = 60;
 
+  reset() {
+    let vm = this;
+
+    vm.level.level = 1;
+    vm.level.xp = 0;
+    vm.level.xpToLevel = ActorLevel.xpForNextLevel();
+
+    vm.attributes.baseHp = 60;
+    
     vm.attributes.baseDamage = 7;
     vm.attributes.strength = 10;
-    vm.attributes.vitality = 20;
+    vm.attributes.vitality = 15;
     vm.attributes.intellect = 40;
     vm.attributes.pointsPerLevel = 5;
 
     vm.attributes.hp = vm.attributes.maxHp;
     vm.attributes.mp = vm.attributes.maxMp;
-}
+  }
 
   aiCanAct() {
     let vm = this;
@@ -89,19 +100,13 @@ export class Healer extends Actor {
     if (!vm.aiCanAct()) {
       return;
     }
-    
+
     let critical = vm.party.lowestHealthMember();
-    if(critical && !critical.lowHealth(0.5)) {
+    if (critical && !critical.lowHealth(0.65)) {
       critical = undefined;
     }
-    
-    if(
-      vm.party.lowHealth() && 
-      vm.attributes.mp >= vm.skills.groupHeal.mpCost &&
-      !vm.skills.groupHeal.onCd
-    ) {
-      vm.skills.groupHeal.invoke();
-    } else if (
+
+    if (
       critical &&
       vm.attributes.mp >= vm.skills.heal.mpCost &&
       !vm.skills.heal.onCd
@@ -109,6 +114,12 @@ export class Healer extends Actor {
       vm.friendlyTarget = critical;
       vm.skills.heal.invoke();
       return;
+    } else if (
+      vm.party.lowHealth() &&
+      vm.attributes.mp >= vm.skills.groupHeal.mpCost &&
+      !vm.skills.groupHeal.onCd
+    ) {
+      vm.skills.groupHeal.invoke();
     } else if (!vm.skills.attack.onCd) {
       vm.skills.attack.invoke();
       return;
@@ -121,16 +132,16 @@ export class Healer extends Actor {
       clearInterval(vm.#aiId);
     }
   }
-  
+
   spendPoints() {
     let vm = this;
-    
+
     vm.buyAttribute('intellect');
     vm.buyAttribute('intellect');
     vm.buyAttribute('intellect');
     vm.buyAttribute('vitality');
     vm.buyAttribute('vitality');
-    
+
   }
-  
+
 }

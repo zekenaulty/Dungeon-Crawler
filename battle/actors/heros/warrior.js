@@ -34,7 +34,7 @@ export class Warrior extends Actor {
     let vm = this;
 
     vm.reset();
-    
+
     vm.name = 'warrior';
     vm.addSkill('cleave', new Cleave(vm));
     vm.addSkill('slam', new Slam(vm));
@@ -50,13 +50,17 @@ export class Warrior extends Actor {
     });
 
   }
-  
+
   reset() {
     let vm = this;
-    
+
     vm.autoBattle = true;
 
-    vm.attributes.baseHp = 60;
+    vm.level.level = 1;
+    vm.level.xp = 0;
+    vm.level.xpToLevel = ActorLevel.xpForNextLevel();
+
+    vm.attributes.baseHp = 100;
 
     vm.attributes.baseDamage = 7;
     vm.attributes.strength = 25;
@@ -66,7 +70,7 @@ export class Warrior extends Actor {
 
     vm.attributes.hp = vm.attributes.maxHp;
     vm.attributes.mp = vm.attributes.maxMp;
-}
+  }
 
   aiCanAct() {
     let vm = this;
@@ -130,16 +134,16 @@ export class Warrior extends Actor {
       clearInterval(vm.#aiId);
     }
   }
-  
+
   spendPoints() {
     let vm = this;
-    
+
     vm.buyAttribute('strength');
     vm.buyAttribute('strength');
     vm.buyAttribute('strength');
     vm.buyAttribute('vitality');
     vm.buyAttribute('vitality');
-    
+
   }
-  
+
 }

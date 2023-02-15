@@ -111,20 +111,9 @@ export class AutoPilot extends EventHandler {
 
   #levelUp() {
     let vm = this;
-
-    let buy = (s, a) => {
-      
-    };
-/*
-    while (warrior.attributes.available > 0) {
-      buy('strength', warrior);
-      buy('strength', warrior);
-      buy('strength', warrior);
-      buy('strength', warrior);
-      buy('strength', warrior);
-    }
-*/
-
+    vm.#party.each((a) => {
+      a.spendPoints();
+    });
   }
 
 }
