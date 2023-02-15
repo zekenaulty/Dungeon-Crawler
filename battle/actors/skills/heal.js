@@ -20,16 +20,13 @@ export class Heal extends ActorSkill {
   
   get summary() {
     let vm = this;
-    return `Heal for 35% of max health.`;
+    return `Heal lowest health ally for 35% of max health.`;
   }
 
   invoke() {
     let vm = this;
     vm.safeInvoke(() => {
-      if(!vm.actor.friendlyTarget) {
-        vm.actor.friendlyTarget = vm.actor.party.lowestHealthMember();
-      }
-      vm.doHeal(vm.actor.friendlyTarget, 0.35, vm.mpCost);
+      vm.doHeal(vm.actor.party.lowestHealthMember(), 0.35, vm.mpCost);
     });
   }
 

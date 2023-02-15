@@ -75,7 +75,11 @@ export class ActorParty extends EventHandler {
     let a = vm.#members[0];
     for(let i = 1; i < vm.#members.length; i++) {
       let b = vm.#members[i];
-      if(b.attributes.hp < a.attributes.hp) {
+      let ap = a.attributes.hp / a.attributes.maxHp * 100;
+      let bp = b.attributes.hp / b.attributes.maxHp * 100;
+      console.log(a.name + ' ' + ap);
+      console.log(b.name + ' ' + bp);
+      if(bp < ap) {
         a = b;
       }
     }

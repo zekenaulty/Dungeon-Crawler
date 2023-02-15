@@ -76,16 +76,6 @@ export class Healer extends Actor {
     vm.attributes.mp = vm.attributes.maxMp;
   }
 
-  aiCanAct() {
-    let vm = this;
-
-    if (vm.casting || !vm.battle || vm.battle.paused || Modal.openCount > 1) {
-      return false;
-    }
-    return true;
-  }
-
-
   #aiId = -1;
   startAi() {
     let vm = this;
@@ -101,17 +91,11 @@ export class Healer extends Actor {
       return;
     }
 
-    let critical = vm.party.lowestHealthMember();
-    if (critical && !critical.lowHealth(0.65)) {
-      critical = undefined;
-    }
-
     if (
-      critical &&
+      vm.party.lowestHealthMember().lowHealth(0.6) &&
       vm.attributes.mp >= vm.skills.heal.mpCost &&
       !vm.skills.heal.onCd
     ) {
-      vm.friendlyTarget = critical;
       vm.skills.heal.invoke();
       return;
     } else if (

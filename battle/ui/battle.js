@@ -214,11 +214,13 @@ export class Battle extends Modal {
         vm.#autoBattleBtn.classList.remove('battle-green');
         vm.#party.each((a) => {
           a.autoBattle = false;
+          a.stopAi();
         });
       } else {
         vm.#autoBattleBtn.classList.add('battle-green');
         vm.#party.each((a) => {
           a.autoBattle = true;
+          a.startAi();
         });
       }
     });

@@ -7,6 +7,7 @@ import { ActorInventory } from './actorInventory.js';
 import { ActorParty } from './actorParty.js';
 import { Attack } from './skills/attack.js';
 import { GCD } from './skills/gcd.js';
+import { Modal } from '../../layout/modal/modal.js';
 
 export class Actor extends EventHandler {
 
@@ -128,9 +129,6 @@ export class Actor extends EventHandler {
 
   takeDamage(dmg) {
     let vm = this;
-    if(vm.name != 'slime') {
-      console.log(`${vm.name} took ${dmg} damage.`);
-    }
     vm.attributes.hp -= dmg;
     vm.raiseEvent('damaged', vm, dmg);
     vm.raiseEvent('changed', vm);
@@ -210,11 +208,30 @@ export class Actor extends EventHandler {
       'intellect'
       ];
     if (allowed.includes(a) && vm.attributes.available > 0) {
-        vm.attributes.available--;
-        vm.attributes[a]++;
-      }
+      vm.attributes.available--;
+      vm.attributes[a]++;
+    }
   }
-  
+
   spendPoints() {}
+
+
+  aiCanAct() {
+    let vm = this;
+
+    if (
+      !vm.autoBattle ||
+      vm.casting ||
+      !vm.battle ||
+      vm.battle.paused ||
+      Modal.openCount > 1 ||
+      vm.attributes.hp < 1
+    ) {
+      return false;
+    }
+    return true;
+  }
+
+
 
 }

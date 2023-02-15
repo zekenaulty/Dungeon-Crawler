@@ -60,12 +60,12 @@ export class Actionbar extends EventHandler {
     };
 
     let begin = () => {
-      btn.classList.add('actionbar-btn-active');
+      btn.classList.add('actionbar-btn-active-' + skill.actor.name);
       btn.innerHTML = skill.displayName;
     };
 
     let done = () => {
-      btn.classList.remove('actionbar-btn-active');
+      btn.classList.remove('actionbar-btn-active-' + skill.actor.name);
       btn.innerHTML = skill.displayName;
     };
 

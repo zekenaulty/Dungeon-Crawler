@@ -72,16 +72,6 @@ export class Warrior extends Actor {
     vm.attributes.mp = vm.attributes.maxMp;
   }
 
-  aiCanAct() {
-    let vm = this;
-
-    if (vm.casting || !vm.battle || vm.battle.paused || Modal.openCount > 1) {
-      return false;
-    }
-    return true;
-  }
-
-
   #aiId = -1;
   startAi() {
     let vm = this;

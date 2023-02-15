@@ -5,18 +5,32 @@
   border: 1px solid white;
   border-radius: 13px 13px 13px 13px;
   margin-top: 2px;
-  margin-right: 4px;
+  margin-right: 8px;
+  margin-bottom: 4px;
   padding: 1px 3px 1px 3px;
   min-width: 90px;
 }
 
-.actionbar-btn-active {
-  color: red;
-  border: 1px solid red;
+.actionbar-btn-active-warrior {
+  color: red !important;
+  border: 1px solid darkred !important;
+}
+
+.actionbar-btn-active-healer {
+  color: goldenrod !important;
+  border: 1px solid darkgoldenrod !important;
+}
+
+.actionbar-btn-active-mage {
+  color: blue !important;
+  border: 1px solid darkblue !important;
 }
 
 .actionbar {
-  margin-bottom: 3px;
   border-bottom: 1px solid white;
-  padding-bottom: 10px;
+  padding-bottom: 0px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  height: 56px;
+  padding-top: 6px;
 }

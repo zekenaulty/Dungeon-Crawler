@@ -46,8 +46,8 @@ body {
 }
 
 .center {
-  display: flex;
-  justify-content: center;
+  text-align: center;
+  vertical-align: middle;
 }
 
 

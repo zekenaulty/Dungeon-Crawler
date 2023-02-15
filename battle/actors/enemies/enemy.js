@@ -34,6 +34,7 @@ export class Enemy extends Actor {
 
     vm.battle = battle;
     vm.name = 'enemy';
+    vm.autoBattle = true;
 
     vm.listenToEvent('death', (e) => {
       e.actor.stopAi();

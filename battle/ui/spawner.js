@@ -128,6 +128,9 @@ export class Spawner extends EventHandler {
     e.div.appendChild(e.enemyDiv);
     e.div.appendChild(e.plateDiv);
     e.id = `enemy_${index}`;
+    
+    e.plateDiv.style.paddingLeft = '6px';
+    e.plateDiv.style.paddingRight = '6px';
 
     return e;
   }
@@ -148,6 +151,7 @@ export class Spawner extends EventHandler {
     e.enemy.spendPoints();
     e.enemy.recover();
     e.plate = new Nameplate(e.plateDiv, e.enemy);
+    e.plate.healthGauge.barWidth('100%');
     e.plate.hideLevel();
     e.plate.hideName();
     e.plate.hideMana();
@@ -163,7 +167,7 @@ export class Spawner extends EventHandler {
 
     e.enemyDiv.innerHTML = e.enemy.ascii;
     e.enemyDiv.classList.add('battle-enemy');
-
+    e.plateDiv.classList.add('center');
   }
 
   #enemyHooks(e) {

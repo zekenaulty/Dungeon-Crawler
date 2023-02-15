@@ -15,6 +15,16 @@ export class Nameplate extends EventHandler {
   #health;
   #mana;
 
+  get healthGauge() {
+    let vm = this;
+    return vm.#health;
+  }
+
+  get manaGauge() {
+    let vm = this;
+    return vm.#mana;
+  }
+
   constructor(container, actor) {
     super();
 
@@ -40,7 +50,9 @@ export class Nameplate extends EventHandler {
 
     vm.#name.innerHTML = vm.#actor.name;
     vm.#level.innerHTML = 'level: ' + vm.#actor.level.level;
-
+    vm.#name.style.padding = '2px 1px 2px 1px';
+    vm.#level.style.padding = '2px 1px 2px 1px';
+    
     vm.#box.appendChild(vm.#name);
     vm.#box.appendChild(vm.#level);
 
@@ -74,12 +86,12 @@ export class Nameplate extends EventHandler {
 
   hideLevel() {
     let vm = this;
-    vm.#level.style.display='none';
+    vm.#level.style.display = 'none';
   }
 
   hideName() {
     let vm = this;
-    vm.#name.style.display='none';
+    vm.#name.style.display = 'none';
   }
 
   hideMana() {
