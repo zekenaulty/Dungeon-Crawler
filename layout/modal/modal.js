@@ -18,8 +18,8 @@ export class Modal extends EventHandler {
   static get openCount() {
     return Modal.#openCount;
   }
-  
-  get content(){
+
+  get content() {
     let vm = this;
     return vm.#content;
   }
@@ -86,18 +86,25 @@ export class Modal extends EventHandler {
       try {
         body.removeChild(vm.#closeButton);
       } catch (e) {}
-      body.removeChild(vm.#content);
-      body.removeChild(vm.#backdrop);
+      
+      try {
+        body.removeChild(vm.#backdrop);
+      } catch (e) {}
+      
+      try {
+        body.removeChild(vm.#content);
+      } catch (e) {}
+      
 
       if (Modal.#openCount < 1) {
         body.classList.remove('modal-body-lock');
       }
 
-      if(vm.#intervalId > -1) {
+      if (vm.#intervalId > -1) {
         clearInterval(vm.#intervalId);
         vm.#intervalId = -1;
       }
-      
+
       if (vm.#id > 0 && vm.#previous > -1) {
         if (history.state == vm.#id) {
           history.back();
