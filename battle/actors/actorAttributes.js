@@ -27,6 +27,7 @@ export class ActorAttributes extends EventHandler {
   strengthLevel = 0;
   vitalityLevel = 0;
   intellectLevel = 0;
+  scaleWith = 'strength';
 
   hp;
   mp;
@@ -75,11 +76,11 @@ export class ActorAttributes extends EventHandler {
 
   get minDamage() {
     let vm = this;
-    return Math.floor((vm.baseDamage + vm.baseDamageLevel) / 6 + 1) + Math.floor((vm.strength + vm.strengthLevel) / 6) + 1;
+    return Math.floor((vm.baseDamage + vm.baseDamageLevel) / 6 + 1) + Math.floor((vm[vm.scaleWith] + vm[vm.scaleWith + 'Level']) / 6) + 1;
   }
 
   get maxDamage() {
     let vm = this;
-    return vm.baseDamage + vm.baseDamageLevel + Math.ceil((vm.strength + vm.strengthLevel) / 3) + 3
+    return vm.baseDamage + vm.baseDamageLevel + Math.ceil((vm[vm.scaleWith] + vm[vm.scaleWith + 'Level']) / 3) + 3
   }
 }

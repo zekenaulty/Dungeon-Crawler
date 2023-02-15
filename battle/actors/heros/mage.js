@@ -4,13 +4,10 @@ import { ActorSkill } from '../actorSkill.js';
 import { ActorLevel } from '../actorLevel.js';
 import { ActorInventory } from '../actorInventory.js';
 import { ActorAttributes } from '../actorAttributes.js';
-import { Slam } from '../skills/slam.js';
-import { Cleave } from '../skills/cleave.js';
-import { Heal } from '../skills/heal.js';
-import { GroupHeal } from '../skills/groupHeal.js';
-import { Teleport } from '../skills/teleport.js';
-import { AutoBattle } from '../skills/autoBattle.js';
 import { Modal } from '../../../layout/modal/modal.js';
+import { MagicMissles } from '../skills/magicMissles.js';
+import { Wand } from '../skills/wand.js';
+import { Dice } from '../../dice.js';
 
 export class Mage extends Actor {
 
@@ -37,6 +34,12 @@ export class Mage extends Actor {
     vm.reset();
     vm.name = 'mage';
 
+    delete vm.skills.attack;
+
+    vm.addSkill('wand', new Wand(vm));
+    vm.addSkill('magicMissles', new MagicMissles(vm));
+
+
     vm.listenToEvent('leveled up', (e) => {
       if (e.level.level % 5 === 0) {
         vm.attributes.baseHpLevel += 25;
@@ -49,7 +52,7 @@ export class Mage extends Actor {
       if (e.level.level % 10) {
         vm.attributes.baseDamageLevel += 3;
       }
-      
+
       vm.attributes.intellectLevel++;
       vm.attributes.intellectLevel++;
     });
@@ -64,7 +67,8 @@ export class Mage extends Actor {
     vm.level.xpToLevel = ActorLevel.xpForNextLevel();
 
     vm.attributes.baseHp = 60;
-    
+    vm.attributes.scaleWith = 'intellect';
+
     vm.attributes.baseDamage = 7;
     vm.attributes.strength = 10;
     vm.attributes.vitality = 15;
@@ -90,9 +94,17 @@ export class Mage extends Actor {
       return;
     }
 
-    if (!vm.skills.attack.onCd) {
-      vm.skills.attack.invoke();
+    if (
+      vm.skills.magicMissles &&
+      vm.enemies.length > 1 &&
+      !vm.skills.magicMissles.onCd &&
+      vm.attributes.mp >= vm.skills.magicMissles.mpCost &&
+      Dice.d6() > 3
+    ) {
+      vm.skills.magicMissles.invoke();
       return;
+    } else if (vm.skills.wand && !vm.skills.wand.onCd) {
+      vm.skills.wand.invoke();
     }
   }
 

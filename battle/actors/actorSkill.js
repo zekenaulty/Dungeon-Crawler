@@ -106,12 +106,14 @@ export class ActorSkill extends EventHandler {
     
   }
 
-  doAttack(target) {
+  doAttack(target, cost = 0) {
     if(!target) {
       return;
     }
     
     let vm = this;
+    if(vm.actor.spendMp(cost)) {
+    
     let maxDmg = vm.max;
     let minDmg = vm.min;
     let dmg = Math.ceil(Math.random() * maxDmg) + 1;
@@ -125,6 +127,7 @@ export class ActorSkill extends EventHandler {
     //TODO add chance to miss
 
     target.takeDamage(dmg);
+    }
   }
 
   invoke() {

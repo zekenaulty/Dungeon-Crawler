@@ -37,7 +37,7 @@ export class ActorParty extends EventHandler {
     vm.#members.delete(actor);
   }
   
-  lowHealth(p = 0.3) {
+  lowHealth(p = 0.65) {
     let vm = this;
     
     if(!vm.#members || vm.#members.length < 1) {
@@ -59,7 +59,7 @@ export class ActorParty extends EventHandler {
       return true;
     }
     
-    let n = Math.floor(vm.#members.length * 0.5);
+    let n = Math.floor(vm.#members.length * 0.4);
     if(c >= n) {
       return true;
     }

@@ -4,13 +4,10 @@ import { ActorSkill } from '../actorSkill.js';
 import { ActorLevel } from '../actorLevel.js';
 import { ActorInventory } from '../actorInventory.js';
 import { ActorAttributes } from '../actorAttributes.js';
-import { Slam } from '../skills/slam.js';
-import { Cleave } from '../skills/cleave.js';
 import { Heal } from '../skills/heal.js';
 import { GroupHeal } from '../skills/groupHeal.js';
-import { Teleport } from '../skills/teleport.js';
-import { AutoBattle } from '../skills/autoBattle.js';
 import { Modal } from '../../../layout/modal/modal.js';
+import { Smite } from '../skills/smite.js';
 
 export class Healer extends Actor {
 
@@ -36,6 +33,10 @@ export class Healer extends Actor {
 
     vm.reset();
     vm.name = 'healer';
+
+    delete vm.skills.attack;
+
+    vm.addSkill('smite', new Smite(vm));
     vm.addSkill('heal', new Heal(vm));
     vm.addSkill('groupHeal', new GroupHeal(vm));
 
@@ -63,9 +64,9 @@ export class Healer extends Actor {
     vm.level.level = 1;
     vm.level.xp = 0;
     vm.level.xpToLevel = ActorLevel.xpForNextLevel();
-
+    vm.scaleWith = 'intellect';
     vm.attributes.baseHp = 60;
-    
+
     vm.attributes.baseDamage = 7;
     vm.attributes.strength = 10;
     vm.attributes.vitality = 15;
@@ -92,20 +93,20 @@ export class Healer extends Actor {
     }
 
     if (
-      vm.party.lowestHealthMember().lowHealth(0.6) &&
-      vm.attributes.mp >= vm.skills.heal.mpCost &&
-      !vm.skills.heal.onCd
-    ) {
-      vm.skills.heal.invoke();
-      return;
-    } else if (
       vm.party.lowHealth() &&
       vm.attributes.mp >= vm.skills.groupHeal.mpCost &&
       !vm.skills.groupHeal.onCd
     ) {
       vm.skills.groupHeal.invoke();
-    } else if (!vm.skills.attack.onCd) {
-      vm.skills.attack.invoke();
+    } else if (
+      vm.party.lowestHealthMember().lowHealth(0.7) &&
+      vm.attributes.mp >= vm.skills.heal.mpCost &&
+      !vm.skills.heal.onCd
+    ) {
+      vm.skills.heal.invoke();
+      return;
+    } else if (vm.skills.smite && !vm.skills.smite.onCd) {
+      vm.skills.smite.invoke();
       return;
     }
   }
