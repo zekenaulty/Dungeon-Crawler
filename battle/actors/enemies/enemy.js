@@ -57,12 +57,17 @@ export class Enemy extends Actor {
       return e.name == 'healer';
     });
     
+    let m = vm.enemies.find((e) => {
+      return e.name == 'mage';
+    });
+    
     while (l.length < 30) {
       l.push(w);
       l.push(w);
       l.push(w);
       l.push(h);
       l.push(w);
+      l.push(m);
     }
     
     return l;
