@@ -74,12 +74,12 @@ export class GameLevel extends EventHandler {
     vm.#warrior = new Warrior(vm);
     vm.#healer = new Healer(vm);
     vm.#mage = new Mage(vm);
-
-    vm.#warrior.party.add(vm.#healer);
+    
     vm.#warrior.party.add(vm.#mage);
+    vm.#warrior.party.add(vm.#healer);
 
-    vm.#healer.party.add(vm.#warrior);
     vm.#healer.party.add(vm.#mage);
+    vm.#healer.party.add(vm.#warrior);
 
     vm.#mage.party.add(vm.#healer);
     vm.#mage.party.add(vm.#warrior);

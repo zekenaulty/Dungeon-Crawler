@@ -52,8 +52,8 @@ export class DetailSheet extends Modal {
     vm.#add('Intellect', vm.#actor.attributes, 'intellect', true && editable);
     vm.#spacer();
 
-    let isWarrior = vm.#actor.gameLevel.isWarrior(vm.#actor);
-    let txt = isWarrior ? 'Skills <span class="tiny-text">(☆ castable)</span>': 'Skills';
+    let isHero = vm.#actor.gameLevel.isHero(vm.#actor);
+    let txt = isHero ? 'Skills <span class="tiny-text">(☆ castable)</span>': 'Skills';
     vm.#text(txt);
     vm.#skills = document.createElement('div');
     vm.#skills.classList.add('detail-sheet-skills');
@@ -62,7 +62,7 @@ export class DetailSheet extends Modal {
     for (let p in vm.#actor.skills) {
       let skill = vm.#actor.skills[p];
       if (skill.register) {
-        vm.#addSkill(skill, isWarrior, edge);
+        vm.#addSkill(skill, isHero, edge);
         edge = 'detail-sheet-skill-edge';
       }
     }

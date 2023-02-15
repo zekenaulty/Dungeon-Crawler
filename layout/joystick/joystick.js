@@ -46,7 +46,7 @@ export class JoyStick extends EventHandler {
     vm.#footer.appendChild(vm.#mover);
     vm.#sig.classList.add('sig-left');
     vm.#footer.appendChild(vm.#sig);
-    vm.#sig.innerHTML = 'By: Zeke Naulty';
+    vm.#sig.innerHTML = 'Zeke Naulty';
     
     vm.#sig.addEventListener('dblclick', () => {
       vm.#gameLevel.histogram();

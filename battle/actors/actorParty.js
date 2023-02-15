@@ -130,4 +130,13 @@ export class ActorParty extends EventHandler {
     return r;
   }
   
+  firstDead() {
+    let vm = this;
+    for(let i = 0; i < vm.#members.length; i++) {
+      if(vm.#members[i].attributes.hp < 1) {
+        return vm.#members[i];
+      }
+    }
+  }
+  
 }

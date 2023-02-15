@@ -19,10 +19,10 @@ export class ActorSkill extends EventHandler {
   recoilId;
   cdId;
   mpCost = 5;
-  
+
   get canCast() {
     let vm = this;
-    
+
     return vm.mpCost <= vm.actor.attributes.mp;
   }
 
@@ -93,40 +93,43 @@ export class ActorSkill extends EventHandler {
     );
 
   }
-  
-  doHeal(target, percent = 0.5, cost = 20) {
+
+  doHeal(target, percent = 0.5, cost = 20, resurect = false) {
     let vm = this;
-    
-    if(vm.actor.spendMp(cost)) {
-      
-    let amt = Math.ceil(target.attributes.maxHp * percent);
-    target.heal(amt);
-    
+    if (!target || (!resurect && target.attributes.hp < 1)) {
+      return;
     }
-    
+
+    if (vm.actor.spendMp(cost)) {
+      let amt = Math.ceil(target.attributes.maxHp * percent);
+      target.heal(amt);
+      if (resurect && a.autoBattle) {
+        a.startAi();
+      }
+    }
   }
 
   doAttack(target, cost = 0) {
-    if(!target) {
+    if (!target) {
       return;
     }
-    
+
     let vm = this;
-    if(vm.actor.spendMp(cost)) {
-    
-    let maxDmg = vm.max;
-    let minDmg = vm.min;
-    let dmg = Math.ceil(Math.random() * maxDmg) + 1;
-    if (dmg < minDmg) {
-      dmg = minDmg + 1;
-    } else if (dmg > maxDmg) {
-      dmg = maxDmg;
-    }
+    if (vm.actor.spendMp(cost)) {
 
-    //TODO use dex for crit and dodge
-    //TODO add chance to miss
+      let maxDmg = vm.max;
+      let minDmg = vm.min;
+      let dmg = Math.ceil(Math.random() * maxDmg) + 1;
+      if (dmg < minDmg) {
+        dmg = minDmg + 1;
+      } else if (dmg > maxDmg) {
+        dmg = maxDmg;
+      }
 
-    target.takeDamage(dmg);
+      //TODO use dex for crit and dodge
+      //TODO add chance to miss
+
+      target.takeDamage(dmg);
     }
   }
 

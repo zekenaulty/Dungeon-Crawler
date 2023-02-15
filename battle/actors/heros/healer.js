@@ -8,6 +8,7 @@ import { Heal } from '../skills/heal.js';
 import { GroupHeal } from '../skills/groupHeal.js';
 import { Modal } from '../../../layout/modal/modal.js';
 import { Smite } from '../skills/smite.js';
+import { Resurect } from '../skills/resurect.js';
 
 export class Healer extends Actor {
 
@@ -40,6 +41,7 @@ export class Healer extends Actor {
     vm.addSkill('smite', new Smite(vm));
     vm.addSkill('heal', new Heal(vm));
     vm.addSkill('groupHeal', new GroupHeal(vm));
+    vm.addSkill('resurect', new Resurect(vm));
 
     vm.listenToEvent('leveled up', (e) => {
       if (e.level.level % 5 === 0) {
@@ -89,6 +91,16 @@ export class Healer extends Actor {
     let vm = this;
 
     if (!vm.aiCanAct()) {
+      return;
+    }
+    
+    if (
+      vm.skills.resurect &&
+      vm.party.firstDead() &&
+      vm.attributes.mp >= vm.skills.resurect.mpCost &&
+      !vm.skills.resurect.onCd
+    ) {
+      vm.skills.resurect.invoke();
       return;
     }
 
