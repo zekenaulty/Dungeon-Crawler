@@ -15,6 +15,7 @@ import { GrowingTree } from '../mazes/generators/growingTree.js';
 import { DetailSheet } from './actors/ui/detailSheet.js';
 import { Warrior } from './actors/heros/warrior.js';
 import { Healer } from './actors/heros/healer.js';
+import { Mage } from './actors/heros/mage.js';
 import { Battle } from './ui/battle.js';
 import { Dice } from './dice.js';
 import { Loader } from '../layout/loader/loader.js';
@@ -38,8 +39,12 @@ export class GameLevel extends EventHandler {
 
   #warrior;
   #healer;
+  #mage;
 
   #warriorDetail;
+  #healerDetail;
+  #mageDetail;
+
   #battle;
   #gameOverId = -1;
 
@@ -68,11 +73,20 @@ export class GameLevel extends EventHandler {
 
     vm.#warrior = new Warrior(vm);
     vm.#healer = new Healer(vm);
+    vm.#mage = new Mage(vm);
 
-    vm.#warrior.party.add(vm.#healer);
+    vm.#warrior.party.add(vm.#healer);    
+    vm.#warrior.party.add(vm.#mage);
+
     vm.#healer.party.add(vm.#warrior);
+    vm.#healer.party.add(vm.#mage);
+
+    vm.#mage.party.add(vm.#healer);    
+    vm.#mage.party.add(vm.#warrior);
 
     vm.#warriorDetail = new DetailSheet(vm.#warrior, true);
+    vm.#healerDetail = new DetailSheet(vm.#healer, true);
+    vm.#mageDetail = new DetailSheet(vm.#mage, true);
 
   }
 
@@ -86,6 +100,27 @@ export class GameLevel extends EventHandler {
     return vm.#healer;
   }
 
+  get mage() {
+    let vm = this;
+    return vm.#mage;
+  }
+
+  get warriorDetail() {
+    let vm = this;
+    return vm.#warriorDetail;
+  }
+
+  get healerDetail() {
+    let vm = this;
+    return vm.#healerDetail;
+  }
+
+  get mageDetail() {
+    let vm = this;
+    return vm.#mageDetail;
+  }
+  
+  
   get battle() {
     let vm = this;
     return vm.#battle;
@@ -96,6 +131,7 @@ export class GameLevel extends EventHandler {
     let vm = this;
     let warriorState = vm.#warrior.saveState();
     let healerState = vm.#healer.saveState();
+    let mageState = vm.#mage.saveState();
     let mazeState = vm.#maze.saveState();
     let state = {
       level: vm.#level,
@@ -104,6 +140,7 @@ export class GameLevel extends EventHandler {
       roomGrowthFactor: vm.#roomGrowthFactor,
       warrior: warriorState,
       healer: healerState,
+      mage: mageState,
       maze: mazeState,
       summary: vm.summary
     };
@@ -122,6 +159,7 @@ export class GameLevel extends EventHandler {
 
     let warriorState = state.warrior;
     let healerState = state.healer;
+    let mageState = state.mage;
     let mazeState = state.maze;
 
     vm.#level = state.level;
@@ -133,9 +171,11 @@ export class GameLevel extends EventHandler {
 
     vm.#warrior.reset();
     vm.#healer.reset();
+    vm.#mage.reset();
 
     vm.#warrior.loadState(warriorState);
     vm.#healer.loadState(healerState);
+    vm.#mage.loadState(mageState);
     vm.#maze.loadState(mazeState);
 
     vm.#renderer.draw();
@@ -154,7 +194,8 @@ export class GameLevel extends EventHandler {
     return `
       <span><span class="bolder">Dungeon Level: </span>${vm.level}</span>
       <span class="small-text"><span class="bolder pl-1">Warrior Level: </span>${vm.#warrior.level.level}</span>
-      <span class="small-text"><span class="bolder pl-1">Healer Level: </span>${vm.#warrior.level.level}</span>
+      <span class="small-text"><span class="bolder pl-1">Healer Level: </span>${vm.#healer.level.level}</span>
+      <span class="small-text"><span class="bolder pl-1">Mage Level: </span>${vm.#mage.level.level}</span>
       `;
     /*     <span><span></span>${}</span>  */
     /*
@@ -176,9 +217,15 @@ export class GameLevel extends EventHandler {
     return actor === vm.#healer;
   }
 
+  isMage(actor) {
+    let vm = this;
+    return actor === vm.#mage;
+  }
+
+
   isHero(actor) {
     let vm = this;
-    return vm.isWarrior(actor) || vm.isHealer(actor);
+    return vm.isWarrior(actor) || vm.isHealer(actor) || vm.isMage(actor);
   }
 
   initialize(width, height, gfx) {
@@ -220,6 +267,17 @@ export class GameLevel extends EventHandler {
     vm.#warriorDetail.open(true);
   }
 
+  healerInfo() {
+    let vm = this;
+    vm.#healerDetail.open(true);
+  }
+
+
+  mageInfo() {
+    let vm = this;
+    vm.#mageDetail.open(true);
+  }
+
   #randomMaze() {
     let vm = this;
     Loader.open();
@@ -237,6 +295,7 @@ export class GameLevel extends EventHandler {
 
     vm.#warrior.reset();
     vm.#healer.reset();
+    vm.#mage.reset();
 
     vm.raiseEvent('updated', vm);
 

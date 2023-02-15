@@ -10,6 +10,11 @@ export class DetailSheet extends Modal {
   #container;
   #skills;
   #elements = new List();
+  
+  get container() {
+    let vm = this;
+    return vm.#container;
+  }
 
   constructor(actor, editable = false) {
     super();

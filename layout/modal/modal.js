@@ -18,6 +18,11 @@ export class Modal extends EventHandler {
   static get openCount() {
     return Modal.#openCount;
   }
+  
+  get content(){
+    let vm = this;
+    return vm.#content;
+  }
 
   constructor() {
     super();

@@ -83,6 +83,11 @@ export class Nameplate extends EventHandler {
     //vm.#actor.listenToEvent('changed', vm.#change);
 
   }
+  
+  get box() {
+    let vm = this;
+    return vm.#box;
+  }
 
   hideLevel() {
     let vm = this;
