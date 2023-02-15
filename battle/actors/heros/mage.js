@@ -122,7 +122,7 @@ export class Mage extends Actor {
     vm.buyAttribute('intellect');
     vm.buyAttribute('intellect');
     vm.buyAttribute('intellect');
-    vm.buyAttribute('vitality');
+    vm.buyAttribute('intellect');
 
   }
 
