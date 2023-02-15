@@ -12,7 +12,7 @@ import { Resurect } from '../skills/resurect.js';
 
 export class Healer extends Actor {
 
-  #aiIntervalMin = 450;
+  #aiIntervalMin = 850;
   #aiIntervalMax = 950;
 
   /*  dexterity should factor 

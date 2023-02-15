@@ -11,7 +11,7 @@ import { Dice } from '../../dice.js';
 
 export class Mage extends Actor {
 
-  #aiIntervalMin = 550;
+  #aiIntervalMin = 850;
   #aiIntervalMax = 1111;
 
   /*  dexterity should factor 

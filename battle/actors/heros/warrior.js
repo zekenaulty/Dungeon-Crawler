@@ -14,7 +14,7 @@ import { Dice } from '../../dice.js';
 
 export class Warrior extends Actor {
 
-  #aiIntervalMin = 650;
+  #aiIntervalMin = 850;
   #aiIntervalMax = 1250;
 
   /*  dexterity should factor 
