@@ -35,6 +35,8 @@ export class Enemy extends Actor {
     vm.battle = battle;
     vm.name = 'enemy';
     vm.autoBattle = true;
+    
+    vm.attributes.pointsPerLevel = 20;
 
     vm.listenToEvent('death', (e) => {
       e.actor.stopAi();
@@ -42,6 +44,20 @@ export class Enemy extends Actor {
         e.actor.casting.interupt();
       }
     });
+    
+    vm.listenToEvent('leveled up', (e) => {
+      if (e.level.level % 5 === 0) {
+        vm.attributes.baseHpLevel += 50;
+        vm.attributes.strengthLevel++;
+        vm.recover();
+      }
+      if (e.level.level % 10) {
+        vm.attributes.baseDamageLevel += 3;
+      }
+      vm.attributes.strengthLevel++;
+    });
+
+
 
   }
 

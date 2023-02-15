@@ -120,4 +120,16 @@ export class ActorParty extends EventHandler {
     let vm = this;
     return vm.#members.sample();
   } 
+  
+  dead() {
+    let vm = this;
+    let r = true;
+    vm.each((a) => {
+      if(a.attributes.hp > 0) {
+        r = false;
+      }
+    });
+    return r;
+  }
+  
 }
