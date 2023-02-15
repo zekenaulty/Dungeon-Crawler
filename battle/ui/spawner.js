@@ -30,13 +30,6 @@ export class Spawner extends EventHandler {
     vm.#battle = battle;
     vm.#gameLevel = gameLevel;
 
-    vm.#minMobLevel = vm.#gameLevel.level - 2;
-    vm.#maxMobLevel = vm.#gameLevel.level + 3;
-
-    if (vm.#minMobLevel < 1) {
-      vm.#minMobLevel = 1;
-    }
-
   }
 
   get #combatDelay() {
@@ -74,6 +67,14 @@ export class Spawner extends EventHandler {
 
   #mobLevel() {
     let vm = this;
+    
+    vm.#minMobLevel = vm.#gameLevel.level - 2;
+    vm.#maxMobLevel = vm.#gameLevel.level + 3;
+
+    if (vm.#minMobLevel < 1) {
+      vm.#minMobLevel = vm.#gameLevel.level;
+    }
+
     if (Dice.d20() > 13) {
       let l = Math.floor(Math.random() * vm.#maxMobLevel) + 1;
       if (l < vm.#minMobLevel) {
@@ -83,7 +84,7 @@ export class Spawner extends EventHandler {
       return l;
     }
 
-    return vm.#battle.level;
+    return vm.#gameLevel.level;
   }
 
   #spawnCount() {
@@ -150,11 +151,13 @@ export class Spawner extends EventHandler {
 
     e.enemy.spendPoints();
     e.enemy.recover();
+    
     e.plate = new Nameplate(e.plateDiv, e.enemy);
     e.plate.healthGauge.barWidth('100%');
     e.plate.hideLevel();
     e.plate.hideName();
     e.plate.hideMana();
+    e.plate.update();
 
     e.enemy.id = e.id;
     e.enemy.div = e.div;

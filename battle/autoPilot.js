@@ -10,8 +10,8 @@ export class AutoPilot extends EventHandler {
   #maze;
   #gameLevel;
 
-  #breathMin = 650;
-  #breathMax = 1250;
+  #breathMin = 450;
+  #breathMax = 550;
 
   #running = false;
 
@@ -66,12 +66,10 @@ export class AutoPilot extends EventHandler {
     let vm = this;
 
     if (vm.#canAct) {
+      vm.#levelUp();
       vm.#nextMove();
     }
 
-    setTimeout(() => {
-      vm.#levelUp();
-    }, 50);
   }
 
   stop() {
@@ -112,7 +110,9 @@ export class AutoPilot extends EventHandler {
   #levelUp() {
     let vm = this;
     vm.#party.each((a) => {
-      a.spendPoints();
+      while(a.attributes.available > 0) {
+        a.spendPoints();
+      }
     });
   }
 

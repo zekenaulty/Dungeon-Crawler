@@ -101,3 +101,23 @@
 .joystick-hide {
   display: none !important;
 }
+
+.sig-left {
+  font-family: monospace;
+  position: fixed;
+  bottom: 12px;
+  left: 6px;
+  color: orange;
+  background-color: black;
+  font-size: 0.8em;
+}
+
+.sig-right {
+  font-family: monospace;
+  position: fixed;
+  bottom: 12px;
+  right: 6px;
+  color: orange;
+  background-color: black;
+  font-size: 0.8em;
+}

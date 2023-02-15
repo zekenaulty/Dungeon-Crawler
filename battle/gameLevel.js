@@ -26,8 +26,8 @@ import { FightWaves } from './ui/fightWaves.js';
 export class GameLevel extends EventHandler {
 
   #level = 0;
-  #mazeMaxRooms = 32;
-  #toTiny = 14;
+  #mazeMaxRooms = 24;
+  #toTiny = 6;
   #roomGrowthFactor = 0.3;
 
   #scaler;
@@ -75,13 +75,13 @@ export class GameLevel extends EventHandler {
     vm.#healer = new Healer(vm);
     vm.#mage = new Mage(vm);
 
-    vm.#warrior.party.add(vm.#healer);    
+    vm.#warrior.party.add(vm.#healer);
     vm.#warrior.party.add(vm.#mage);
 
     vm.#healer.party.add(vm.#warrior);
     vm.#healer.party.add(vm.#mage);
 
-    vm.#mage.party.add(vm.#healer);    
+    vm.#mage.party.add(vm.#healer);
     vm.#mage.party.add(vm.#warrior);
 
     vm.#warriorDetail = new DetailSheet(vm.#warrior, true);
@@ -119,8 +119,8 @@ export class GameLevel extends EventHandler {
     let vm = this;
     return vm.#mageDetail;
   }
-  
-  
+
+
   get battle() {
     let vm = this;
     return vm.#battle;
@@ -164,7 +164,7 @@ export class GameLevel extends EventHandler {
 
     vm.#level = state.level;
     vm.#mazeMaxRooms = state.mazeMaxRooms;
-    vm.#toTiny = state.toTiny;
+    //vm.#toTiny = state.toTiny;
     vm.#roomGrowthFactor = state.roomGrowthFactor;
 
     vm.#resetMaze();
@@ -335,15 +335,13 @@ export class GameLevel extends EventHandler {
     /* 
     vm.#generators.push(new BinaryTree(vm.#maze));
     vm.#generators.push(new Sidewinder(vm.#maze));
+    */
     vm.#generators.push(new AldousBroder(vm.#maze));
     vm.#generators.push(new Wilsons(vm.#maze));
     vm.#generators.push(new HuntAndKill(vm.#maze));
-    */
     vm.#generators.push(new RecursiveBacktracker(vm.#maze));
-    /*
     vm.#generators.push(new SimplePrims(vm.#maze));
     vm.#generators.push(new GrowingTree(vm.#maze));
-    */
 
     vm.#generators.forEach((g) => {
       g.listenToEvent('generated', () => {
@@ -374,7 +372,7 @@ export class GameLevel extends EventHandler {
         return;
       }
 
-      let dice = Dice.many(20, 20, 20, 20);
+      let dice = Dice.many(20, 20, 20, 20, 100, 100);
       if (vm.#shouldBattle(dice)) {
         Loader.open('BATTLE');
         setTimeout(() => {
@@ -426,7 +424,12 @@ export class GameLevel extends EventHandler {
   }
 
   #shouldTeleport(d) {
-    return d[0] > 18 && d[1] > 10 && d[2] > 10 && d[3] > 10;
+    return d[0] > 18 &&
+      d[1] > 10 &&
+      d[2] > 10 &&
+      d[3] > 10 &&
+      d[4] > 75 &&
+      d[5] < 25;
   }
 
   gameOver(delay = 2250) {
@@ -458,5 +461,5 @@ export class GameLevel extends EventHandler {
     vm.#renderer.histogram();
   }
 
-  
+
 }

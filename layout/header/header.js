@@ -6,14 +6,22 @@ export class Header extends EventHandler {
   #left;
   #menu;
   #styles;
+  
+  #gameLevel;
 
-  constructor() {
+  constructor(gameLevel) {
 
     super();
     let vm = this;
+    
+    vm.#gameLevel = gameLevel;
 
     vm.#header = document.createElement('nav');
     vm.#left = document.createElement('div');
+    
+    vm.#left.addEventListener('dblclick', () => {
+      vm.#gameLevel.solve();
+    });
     vm.#menu = document.createElement('div');
     vm.#styles = document.createElement('link');
 

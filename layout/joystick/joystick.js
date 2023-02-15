@@ -10,11 +10,15 @@ export class JoyStick extends EventHandler {
   #down;
   #left;
   #right;
+  #sig;
+  
+  #gameLevel;
 
-
-  constructor() {
+  constructor(gameLevel) {
     super();
     let vm = this;
+
+    vm.#gameLevel = gameLevel;
     
     vm.defineEvent('up', 'down', 'left', 'right');
 
@@ -32,6 +36,7 @@ export class JoyStick extends EventHandler {
     vm.#down = document.createElement('button');
     vm.#left = document.createElement('button');
     vm.#right = document.createElement('button');
+    vm.#sig = document.createElement('span');
 
     vm.#footer.classList.add('foot');
     vm.#hand.classList.add('hand');
@@ -39,6 +44,13 @@ export class JoyStick extends EventHandler {
     vm.#footer.appendChild(vm.#hand);
     vm.#mover.classList.add('move');
     vm.#footer.appendChild(vm.#mover);
+    vm.#sig.classList.add('sig-left');
+    vm.#footer.appendChild(vm.#sig);
+    vm.#sig.innerHTML = 'By: Zeke Naulty';
+    
+    vm.#sig.addEventListener('dblclick', () => {
+      vm.#gameLevel.histogram();
+    });
 
     vm.#up.classList.add('up');
     vm.#down.classList.add('down');
@@ -58,15 +70,15 @@ export class JoyStick extends EventHandler {
     vm.#up.addEventListener('click', () => {
       vm.raiseEvent('up');
     });
-    
+
     vm.#down.addEventListener('click', () => {
       vm.raiseEvent('down');
     });
-    
+
     vm.#left.addEventListener('click', () => {
       vm.raiseEvent('left');
     });
-    
+
     vm.#right.addEventListener('click', () => {
       vm.raiseEvent('right');
     });
@@ -86,11 +98,19 @@ export class JoyStick extends EventHandler {
       vm.#mover.style.order = 1;
       vm.#hand.style.order = 2;
       vm.#hand.innerHTML = '&gt;';
+      
+      vm.#sig.classList.remove('sig-left');
+      vm.#sig.classList.add('sig-right');
+
     } else {
       vm.#footer.style.justifyContent = 'end';
       vm.#hand.style.order = 1;
       vm.#mover.style.order = 2;
       vm.#hand.innerHTML = '&lt;';
+      
+      vm.#sig.classList.remove('sig-right');
+      vm.#sig.classList.add('sig-left');
+
     }
   }
 

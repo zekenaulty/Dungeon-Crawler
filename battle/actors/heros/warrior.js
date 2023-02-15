@@ -10,6 +10,7 @@ import { Heal } from '../skills/heal.js';
 import { Teleport } from '../skills/teleport.js';
 import { AutoBattle } from '../skills/autoBattle.js';
 import { Modal } from '../../../layout/modal/modal.js';
+import { Dice } from '../../dice.js';
 
 export class Warrior extends Actor {
 
@@ -101,14 +102,16 @@ export class Warrior extends Actor {
     if (
       vm.enemies.length > 2 &&
       vm.skills.slam.charges > 0 &&
-      !vm.skills.slam.onCd
+      !vm.skills.slam.onCd &&
+      Dice.d6() > 3
     ) {
       vm.skills.slam.invoke();
       return;
     } else if (
       vm.enemies.length > 1 &&
       vm.skills.cleave.charges > 0 &&
-      !vm.skills.cleave.onCd
+      !vm.skills.cleave.onCd && 
+      Dice.coin() == 1
     ) {
       vm.skills.cleave.invoke();
       return;

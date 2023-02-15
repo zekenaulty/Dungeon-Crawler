@@ -14,7 +14,7 @@ export class CanvasRectangle extends EventHandler {
   endColor = 'green'; //'#D2042D';
   //pathColor = '#7F00FF';
   activeColor = 'silver'; //'#800080';
-  solveColor = 'cornflowerblue';
+  solveColor = 'teal';
 
   showSolution = false;
   showHistogram = false;

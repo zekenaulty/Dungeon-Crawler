@@ -136,7 +136,7 @@ export class Battle extends Modal {
     return vm.#partyInfo;
   }
 
-  get actonbars() {
+  get actionbars() {
     let vm = this;
     return vm.#actions;
   }
@@ -315,6 +315,17 @@ export class Battle extends Modal {
       h.enemies.forEach((e) => {
         e.stopAi();
       });
+    }
+  }
+
+  pause() {
+    let vm = this;
+
+    vm.#paused = !vm.paused;
+    if (vm.#paused) {
+      vm.#pauseBtn.classList.add('battle-green');
+    } else {
+      vm.#pauseBtn.classList.remove('battle-green');
     }
   }
 
