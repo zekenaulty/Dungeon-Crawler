@@ -6,7 +6,7 @@ export class GroupHeal extends ActorSkill {
   constructor(actor) {
     super(actor);
     let vm = this;
-    vm.cooldown = 2000;
+    vm.cooldown = 6000;
     vm.register = true;
     vm.name = 'Group Heal';
     vm.bubble = true;

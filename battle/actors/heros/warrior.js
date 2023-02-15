@@ -14,8 +14,8 @@ import { Dice } from '../../dice.js';
 
 export class Warrior extends Actor {
 
-  #aiIntervalMin = 1250;
-  #aiIntervalMax = 1750;
+  #aiIntervalMin = 650;
+  #aiIntervalMax = 1250;
 
   /*  dexterity should factor 
       into these numbers 
@@ -37,6 +37,7 @@ export class Warrior extends Actor {
     vm.reset();
 
     vm.name = 'warrior';
+
     vm.addSkill('cleave', new Cleave(vm));
     vm.addSkill('slam', new Slam(vm));
     //vm.addSkill('heal', new Heal(vm));
@@ -47,6 +48,13 @@ export class Warrior extends Actor {
         vm.attributes.baseDamageLevel += 2;
         vm.recover();
       }
+      
+      if(e.level.level % 25 == 0) {
+        vm.skills.cleave.addMaxCharge();
+        vm.skills.slam.addMaxCharge();
+      }
+      
+      vm.attributes.strengthLevel++;
       vm.attributes.strengthLevel++;
     });
 
@@ -60,6 +68,7 @@ export class Warrior extends Actor {
     vm.level.level = 1;
     vm.level.xp = 0;
     vm.level.xpToLevel = ActorLevel.xpForNextLevel();
+    vm.attributes.scaleWith = 'strength';
 
     vm.attributes.baseHp = 100;
 

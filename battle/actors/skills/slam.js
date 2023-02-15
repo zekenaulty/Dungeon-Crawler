@@ -10,12 +10,18 @@ export class Slam extends ActorSkill {
   constructor(actor) {
     super(actor);
     let vm = this;
-    vm.cooldown = 500;
+    vm.cooldown = 2000;
     vm.register = true;
     vm.name = 'Slam';
     vm.#charges = vm.#maxCharges;
     vm.mpCost = 0;
     vm.calcDmg();
+  }
+
+  addMaxCharge() {
+    let vm = this;
+    vm.#maxCharges++;
+    vm.#charges = vm.#maxCharges;
   }
 
   calcDmg() {

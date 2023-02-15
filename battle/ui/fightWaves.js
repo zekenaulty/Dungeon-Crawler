@@ -33,12 +33,19 @@ export class FightWaves extends EventHandler {
     vm.#battleWon = () => {
       vm.#battle.close();
       vm.#count++;
+      
+      if(vm.#count % 10 == 0) {
+        vm.#party.each((a) => {
+          a.recover();
+        });
+      }
+      
       Loader.open('BATTLE ' + vm.#count);
       SaveData.save(vm.#gameLevel);
       setTimeout(() => {
           vm.#beginBattle();
         },
-        350
+        100
       );
     };
 

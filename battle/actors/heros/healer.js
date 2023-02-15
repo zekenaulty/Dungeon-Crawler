@@ -11,8 +11,8 @@ import { Smite } from '../skills/smite.js';
 
 export class Healer extends Actor {
 
-  #aiIntervalMin = 1250;
-  #aiIntervalMax = 1750;
+  #aiIntervalMin = 450;
+  #aiIntervalMax = 950;
 
   /*  dexterity should factor 
       into these numbers 
@@ -33,6 +33,7 @@ export class Healer extends Actor {
 
     vm.reset();
     vm.name = 'healer';
+    vm.attributes.scaleWith = 'intellect';
 
     delete vm.skills.attack;
 
@@ -43,13 +44,12 @@ export class Healer extends Actor {
     vm.listenToEvent('leveled up', (e) => {
       if (e.level.level % 5 === 0) {
         vm.attributes.baseHpLevel += 25;
-        vm.attributes.baseMp += 10;
-        vm.attributes.strengthLevel++;
+        vm.attributes.baseMpLevel += 10;
 
         vm.recover();
       }
 
-      if (e.level.level % 10) {
+      if (e.level.level % 10 == 0) {
         vm.attributes.baseDamageLevel += 3;
       }
 
@@ -64,7 +64,7 @@ export class Healer extends Actor {
     vm.level.level = 1;
     vm.level.xp = 0;
     vm.level.xpToLevel = ActorLevel.xpForNextLevel();
-    vm.scaleWith = 'intellect';
+    vm.attributes.scaleWith = 'intellect';
     vm.attributes.baseHp = 60;
 
     vm.attributes.baseDamage = 7;

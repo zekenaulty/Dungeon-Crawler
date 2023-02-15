@@ -10,8 +10,8 @@ import { Modal } from '../../../layout/modal/modal.js';
 export class Enemy extends Actor {
 
   #aiId;
-  #aiIntervalMin = 1750;
-  #aiIntervalMax = 2750;
+  #aiIntervalMin = 1250;
+  #aiIntervalMax = 1750;
   #weightedTargets;
 
   /*  dexterity should factor 
@@ -51,10 +51,9 @@ export class Enemy extends Actor {
         vm.attributes.strengthLevel++;
         vm.recover();
       }
-      if (e.level.level % 10) {
-        vm.attributes.baseDamageLevel += 3;
+      if (e.level.level % 10 == 0) {
+        vm.attributes.baseDamageLevel += 1;
       }
-      vm.attributes.strengthLevel++;
     });
 
 

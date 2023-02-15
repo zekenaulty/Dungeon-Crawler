@@ -7,7 +7,7 @@ export class Attack extends ActorSkill {
   constructor(actor) {
     super(actor);
     let vm = this;
-    vm.cooldown = 850;
+    vm.cooldown = 1000;
     vm.register = true;
     vm.name = 'Attack';
     vm.bubble = true;

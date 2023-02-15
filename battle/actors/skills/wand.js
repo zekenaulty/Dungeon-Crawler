@@ -7,7 +7,7 @@ export class Wand extends ActorSkill {
   constructor(actor) {
     super(actor);
     let vm = this;
-    vm.cooldown = 850;
+    vm.cooldown = 1250;
     vm.register = true;
     vm.name = 'Wand';
     vm.bubble = true;

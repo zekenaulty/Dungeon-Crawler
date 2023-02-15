@@ -26,7 +26,7 @@ import { FightWaves } from './ui/fightWaves.js';
 export class GameLevel extends EventHandler {
 
   #level = 0;
-  #mazeMaxRooms = 24;
+  #mazeMaxRooms = 8;
   #toTiny = 6;
   #roomGrowthFactor = 0.3;
 
@@ -119,7 +119,6 @@ export class GameLevel extends EventHandler {
     let vm = this;
     return vm.#mageDetail;
   }
-
 
   get battle() {
     let vm = this;
@@ -271,7 +270,6 @@ export class GameLevel extends EventHandler {
     let vm = this;
     vm.#healerDetail.open(true);
   }
-
 
   mageInfo() {
     let vm = this;

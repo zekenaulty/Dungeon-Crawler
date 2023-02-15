@@ -11,8 +11,8 @@ import { Dice } from '../../dice.js';
 
 export class Mage extends Actor {
 
-  #aiIntervalMin = 1250;
-  #aiIntervalMax = 1750;
+  #aiIntervalMin = 550;
+  #aiIntervalMax = 1111;
 
   /*  dexterity should factor 
       into these numbers 
@@ -33,6 +33,7 @@ export class Mage extends Actor {
 
     vm.reset();
     vm.name = 'mage';
+    vm.attributes.scaleWith = 'intellect';
 
     delete vm.skills.attack;
 
@@ -43,13 +44,13 @@ export class Mage extends Actor {
     vm.listenToEvent('leveled up', (e) => {
       if (e.level.level % 5 === 0) {
         vm.attributes.baseHpLevel += 25;
-        vm.attributes.baseMp += 10;
-        vm.attributes.strengthLevel++;
+        vm.attributes.baseMpLevwl += 10;
+        vm.attributes.intellectLevel++;
 
         vm.recover();
       }
 
-      if (e.level.level % 10) {
+      if (e.level.level % 10 == 0) {
         vm.attributes.baseDamageLevel += 3;
       }
 

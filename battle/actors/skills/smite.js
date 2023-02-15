@@ -7,7 +7,7 @@ export class Smite extends ActorSkill {
   constructor(actor) {
     super(actor);
     let vm = this;
-    vm.cooldown = 850;
+    vm.cooldown = 1500;
     vm.register = true;
     vm.name = 'Smite';
     vm.bubble = true;
