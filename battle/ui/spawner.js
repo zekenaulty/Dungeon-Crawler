@@ -46,9 +46,15 @@ export class Spawner extends EventHandler {
   spawn() {
     let vm = this;
     let count = vm.#spawnCount();
+    
+    vm.#party.each((a) => {
+      a.enemies = new List();
+    });
+    
     for (let i = 0; i < count; i++) {
       vm.#addEnemey(i);
     }
+    
     let delay = vm.#combatDelay;
     setTimeout(() => {
         vm.#gameLevel.raiseEvent(
