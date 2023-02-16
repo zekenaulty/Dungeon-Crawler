@@ -103,8 +103,8 @@ export class ActorSkill extends EventHandler {
     if (vm.actor.spendMp(cost)) {
       let amt = Math.ceil(target.attributes.maxHp * percent);
       target.heal(amt);
-      if (resurect && a.autoBattle) {
-        a.startAi();
+      if (resurect && target.autoBattle && target.battle) {
+        target.startAi();
       }
     }
   }

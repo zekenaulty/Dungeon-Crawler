@@ -52,7 +52,7 @@ export class Nameplate extends EventHandler {
     vm.#level.innerHTML = 'level: ' + vm.#actor.level.level;
     vm.#name.style.padding = '2px 1px 2px 1px';
     vm.#level.style.padding = '2px 1px 2px 1px';
-    
+
     vm.#box.appendChild(vm.#name);
     vm.#box.appendChild(vm.#level);
 
@@ -62,8 +62,6 @@ export class Nameplate extends EventHandler {
       vm.#actor.attributes.hp,
       vm.#actor.attributes.health,
       '');
-    //vm.#health.labelWidth('38px');
-    //vm.#health.barWidth('75px');
 
     vm.#mana = new Gauge(
       vm.#box,
@@ -71,19 +69,12 @@ export class Nameplate extends EventHandler {
       vm.#actor.attributes.mp,
       vm.#actor.attributes.mana,
       '');
-    //vm.#mana.labelWidth('38px');
-    //vm.#mana.barWidth('75px');
     vm.#mana.fillColor('darkblue');
     vm.#mana.borderColor('blue');
 
     container.appendChild(vm.#box);
-    vm.#change = () => {
-      vm.#changed();
-    };
-    //vm.#actor.listenToEvent('changed', vm.#change);
-
   }
-  
+
   get box() {
     let vm = this;
     return vm.#box;
@@ -109,25 +100,19 @@ export class Nameplate extends EventHandler {
     vm.#health.hide();
   }
 
-  #change;
   #changed() {
     let vm = this;
     vm.#health.setMax(vm.#actor.attributes.maxHp, vm.#actor.attributes.hp);
     vm.#mana.setMax(vm.#actor.attributes.maxMp, vm.#actor.attributes.mp);
     vm.#health.barText(vm.#actor.attributes.health);
     vm.#mana.barText(vm.#actor.attributes.mana);
-    vm.#name.innerHTML = vm.#actor.name;
+    vm.#name.innerHTML = vm.#actor.displayName;
     vm.#level.innerHTML = 'level: ' + vm.#actor.level.level;
   }
 
   update() {
     let vm = this;
     vm.#changed();
-  }
-
-  release() {
-    let vm = this;
-    //vm.#actor.ignoreEvent('changed', vm.#change);
   }
 
 }

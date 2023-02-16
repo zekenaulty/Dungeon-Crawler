@@ -21,7 +21,7 @@ export class Enemy extends Actor {
     
     vm.autoBattle = true;
 
-    vm.attributes.pointsPerLevel = 20;
+    vm.attributes.pointsPerLevel = 10;
 
     vm.listenToEvent('death', (e) => {
       e.stopAi();

@@ -63,12 +63,12 @@ export class Warrior extends Actor {
     vm.level.xpToLevel = ActorLevel.xpForNextLevel();
     vm.attributes.scaleWith = 'strength';
 
-    vm.attributes.baseHp = 100;
+    vm.attributes.baseHp = 200;
 
-    vm.attributes.baseDamage = 7;
-    vm.attributes.strength = 25;
-    vm.attributes.vitality = 20;
-    vm.attributes.intellect = 10;
+    vm.attributes.baseDamage = 8;
+    vm.attributes.strength = 40;
+    vm.attributes.vitality = 30;
+    vm.attributes.intellect = 0;
     vm.attributes.pointsPerLevel = 5;
 
     vm.attributes.hp = vm.attributes.maxHp;

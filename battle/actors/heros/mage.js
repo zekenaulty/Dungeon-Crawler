@@ -35,13 +35,12 @@ export class Mage extends Actor {
 
     vm.listenToEvent('leveled up', (e) => {
       vm.attributes.baseHpLevel += 5;
-      vm.attributes.baseMpLevel += 2;
+      vm.attributes.baseMpLevel += 3;
 
       if (e.level.level % 10 == 0) {
         vm.attributes.baseDamageLevel += 3;
       }
 
-      vm.attributes.intellectLevel++;
       vm.attributes.intellectLevel++;
       vm.attributes.intellectLevel++;
 
@@ -58,13 +57,14 @@ export class Mage extends Actor {
     vm.level.xp = 0;
     vm.level.xpToLevel = ActorLevel.xpForNextLevel();
 
-    vm.attributes.baseHp = 60;
+    vm.attributes.baseHp = 120;
+    vm.attributes.baseMp = 400;
     vm.attributes.scaleWith = 'intellect';
 
     vm.attributes.baseDamage = 7;
     vm.attributes.strength = 10;
     vm.attributes.vitality = 15;
-    vm.attributes.intellect = 40;
+    vm.attributes.intellect = 80;
     vm.attributes.pointsPerLevel = 5;
 
     vm.attributes.hp = vm.attributes.maxHp;
