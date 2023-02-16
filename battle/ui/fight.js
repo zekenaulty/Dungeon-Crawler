@@ -31,7 +31,6 @@ export class Fight extends EventHandler {
 
     vm.#battleWon = () => {
       setTimeout(() => {
-
           if (vm.#battle) {
             vm.#battle.ignoreEvent('won battle', vm.#battleWon);
             vm.#battle.close();
@@ -59,7 +58,7 @@ export class Fight extends EventHandler {
           SaveData.save(vm.#gameLevel);
           vm.#beginBattle();
         },
-        550
+        450
       );
     };
 
