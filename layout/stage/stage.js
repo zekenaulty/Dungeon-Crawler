@@ -1,12 +1,11 @@
+import { DOM } from '../../core/dom.js';
 import { EventHandler } from '../../core/eventHandler.js';
 
 export class Stage extends EventHandler {
 
   #styles;
   #stage;
-  #pre;
   #canvas;
-  #toggle;
   #gfx;
 
   constructor(ready) {
@@ -19,26 +18,11 @@ export class Stage extends EventHandler {
       vm.listenToEvent('ready', ready);
     }
 
-    vm.#styles = document.createElement('link');
+    DOM.stylesheet('./layout/stage/stage.css', 'stage_styles')
 
-    vm.#styles.rel = 'stylesheet';
-    vm.#styles.href = './layout/stage/stage.css';
-
-    document.querySelector('head').appendChild(vm.#styles);
-
-    vm.#stage = document.createElement('div');
-    vm.#stage.classList.add('stage');
-
-    document.querySelector('body').appendChild(vm.#stage);
-
-    vm.#canvas = document.createElement('canvas');
-    vm.#canvas.classList.add('viewport');
-    vm.#stage.appendChild(vm.#canvas);
-
+    vm.#stage = DOM.div(DOM.body, 'stage');
+    vm.#canvas = DOM.canvas(vm.#stage, 'viewport');
     vm.#gfx = vm.#canvas.getContext("2d");
-    
-    //vm.#gfx.ellipse()
-
     vm.#scale();
 
   }
@@ -67,11 +51,6 @@ export class Stage extends EventHandler {
     } else {
       setTimeout(() => { vm.#scale(); }, 10);
     }
-  }
-
-  setTextView(text) {
-    let vm = this;
-    vm.#pre.innerHTML = text;
   }
 
 }
