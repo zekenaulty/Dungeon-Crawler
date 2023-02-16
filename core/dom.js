@@ -21,21 +21,9 @@ export class DOM {
   static get body() {
     return document.querySelector('body');
   }
-
-  static nav(parent, classes) {
-    let e = document.createElement('nav');
-
-    if (parent) {
-      DOM.append(e, parent);
-    }
-
-    DOM.classes(e, classes);
-
-    return e;
-  }
-
-  static button(text, parent, classes, action) {
-    let e = document.createElement('button');
+  
+  static element(tag, parent, classes, text, clicker) {
+    let e = document.createElement(tag);
 
     if (text) {
       DOM.text(text, e);
@@ -47,101 +35,49 @@ export class DOM {
       DOM.append(e, parent);
     }
 
-    if (action) {
+    if (clicker) {
       e.addEventListener('click', () => {
-        action(e);
+        clicker(e);
       });
     }
 
     return e;
   }
 
+  static nav(parent, classes) {
+    return DOM.element('nav', parent, classes);
+  }
+
+  static button(text, parent, classes, action) {
+    return DOM.element('button', parent, classes, text, action);
+  }
+
   static span(text, parent, classes) {
-    let e = document.createElement('span');
-
-    if (text) {
-      DOM.text(text, e);
-    }
-
-    DOM.classes(e, classes);
-
-    if (parent) {
-      DOM.append(e, parent);
-    }
-
-    return e;
+    return DOM.element('span', parent, classes, text);
   }
 
   static a(text, parent, classes) {
-    let e = document.createElement('a');
-
-    if (text) {
-      DOM.text(text, e);
-    }
-
-    DOM.classes(e, classes);
-
-    if (parent) {
-      DOM.append(e, parent);
-    }
-
-    return e;
+    return DOM.element('a', parent, classes, text);
   }
 
   static p(text, parent, classes) {
-    let e = document.createElement('p');
-
-    if (text) {
-      DOM.text(text, e);
-    }
-
-    DOM.classes(e, classes);
-
-    if (parent) {
-      DOM.append(e, parent);
-    }
-
-    return e;
+    return DOM.element('p', parent, classes, text);
   }
 
   static ul(parent, classes) {
-    let e = document.createElement('ul');
-
-    DOM.classes(e, classes);
-
-    if (parent) {
-      DOM.append(e, parent);
-    }
-
-    return e;
+    return DOM.element('ul', parent, classes);
   }
 
   static li(text, parent, classes) {
-    let e = document.createElement('li');
-
-    if (text) {
-      DOM.text(text, e);
-    }
-
-    DOM.classes(e, classes);
-
-    if (parent) {
-      DOM.append(e, parent);
-    }
-
-    return e;
+    return DOM.element('li', parent, classes, text);
   }
 
   static div(parent, classes) {
-    let e = document.createElement('div');
+    return DOM.element('div', parent, classes);
+  }
 
-    if (parent) {
-      DOM.append(e, parent);
-    }
-
-    DOM.classes(e, classes);
-
-    return e;
+  static canvas(parent, classes) {
+    return DOM.element('canvas', parent, classes);
   }
 
   static text(text, parent) {
