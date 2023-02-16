@@ -70,6 +70,7 @@ export class Actionbar extends EventHandler {
     };
 
     let update = () => {
+      btn.innerHTML = skill.displayName;
       vm.#battle.partyInfo();
     };
     

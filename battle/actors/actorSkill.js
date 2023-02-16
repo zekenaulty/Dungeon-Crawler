@@ -89,7 +89,9 @@ export class ActorSkill extends EventHandler {
       'interupted',
       'updated',
       'begin cd',
-      'end cd'
+      'end cd',
+      'begin gcd',
+      'end gcd'
     );
 
   }
