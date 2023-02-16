@@ -12,7 +12,7 @@ export class JoyStick extends EventHandler {
 
     vm.defineEvent('up', 'down', 'left', 'right');
 
-    DOM.stylesheet('./layout/joystick/joystick.css', 'joystick_styles');
+    DOM.stylesheet('./ui/joystick/joystick.css', 'joystick_styles');
 
     vm.#footer = DOM.nav(DOM.body, 'foot');
     vm.#mover = DOM.div(vm.#footer, 'move');

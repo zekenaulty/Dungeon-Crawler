@@ -1,6 +1,6 @@
 import { List } from '../../core/list.js';
 import { EventHandler } from '../../core/eventHandler.js';
-import { Modal } from '../../layout/modal/modal.js'
+import { Modal } from '../../ui/modal/modal.js'
 import { Dice } from '../dice.js';
 import { Slime } from '../actors/enemies/slime.js';
 import { ActorLevel } from '../actors/actorLevel.js';
@@ -117,7 +117,7 @@ export class Spawner extends EventHandler {
 
   #addEnemey(index) {
     let vm = this;
-    let e = vm.#createEnemyLayout(index);
+    let e = vm.#createEnemyui(index);
 
     vm.#createEnemy(e);
     vm.#enemyHooks(e);
@@ -125,7 +125,7 @@ export class Spawner extends EventHandler {
     vm.#battle.addEnemey(e.enemy);
   }
 
-  #createEnemyLayout(index) {
+  #createEnemyui(index) {
     let vm = this;
     let e = {};
 

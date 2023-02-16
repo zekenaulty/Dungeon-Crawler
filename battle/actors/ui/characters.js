@@ -1,5 +1,5 @@
 import { List } from '../../../core/list.js';
-import { Modal } from '../../../layout/modal/modal.js';
+import { Modal } from '../../../ui/modal/modal.js';
 import { Nameplate } from './nameplate.js';
 
 export class Characters {

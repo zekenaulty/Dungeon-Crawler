@@ -16,7 +16,7 @@ export class Loader {
     let bg = vm.#loaderBg;
     let text = vm.#loaderText;
     
-    DOM.stylesheet('./layout/loader/loader.css', 'loader_styles');
+    DOM.stylesheet('./ui/loader/loader.css', 'loader_styles');
 
     if (!bg) {
       bg = DOM.div(DOM.body, ['loader', 'loader-hide']);

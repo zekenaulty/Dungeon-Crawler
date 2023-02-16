@@ -12,7 +12,7 @@ export class Header extends EventHandler {
     super();
     let vm = this;
 
-    DOM.stylesheet('./layout/header/header.css', 'header_styles');
+    DOM.stylesheet('./ui/header/header.css', 'header_styles');
 
     vm.#header = DOM.nav(DOM.body, 'head');
     vm.#left = DOM.div(vm.#header, 'header-info');

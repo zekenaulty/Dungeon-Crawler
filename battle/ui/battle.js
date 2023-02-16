@@ -1,5 +1,5 @@
 import { List } from '../../core/list.js';
-import { Modal } from '../../layout/modal/modal.js'
+import { Modal } from '../../ui/modal/modal.js'
 import { Dice } from '../dice.js';
 import { Slime } from '../actors/enemies/slime.js';
 import { ActorLevel } from '../actors/actorLevel.js';

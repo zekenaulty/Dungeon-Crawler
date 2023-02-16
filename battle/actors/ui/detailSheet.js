@@ -1,5 +1,5 @@
 import { List } from '../../../core/list.js';
-import { Modal } from '../../../layout/modal/modal.js'
+import { Modal } from '../../../ui/modal/modal.js'
 import { SaveData } from '../../saveData.js';
 
 export class DetailSheet extends Modal {

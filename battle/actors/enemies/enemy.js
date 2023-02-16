@@ -5,7 +5,7 @@ import { ActorLevel } from '../actorLevel.js';
 import { ActorInventory } from '../actorInventory.js';
 import { ActorAttributes } from '../actorAttributes.js';
 import { Dice } from '../../dice.js';
-import { Modal } from '../../../layout/modal/modal.js';
+import { Modal } from '../../../ui/modal/modal.js';
 
 export class Enemy extends Actor {
 

@@ -1,6 +1,6 @@
 import { List } from '../../../core/list.js';
 import { EventHandler } from '../../../core/eventHandler.js'
-import { Modal } from '../../../layout/modal/modal.js'
+import { Modal } from '../../../ui/modal/modal.js'
 
 export class Actionbar extends EventHandler {
 

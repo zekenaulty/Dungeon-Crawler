@@ -1,11 +1,11 @@
 import { go } from './core/isReady.js';
 import { List } from './core/list.js';
-import { Header } from './layout/header/header.js';
-import { Stage } from './layout/stage/stage.js';
-import { JoyStick } from './layout/joystick/joystick.js';
-import { Modal } from './layout/modal/modal.js';
+import { Header } from './ui/header/header.js';
+import { Stage } from './ui/stage/stage.js';
+import { JoyStick } from './ui/joystick/joystick.js';
+import { Modal } from './ui/modal/modal.js';
 import { GameLevel } from './battle/gameLevel.js';
-import { Loader } from './layout/loader/loader.js';
+import { Loader } from './ui/loader/loader.js';
 import { Saves } from './battle/ui/saves.js';
 import { Characters } from './battle/actors/ui/characters.js'
 (() => {

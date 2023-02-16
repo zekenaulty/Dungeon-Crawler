@@ -18,7 +18,7 @@ export class Stage extends EventHandler {
       vm.listenToEvent('ready', ready);
     }
 
-    DOM.stylesheet('./layout/stage/stage.css', 'stage_styles')
+    DOM.stylesheet('./ui/stage/stage.css', 'stage_styles')
 
     vm.#stage = DOM.div(DOM.body, 'stage');
     vm.#canvas = DOM.canvas(vm.#stage, 'viewport');

@@ -7,7 +7,7 @@ import { ActorInventory } from './actorInventory.js';
 import { ActorParty } from './actorParty.js';
 import { Attack } from './skills/attack.js';
 import { GCD } from './skills/gcd.js';
-import { Modal } from '../../layout/modal/modal.js';
+import { Modal } from '../../ui/modal/modal.js';
 
 export class Actor extends EventHandler {
 

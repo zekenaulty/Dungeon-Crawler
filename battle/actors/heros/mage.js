@@ -4,7 +4,7 @@ import { ActorSkill } from '../actorSkill.js';
 import { ActorLevel } from '../actorLevel.js';
 import { ActorInventory } from '../actorInventory.js';
 import { ActorAttributes } from '../actorAttributes.js';
-import { Modal } from '../../../layout/modal/modal.js';
+import { Modal } from '../../../ui/modal/modal.js';
 import { MagicMissles } from '../skills/magicMissles.js';
 import { Wand } from '../skills/wand.js';
 import { Dice } from '../../dice.js';

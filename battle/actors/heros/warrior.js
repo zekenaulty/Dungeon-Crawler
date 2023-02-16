@@ -9,7 +9,7 @@ import { Cleave } from '../skills/cleave.js';
 import { Heal } from '../skills/heal.js';
 import { Teleport } from '../skills/teleport.js';
 import { AutoBattle } from '../skills/autoBattle.js';
-import { Modal } from '../../../layout/modal/modal.js';
+import { Modal } from '../../../ui/modal/modal.js';
 import { Dice } from '../../dice.js';
 
 export class Warrior extends Actor {

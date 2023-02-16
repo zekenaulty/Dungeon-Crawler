@@ -18,7 +18,7 @@ import { Healer } from './actors/heros/healer.js';
 import { Mage } from './actors/heros/mage.js';
 import { Battle } from './ui/battle.js';
 import { Dice } from './dice.js';
-import { Loader } from '../layout/loader/loader.js';
+import { Loader } from '../ui/loader/loader.js';
 import { SaveData } from './saveData.js';
 import { AutoPilot } from './autoPilot.js';
 import { Fight } from './ui/fight.js';

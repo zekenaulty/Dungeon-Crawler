@@ -1,10 +1,10 @@
 import { List } from '../../core/list.js';
-import { Modal } from '../../layout/modal/modal.js'
+import { Modal } from '../../ui/modal/modal.js'
 import { Dice } from '../dice.js';
 import { SaveData } from '../saveData.js';
 import { EventHandler } from '../../core/eventHandler.js';
 import { Battle } from './battle.js';
-import { Loader } from '../../layout/loader/loader.js';
+import { Loader } from '../../ui/loader/loader.js';
 
 export class Fight extends EventHandler {
 

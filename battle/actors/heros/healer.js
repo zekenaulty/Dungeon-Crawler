@@ -6,7 +6,7 @@ import { ActorInventory } from '../actorInventory.js';
 import { ActorAttributes } from '../actorAttributes.js';
 import { Heal } from '../skills/heal.js';
 import { GroupHeal } from '../skills/groupHeal.js';
-import { Modal } from '../../../layout/modal/modal.js';
+import { Modal } from '../../../ui/modal/modal.js';
 import { Smite } from '../skills/smite.js';
 import { Resurect } from '../skills/resurect.js';
 

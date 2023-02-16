@@ -36,7 +36,7 @@ export class Modal extends EventHandler {
       'closing'
     );
 
-    DOM.stylesheet('./layout/modal/modal.css', 'modal_styles');
+    DOM.stylesheet('./ui/modal/modal.css', 'modal_styles');
 
     vm.#backdrop = DOM.div(undefined, 'modal-bg');
     vm.#content = DOM.div(undefined, 'modal-content-container');
