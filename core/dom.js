@@ -1,5 +1,5 @@
-class DOM {
-  
+export class DOM {
+
   static stylesheet(path, id) {
     let e;
     if (!document.getElementById(id)) {
@@ -13,119 +13,159 @@ class DOM {
     }
     return e;
   }
-  
+
   static get head() {
     return document.querySelector('head');
   }
-  
+
   static get body() {
     return document.querySelector('body');
   }
-  
-  static nav() { 
-    let e =  document.createElement('nav');
+
+  static nav(parent, classes) {
+    let e = document.createElement('nav');
+
+    if (parent) {
+      parent.appendChild(e);
+    }
+
+    DOM.classes(e, classes);
+
+
     return e;
   }
-  
-  static button(text, parent) { 
-    let e =  document.createElement('button');
-    
-    if(text) {
+
+  static button(text, parent, classes, action) {
+    let e = document.createElement('button');
+
+    if (text) {
       DOM.text(text, e);
     }
-    
-    if(parent) {
+
+    DOM.classes(e, classes);
+
+    if (parent) {
       parent.appendChild(e);
     }
-    
+
+    if (action) {
+      e.addEventListener('click', () => {
+        action(e);
+      });
+    }
+
     return e;
   }
-  
-  static span(text, parent) { 
-    let e =  document.createElement('span');
-    
-    if(text) {
+
+  static span(text, parent, classes) {
+    let e = document.createElement('span');
+
+    if (text) {
       DOM.text(text, e);
     }
-    
-    if(parent) {
+
+    DOM.classes(e, classes);
+
+    if (parent) {
       parent.appendChild(e);
     }
-    
+
     return e;
   }
-  
-  static a(text, parent) { 
-    let e =  document.createElement('a');
-    
-    if(text) {
+
+  static a(text, parent, classes) {
+    let e = document.createElement('a');
+
+    if (text) {
       DOM.text(text, e);
     }
-    
-    if(parent) {
+
+    DOM.classes(e, classes);
+
+    if (parent) {
       parent.appendChild(e);
     }
-    
+
     return e;
   }
-  
-  static p(text, parent) { 
-    let e =  document.createElement('p');
-    
-    if(text) {
+
+  static p(text, parent, classes) {
+    let e = document.createElement('p');
+
+    if (text) {
       DOM.text(text, e);
     }
-    
-    if(parent) {
+
+    DOM.classes(e, classes);
+
+    if (parent) {
       parent.appendChild(e);
     }
-    
+
     return e;
   }
-  
-  static ul(parent) { 
-    let e =  document.createElement('ul');
-    
-    if(parent) {
+
+  static ul(parent, classes) {
+    let e = document.createElement('ul');
+
+    DOM.classes(e, classes);
+
+    if (parent) {
       parent.appendChild(e);
     }
-    
+
     return e;
   }
-  
-  static li(text, parent) { 
-    let e =  document.createElement('li');
-    
-    if(text) {
+
+  static li(text, parent, classes) {
+    let e = document.createElement('li');
+
+    if (text) {
       DOM.text(text, e);
     }
-    
-    if(parent) {
+
+    DOM.classes(e, classes);
+
+    if (parent) {
       parent.appendChild(e);
     }
-    
+
     return e;
   }
-  
-  static div(parent) { 
-    let e =  document.createElement('div');
-    
-    if(parent) {
+
+  static div(parent, classes) {
+    let e = document.createElement('div');
+
+    if (parent) {
       parent.appendChild(e);
     }
-    
+
+    DOM.classes(e, classes);
+
     return e;
   }
-  
+
   static text(text, parent) {
     let e = document.createTextNode(text);
-    
-    if(parent) {
+
+    if (parent) {
       parent.appendChild(e);
     }
-    
+
     return e;
   }
-  
 
+  static classes(e, classes) {
+
+    if (classes) {
+      if (Array.isArray(classes)) {
+        classes.forEach((c) => {
+          e.classList.add(c);
+        })
+      } else {
+        e.classList.add(classes);
+      }
+    }
+
+  }
 }
