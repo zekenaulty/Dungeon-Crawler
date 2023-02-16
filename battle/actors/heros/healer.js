@@ -15,19 +15,6 @@ export class Healer extends Actor {
   #aiIntervalMin = 750;
   #aiIntervalMax = 950;
 
-  /*  dexterity should factor 
-      into these numbers 
-      a.k.a. speed */
-  get #aiInterval() {
-    let vm = this;
-    let r = Math.floor(Math.random() * vm.#aiIntervalMax) + 1;
-    if (r < vm.#aiIntervalMin) {
-      r = vm.#aiIntervalMin;
-    }
-
-    return r;
-  }
-
   constructor(gameLevel) {
     super(gameLevel);
     let vm = this;
@@ -37,6 +24,9 @@ export class Healer extends Actor {
     vm.displayName = 'Ayla';
     
     vm.attributes.scaleWith = 'intellect';
+    
+    vm.aiIntervalMin = vm.#aiIntervalMin;
+    vm.aiIntervalMax = vm.#aiIntervalMax;
 
     delete vm.skills.attack;
 
@@ -76,15 +66,8 @@ export class Healer extends Actor {
     vm.attributes.mp = vm.attributes.maxMp;
   }
 
-  #aiId = -1;
-  startAi() {
-    let vm = this;
-    vm.#aiId = setInterval(() => {
-      vm.#aiLoop();
-    }, vm.#aiInterval);
-  }
 
-  #aiLoop() {
+  aiLoop() {
     let vm = this;
 
     if (!vm.aiCanAct()) {
@@ -117,13 +100,6 @@ export class Healer extends Actor {
     } else if (vm.skills.smite && !vm.skills.smite.onCd) {
       vm.skills.smite.invoke();
       return;
-    }
-  }
-
-  stopAi() {
-    let vm = this;
-    if (vm.#aiId > -1) {
-      clearInterval(vm.#aiId);
     }
   }
 

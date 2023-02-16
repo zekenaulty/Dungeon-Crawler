@@ -14,19 +14,6 @@ export class Mage extends Actor {
   #aiIntervalMin = 777;
   #aiIntervalMax = 1331;
 
-  /*  dexterity should factor 
-      into these numbers 
-      a.k.a. speed */
-  get #aiInterval() {
-    let vm = this;
-    let r = Math.floor(Math.random() * vm.#aiIntervalMax) + 1;
-    if (r < vm.#aiIntervalMin) {
-      r = vm.#aiIntervalMin;
-    }
-
-    return r;
-  }
-
   constructor(gameLevel) {
     super(gameLevel);
     let vm = this;
@@ -34,6 +21,9 @@ export class Mage extends Actor {
     vm.reset();
     vm.name = 'mage';
     vm.displayName = 'Zyth';
+    
+    vm.aiIntervalMin = vm.#aiIntervalMin;
+    vm.aiIntervalMax = vm.#aiIntervalMax;
     
     vm.attributes.scaleWith = 'intellect';
 
@@ -81,15 +71,7 @@ export class Mage extends Actor {
     vm.attributes.mp = vm.attributes.maxMp;
   }
 
-  #aiId = -1;
-  startAi() {
-    let vm = this;
-    vm.#aiId = setInterval(() => {
-      vm.#aiLoop();
-    }, vm.#aiInterval);
-  }
-
-  #aiLoop() {
+  aiLoop() {
     let vm = this;
 
     if (!vm.aiCanAct()) {
@@ -107,13 +89,7 @@ export class Mage extends Actor {
       return;
     } else if (vm.skills.wand && !vm.skills.wand.onCd) {
       vm.skills.wand.invoke();
-    }
-  }
-
-  stopAi() {
-    let vm = this;
-    if (vm.#aiId > -1) {
-      clearInterval(vm.#aiId);
+      return;
     }
   }
 

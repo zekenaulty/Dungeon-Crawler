@@ -17,19 +17,6 @@ export class Warrior extends Actor {
   #aiIntervalMin = 850;
   #aiIntervalMax = 1250;
 
-  /*  dexterity should factor 
-      into these numbers 
-      a.k.a. speed */
-  get #aiInterval() {
-    let vm = this;
-    let r = Math.floor(Math.random() * vm.#aiIntervalMax) + 1;
-    if (r < vm.#aiIntervalMin) {
-      r = vm.#aiIntervalMin;
-    }
-
-    return r;
-  }
-
   constructor(gameLevel) {
     super(gameLevel);
     let vm = this;
@@ -39,6 +26,9 @@ export class Warrior extends Actor {
     vm.name = 'warrior';
     vm.displayName = 'Vor'
 
+    vm.aiIntervalMin = vm.#aiIntervalMin;
+    vm.aiIntervalMax = vm.#aiIntervalMax;
+    
     vm.addSkill('cleave', new Cleave(vm));
     vm.addSkill('slam', new Slam(vm));
 
@@ -85,29 +75,10 @@ export class Warrior extends Actor {
     vm.attributes.mp = vm.attributes.maxMp;
   }
 
-  #aiId = -1;
-  startAi() {
-    let vm = this;
-    vm.#aiId = setInterval(() => {
-      vm.#aiLoop();
-    }, vm.#aiInterval);
-  }
-
-  #aiLoop() {
+  aiLoop() {
     let vm = this;
 
     if (!vm.aiCanAct()) {
-      return;
-    }
-
-    if (
-      vm.skills.heal &&
-      vm.lowHealth() &&
-      vm.attributes.mp >= vm.skills.heal.mpCost &&
-      !vm.skills.heal.onCd
-    ) {
-      vm.friendlyTarget = vm;
-      vm.skills.heal.invoke();
       return;
     }
 
@@ -130,13 +101,6 @@ export class Warrior extends Actor {
     } else if (!vm.skills.attack.onCd) {
       vm.skills.attack.invoke();
       return;
-    }
-  }
-
-  stopAi() {
-    let vm = this;
-    if (vm.#aiId > -1) {
-      clearInterval(vm.#aiId);
     }
   }
 

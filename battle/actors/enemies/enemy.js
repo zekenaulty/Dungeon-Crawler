@@ -9,24 +9,7 @@ import { Modal } from '../../../layout/modal/modal.js';
 
 export class Enemy extends Actor {
 
-  #aiId;
-  #aiIntervalMin = 1250;
-  #aiIntervalMax = 1750;
   #weightedTargets;
-
-  /*  dexterity should factor 
-      into these numbers 
-      a.k.a. speed */
-  get #aiInterval() {
-    let vm = this;
-    let r = Math.floor(Math.random() * vm.#aiIntervalMax) + 1;
-    let v = Math.floor(Math.random() * 400);
-    if (r < vm.#aiIntervalMin) {
-      r = vm.#aiIntervalMin;
-    }
-
-    return r + v;
-  }
 
   constructor(gameLevel, battle) {
     super(gameLevel);
@@ -134,29 +117,6 @@ export class Enemy extends Actor {
     if (d > 3) {
       vm.skills.attack.invoke();
     }
-
-    vm.#nextFrame();
-
-  }
-
-  #nextFrame() {
-    /* 
-      how to implememt ascii frame animations...?
-    */
-  }
-
-  startAi() {
-    let vm = this;
-    vm.#aiId = setInterval(() => {
-        vm.aiLoop();
-      },
-      vm.#aiInterval
-    );
-  }
-
-  stopAi() {
-    let vm = this;
-    clearInterval(vm.#aiId);
   }
 
   spendPoints() {

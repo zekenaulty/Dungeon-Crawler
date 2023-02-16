@@ -25,6 +25,9 @@ export class Actor extends EventHandler {
   autoBattle = true;
   party;
   displayName;
+  #aiId = -1;
+  aiIntervalMin = 1250;
+  aiIntervalMax = 1750;
 
   constructor(gameLevel) {
     super();
@@ -228,5 +231,37 @@ export class Actor extends EventHandler {
     vm.autoBattle = state.autoBattle;
 
   }
+  
+  /*  dexterity should factor 
+      into these numbers 
+      a.k.a. speed */
+  get #aiInterval() {
+    let vm = this;
+    let r = Math.floor(Math.random() * vm.aiIntervalMax) + 1;
+    let v = Math.floor(Math.random() * 400);
+    if (r < vm.aiIntervalMin) {
+      r = vm.aiIntervalMin;
+    }
+
+    return r + v;
+  }
+
+  aiLoop() {}
+
+  startAi() {
+    let vm = this;
+    vm.#aiId = setInterval(() => {
+        vm.aiLoop();
+      },
+      vm.#aiInterval
+    );
+  }
+
+  stopAi() {
+    let vm = this;
+    clearInterval(vm.#aiId);
+    vm.#aiId = -1;
+  }
+
 
 }

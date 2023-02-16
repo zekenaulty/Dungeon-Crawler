@@ -169,8 +169,14 @@ export class Spawner extends EventHandler {
       a.enemies.forEach((v) => {
         v.party.add(e.enemy);
       });
-      a.enemies.push(e.enemy);
-      e.enemy.enemies.push(a);
+      
+      if (!a.enemies.includes(e.enemy)) {
+        a.enemies.push(e.enemy);
+      }
+      
+      if (!e.enemy.enemies.includes(a)) {
+        e.enemy.enemies.push(a);
+      }
     });
 
     e.enemyDiv.innerHTML = e.enemy.ascii;
