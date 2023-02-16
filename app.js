@@ -54,9 +54,9 @@ import { Characters } from './battle/actors/ui/characters.js'
       });
     };
 
-    const header = new Header(game);
+    const header = new Header();
     const stage = new Stage(stageReady);
-    const joystick = new JoyStick(game);
+    const joystick = new JoyStick();
 
     const player = header.addButton('AUTO PLAY', (e) => {
       if (game.autoPilot.running) {
@@ -83,6 +83,7 @@ import { Characters } from './battle/actors/ui/characters.js'
     const states = header.addButton('SAVES', (e) => {
       saves.open(true);
     });
+    
     joystick.listenToEvent('up', () => {
       game.move('north');
     });

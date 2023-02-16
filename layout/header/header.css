@@ -50,11 +50,13 @@
   color: orange;
   background-color: black;
   height: 26px;
-  margin-bottom: 0.5px;
+  margin-bottom: 2px;
+  margin-right: 2px;
   font-size: 1.2em;
-  border: 0.5px solid orange;
+  border: 1px solid orange;
   text-align: center;
   width: 100px;
+  border-radius: 13px 13px 13px 13px;
 }
 
 .header-button-active {

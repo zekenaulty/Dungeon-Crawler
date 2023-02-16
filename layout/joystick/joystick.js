@@ -1,117 +1,54 @@
+import { DOM } from '../../core/dom.js';
 import { EventHandler } from '../../core/eventHandler.js';
 
 export class JoyStick extends EventHandler {
 
-  #styles;
   #footer;
-  #hand;
   #mover;
-  #up;
-  #down;
-  #left;
-  #right;
-  #sig;
-  
-  #gameLevel;
 
-  constructor(gameLevel) {
+  constructor() {
     super();
     let vm = this;
 
-    vm.#gameLevel = gameLevel;
-    
     vm.defineEvent('up', 'down', 'left', 'right');
 
-    vm.#styles = document.createElement('link');
+    DOM.stylesheet('./layout/joystick/joystick.css', 'joystick_styles');
 
-    vm.#styles.rel = 'stylesheet';
-    vm.#styles.href = './layout/joystick/joystick.css';
-
-    document.querySelector('head').appendChild(vm.#styles);
-
-    vm.#footer = document.createElement('nav');
-    vm.#hand = document.createElement('button');
-    vm.#mover = document.createElement('div');
-    vm.#up = document.createElement('button');
-    vm.#down = document.createElement('button');
-    vm.#left = document.createElement('button');
-    vm.#right = document.createElement('button');
-    vm.#sig = document.createElement('span');
-
-    vm.#footer.classList.add('foot');
-    vm.#hand.classList.add('hand');
-    vm.#hand.innerHTML = '&lt;';
-    vm.#footer.appendChild(vm.#hand);
-    vm.#mover.classList.add('move');
-    vm.#footer.appendChild(vm.#mover);
-    vm.#sig.classList.add('sig-left');
-    vm.#footer.appendChild(vm.#sig);
-    vm.#sig.innerHTML = 'Zeke Naulty';
+    vm.#footer = DOM.nav(DOM.body, 'foot');
+    vm.#mover = DOM.div(vm.#footer, 'move');
     
-    vm.#sig.addEventListener('dblclick', () => {
-      vm.#gameLevel.histogram();
-    });
+    DOM.button(
+      'UP',
+      vm.#mover,
+      'up',
+      () => {
+        vm.raiseEvent('up');
+      });
 
-    vm.#up.classList.add('up');
-    vm.#down.classList.add('down');
-    vm.#left.classList.add('left');
-    vm.#right.classList.add('right');
+    DOM.button(
+      'DOWN',
+      vm.#mover,
+      'down',
+      () => {
+        vm.raiseEvent('down');
+      });
 
-    vm.#mover.appendChild(vm.#up);
-    vm.#mover.appendChild(vm.#down);
-    vm.#mover.appendChild(vm.#left);
-    vm.#mover.appendChild(vm.#right);
+    DOM.button(
+      'LEFT',
+      vm.#mover,
+      'left',
+      () => {
+        vm.raiseEvent('left');
+      });
 
-    vm.#up.innerHTML = 'UP';
-    vm.#down.innerHTML = 'DOWN';
-    vm.#left.innerHTML = 'LEFT';
-    vm.#right.innerHTML = 'RIGHT';
-
-    vm.#up.addEventListener('click', () => {
-      vm.raiseEvent('up');
-    });
-
-    vm.#down.addEventListener('click', () => {
-      vm.raiseEvent('down');
-    });
-
-    vm.#left.addEventListener('click', () => {
-      vm.raiseEvent('left');
-    });
-
-    vm.#right.addEventListener('click', () => {
-      vm.raiseEvent('right');
-    });
-
-    vm.#hand.addEventListener('click', () => {
-      vm.#swap();
-    });
-
-    document.querySelector('body').appendChild(vm.#footer);
-
-  }
-
-  #swap() {
-    let vm = this;
-    if (vm.#hand.innerHTML === '&lt;') {
-      vm.#footer.style.justifyContent = 'start';
-      vm.#mover.style.order = 1;
-      vm.#hand.style.order = 2;
-      vm.#hand.innerHTML = '&gt;';
+    DOM.button(
+      'RIGHT',
+      vm.#mover,
+      'right',
+      () => {
+        vm.raiseEvent('right');
+      });
       
-      vm.#sig.classList.remove('sig-left');
-      vm.#sig.classList.add('sig-right');
-
-    } else {
-      vm.#footer.style.justifyContent = 'end';
-      vm.#hand.style.order = 1;
-      vm.#mover.style.order = 2;
-      vm.#hand.innerHTML = '&lt;';
-      
-      vm.#sig.classList.remove('sig-right');
-      vm.#sig.classList.add('sig-left');
-
-    }
   }
 
 }
