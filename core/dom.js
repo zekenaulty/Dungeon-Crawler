@@ -26,11 +26,10 @@ export class DOM {
     let e = document.createElement('nav');
 
     if (parent) {
-      parent.appendChild(e);
+      DOM.append(e, parent);
     }
 
     DOM.classes(e, classes);
-
 
     return e;
   }
@@ -45,7 +44,7 @@ export class DOM {
     DOM.classes(e, classes);
 
     if (parent) {
-      parent.appendChild(e);
+      DOM.append(e, parent);
     }
 
     if (action) {
@@ -67,7 +66,7 @@ export class DOM {
     DOM.classes(e, classes);
 
     if (parent) {
-      parent.appendChild(e);
+      DOM.append(e, parent);
     }
 
     return e;
@@ -83,7 +82,7 @@ export class DOM {
     DOM.classes(e, classes);
 
     if (parent) {
-      parent.appendChild(e);
+      DOM.append(e, parent);
     }
 
     return e;
@@ -99,7 +98,7 @@ export class DOM {
     DOM.classes(e, classes);
 
     if (parent) {
-      parent.appendChild(e);
+      DOM.append(e, parent);
     }
 
     return e;
@@ -111,7 +110,7 @@ export class DOM {
     DOM.classes(e, classes);
 
     if (parent) {
-      parent.appendChild(e);
+      DOM.append(e, parent);
     }
 
     return e;
@@ -127,7 +126,7 @@ export class DOM {
     DOM.classes(e, classes);
 
     if (parent) {
-      parent.appendChild(e);
+      DOM.append(e, parent);
     }
 
     return e;
@@ -137,7 +136,7 @@ export class DOM {
     let e = document.createElement('div');
 
     if (parent) {
-      parent.appendChild(e);
+      DOM.append(e, parent);
     }
 
     DOM.classes(e, classes);
@@ -149,7 +148,7 @@ export class DOM {
     let e = document.createTextNode(text);
 
     if (parent) {
-      parent.appendChild(e);
+      DOM.append(e, parent);
     }
 
     return e;
@@ -167,5 +166,25 @@ export class DOM {
       }
     }
 
+  }
+
+  static append(e, to) {
+    if (!to) {
+      to = DOM.body;
+    }
+
+    if (!to.contains(e)) {
+      to.appendChild(e);
+    }
+  }
+  
+  static remove(e, from) {
+    if (!from) {
+      from = DOM.body;
+    }
+    
+    if(from.contains(e)) {
+      from.removeChild(e);
+    }
   }
 }

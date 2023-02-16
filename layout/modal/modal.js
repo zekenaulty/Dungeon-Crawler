@@ -1,8 +1,8 @@
+import { DOM } from '../../core/dom.js';
 import { EventHandler } from '../../core/eventHandler.js';
 
 export class Modal extends EventHandler {
 
-  #styles;
   #backdrop;
   #content;
   #closeButton;
@@ -36,29 +36,17 @@ export class Modal extends EventHandler {
       'closing'
     );
 
+    DOM.stylesheet('./layout/modal/modal.css', 'modal_styles');
 
-    if (!document.getElementById('modal-styles')) {
-      vm.#styles = document.createElement('link');
-      vm.#styles.id = 'modal-styles';
-      vm.#styles.rel = 'stylesheet';
-      vm.#styles.href = './layout/modal/modal.css';
-      document.querySelector('head').appendChild(vm.#styles);
-    } else {
-      vm.#styles = document.querySelector('#modal-styles');
-    }
-
-    vm.#backdrop = document.createElement('div');
-    vm.#content = document.createElement('div');
-    vm.#closeButton = document.createElement('button');
-
-    vm.#backdrop.classList.add('modal-bg');
-    vm.#content.classList.add('modal-content-container');
-    vm.#closeButton.classList.add('modal-close');
-
-    vm.#closeButton.innerHTML = '&times;';
-    vm.#closeButton.addEventListener('click', () => {
-      vm.close();
-    });
+    vm.#backdrop = DOM.div(undefined, 'modal-bg');
+    vm.#content = DOM.div(undefined, 'modal-content-container');
+    vm.#closeButton = DOM.button(
+      '×',
+      undefined,
+      'modal-close',
+      () => {
+        vm.close();
+      });
   }
 
   get isOpen() {
@@ -78,23 +66,18 @@ export class Modal extends EventHandler {
 
       vm.#isOpen = false;
 
-      let body = document.querySelector('body');
-
       if (Modal.#openCount > 0) {
         Modal.#openCount -= 1;
       } else {
         Modal.#openCount = 0;
       }
 
-      if (body.contains(vm.#closeButton)) {
-        body.removeChild(vm.#closeButton);
-      }
-
-      body.removeChild(vm.#backdrop);
-      body.removeChild(vm.#content);
+      DOM.remove(vm.#closeButton);
+      DOM.remove(vm.#backdrop);
+      DOM.remove(vm.#content);
 
       if (Modal.#openCount < 1) {
-        body.classList.remove('modal-body-lock');
+        DOM.body.classList.remove('modal-body-lock');
       }
 
       if (vm.#intervalId > -1) {
@@ -121,19 +104,18 @@ export class Modal extends EventHandler {
       if (e.cancel) {
         return;
       }
-      let body = document.querySelector('body');
 
       Modal.#openCount++;
 
       vm.#isOpen = true;
       if (Modal.#openCount === 1) {
-        body.classList.add('modal-body-lock');
+        DOM.body.classList.add('modal-body-lock');
       }
 
-      body.appendChild(vm.#backdrop);
-      body.appendChild(vm.#content);
+      DOM.append(vm.#backdrop);
+      DOM.append(vm.#content);
       if (showClose) {
-        body.appendChild(vm.#closeButton);
+        DOM.append(vm.#closeButton);
       }
 
       if (showClose) {
