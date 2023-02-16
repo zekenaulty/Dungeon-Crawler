@@ -99,10 +99,6 @@ export class Fight extends EventHandler {
     vm.#encounter = false;
     vm.#running = false;
     vm.raiseEvent('stopped');
-    if (vm.#battle) {
-      vm.#battle.ignoreEvent('won battle', vm.#battleWon);
-      vm.#battle = undefined;
-    }
   }
 
   #beginBattle() {
