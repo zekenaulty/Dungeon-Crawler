@@ -1,9 +1,10 @@
+import { DOM } from '../../core/dom.js';
+
 export class Loader {
 
   static #loaderBg;
   static #loaderText;
   static #text;
-  static #styles;
   static #open = false;
   
   static get isOpen() {
@@ -14,59 +15,34 @@ export class Loader {
     let vm = Loader;
     let bg = vm.#loaderBg;
     let text = vm.#loaderText;
-
-    if (!vm.#styles) {
-      vm.#styles = document.createElement('link');
-      vm.#styles.id = 'loader-styles';
-      vm.#styles.rel = 'stylesheet';
-      vm.#styles.href = './layout/loader/loader.css';
-      document.querySelector('head').appendChild(vm.#styles);
-    }
+    
+    DOM.stylesheet('./layout/loader/loader.css', 'loader_styles');
 
     if (!bg) {
-      bg = document.createElement('div');
-      bg.classList.add('loader');
-      bg.classList.add('loader-hide');
-
-      let inner = document.createElement('div');
-      inner.classList.add('inner-loader');
-      bg.appendChild(inner);
-      
+      bg = DOM.div(DOM.body, ['loader', 'loader-hide']);
+      DOM.div(bg, 'inner-loader');
       vm.#loaderBg = bg;
-      
-      document.querySelector('body').appendChild(bg);
     }
 
     if (!text) {
-      text = document.createElement('div');
-      text.classList.add('loader-over');
-      text.classList.add('loader-hide');
-
-      let inner = document.createElement('div');
-      inner.classList.add('loader-msg');
-      inner.innerHTML = 'LOADING';
-      vm.#text = inner;
-      text.appendChild(inner);
-      
+      text = DOM.div(DOM.body, ['loader-over', 'loader-hide']);
+      vm.#text = DOM.div(text, 'inner-msg');
       vm.#loaderText = text;
-
-      document.querySelector('body').appendChild(text);
     }
   }
 
   static open(msg = 'LOADING') {
     let vm = Loader;
 
-    vm.#build();
-
     if (vm.#open) {
       return;
     }
-
+    
+    vm.#build();
     vm.#open = true;
     
-    vm.#text.innerHTML = msg;
-
+    vm.#text.innerText = msg;
+    
     vm.#loaderText.classList.remove('loader-hide');
     vm.#loaderBg.classList.remove('loader-hide');
   }
