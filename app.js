@@ -3,11 +3,11 @@ import { List } from './core/list.js';
 import { Header } from './ui/header/header.js';
 import { Stage } from './ui/stage/stage.js';
 import { JoyStick } from './ui/joystick/joystick.js';
-import { Modal } from './ui/modal/modal.js';
 import { GameLevel } from './battle/gameLevel.js';
 import { Loader } from './ui/loader/loader.js';
 import { Saves } from './battle/ui/saves.js';
 import { Characters } from './battle/actors/ui/characters.js'
+
 (() => {
 
   go(() => {
@@ -26,11 +26,14 @@ import { Characters } from './battle/actors/ui/characters.js'
     const game = new GameLevel();
     const saves = new Saves(game);
     const stageReady = (gfx) => {
+
       game.initialize(
         stage.width,
         stage.height,
         gfx);
       game.begin();
+      
+      header.info(game.summary);
 
       game.listenToEvent('updated', () => {
         header.info(game.summary);

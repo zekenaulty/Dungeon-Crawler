@@ -1,3 +1,4 @@
+import { DOM } from '../../core/dom.js';
 import { List } from '../../core/list.js';
 import { Modal } from '../../ui/modal/modal.js'
 import { Dice } from '../dice.js';
@@ -21,7 +22,7 @@ export class Battle extends Modal {
 
   #gameLevel;
   #paused = true;
-  #endGrind;
+  #fightWavesBtn;
 
   #nameplates;
   #actionbars;
@@ -45,34 +46,17 @@ export class Battle extends Modal {
     vm.#paused = true;
     vm.#spawner = new Spawner(vm.#party, vm.#gameLevel, vm);
 
-    if (!document.getElementById('battle-styles')) {
-      vm.#stylesheet = document.createElement('link');
-      vm.#stylesheet.id = 'battle-styles';
-      vm.#stylesheet.rel = 'stylesheet';
-      vm.#stylesheet.href = './battle/ui/battle.css';
-      document.querySelector('head').appendChild(vm.#stylesheet);
-    } else {
-      vm.#stylesheet = document.querySelector('#battle-styles');
-    }
+    DOM.stylesheet('./battle/ui/battle.css', 'battle_styles');
 
-    vm.#battlefield = document.createElement('div');
-    vm.#partyInfo = document.createElement('div');
-    vm.#actions = document.createElement('div');
-
-    vm.#battlefield.classList.add('battle-battlefield');
-    vm.#partyInfo.classList.add('battle-party-info');
-    vm.#actions.classList.add('battle-pc-actions');
+    vm.#battlefield = DOM.div(vm.content, 'battle-battlefield');
+    vm.#partyInfo = DOM.div(vm.content, 'battle-party-info');
+    vm.#actions = DOM.div(vm.content, 'battle-pc-actions');
 
     vm.#registerParty();
-
     vm.partyInfo();
 
-    vm.appendChild(vm.#battlefield);
-    vm.appendChild(vm.#partyInfo);
-    vm.appendChild(vm.#actions);
-
     vm.#createPauseButton();
-    vm.#createGrindButton();
+    vm.#createFightWavesButton();
     vm.#createAutoBattleButton();
 
     vm.defineEvent(
@@ -107,11 +91,11 @@ export class Battle extends Modal {
         a.battle = undefined;
       });
     };
-    
+
     vm.#enemyDeath = (e) => {
-      if(e.party.dead()){
+      e.ignoreEvent('death', vm.#enemyDeath);
+      if (e.party.dead()) {
         vm.stopAi();
-        e.ignoreEvent('death', vm.#enemyDeath);
         vm.raiseEvent('end combat', vm);
         vm.raiseEvent('won battle', vm);
       }
@@ -169,88 +153,77 @@ export class Battle extends Modal {
       a.listenToEvent('death', vm.#partyDeath);
       a.battle = vm;
 
-      let ab = document.createElement('div');
-
-      ab.classList.add('actionbar');
+      let ab = DOM.div(vm.#actions, 'actionbar');
       ab.bar = new Actionbar(ab, a, vm);
       ab.bar.populate();
       vm.#actionbars.push(ab);
-      vm.#actions.appendChild(ab);
     });
 
   }
 
   #createPauseButton() {
     let vm = this;
-    vm.#pauseBtn = document.createElement('button');
-    vm.#pauseBtn.innerHTML = 'pause';
-    vm.#pauseBtn.classList.add('battle-btn');
-    vm.#pauseBtn.classList.add('battle-pause');
-
-    vm.#pauseBtn.addEventListener('click', () => {
-      if (vm.#paused) {
-        vm.#paused = false;
-        vm.#pauseBtn.classList.remove('battle-green');
-        vm.#pauseBtn.innerHTML = 'pause';
-      } else {
-        vm.#pauseBtn.classList.add('battle-green');
-        vm.#pauseBtn.innerHTML = 'paused';
-        vm.#paused = true;
+    vm.#pauseBtn = DOM.button(
+      'pause',
+      vm.content,
+      ['battle-btn', 'battle-pause'],
+      () => {
+        if (vm.#paused) {
+          vm.#paused = false;
+          vm.#pauseBtn.classList.remove('battle-green');
+        } else {
+          vm.#pauseBtn.classList.add('battle-green');
+          vm.#paused = true;
+        }
       }
-    });
-
-    vm.appendChild(vm.#pauseBtn);
+    );
   }
 
   #createAutoBattleButton() {
     let vm = this;
-    vm.#autoBattleBtn = document.createElement('button');
-    vm.#autoBattleBtn.innerHTML = 'auto battle';
-    vm.#autoBattleBtn.classList.add('battle-btn');
-    vm.#autoBattleBtn.classList.add('battle-auto-battle');
+    vm.#autoBattleBtn = DOM.button(
+      'auto battle',
+      vm.content,
+      ['battle-btn', 'battle-auto-battle'],
+      () => {
+        if (vm.#party.first().autoBattle) {
+          vm.#autoBattleBtn.classList.remove('battle-green');
+          vm.#party.each((a) => {
+            a.autoBattle = false;
+            a.stopAi();
+          });
+        } else {
+          vm.#autoBattleBtn.classList.add('battle-green');
+          vm.#party.each((a) => {
+            a.autoBattle = true;
+            a.startAi();
+          });
+        }
+      }
+    );
+
     if (vm.#party.first().autoBattle) {
       vm.#autoBattleBtn.classList.add('battle-green');
     }
-    vm.#autoBattleBtn.addEventListener('click', () => {
-      if (vm.#party.first().autoBattle) {
-        vm.#autoBattleBtn.classList.remove('battle-green');
-        vm.#party.each((a) => {
-          a.autoBattle = false;
-          a.stopAi();
-        });
-      } else {
-        vm.#autoBattleBtn.classList.add('battle-green');
-        vm.#party.each((a) => {
-          a.autoBattle = true;
-          a.startAi();
-        });
-      }
-    });
-
-    vm.appendChild(vm.#autoBattleBtn);
   }
 
-  #createGrindButton() {
+  #createFightWavesButton() {
     let vm = this;
     if (vm.#gameLevel.fight.running && !vm.#gameLevel.fight.encounter) {
-      vm.#endGrind = document.createElement('button');
-      vm.#endGrind.innerHTML = 'stop waves';
-      vm.#endGrind.classList.add('battle-end-grind');
-      vm.#endGrind.classList.add('battle-green');
-
-      vm.appendChild(vm.#endGrind);
-
-      vm.#endGrind.addEventListener('click', () => {
-        if (vm.#gameLevel.fight.running) {
-          vm.#gameLevel.fight.stop();
-          vm.#endGrind.innerHTML = 'fight waves';
-          vm.#endGrind.classList.remove('battle-green');
-        } else {
-          vm.#gameLevel.fight.start();
-          vm.#endGrind.innerHTML = 'stop waves';
-          vm.#endGrind.classList.add('battle-green');
+      vm.#fightWavesBtn = DOM.button(
+        'waves',
+        vm.content,
+        ['battle-end-grind', 'battle-green'],
+        () => {
+          if (vm.#gameLevel.fight.running) {
+            vm.#gameLevel.fight.stop();
+            vm.#fightWavesBtn.classList.remove('battle-green');
+          } else {
+            vm.#gameLevel.fight.start();
+            vm.#fightWavesBtn.classList.add('battle-green');
+          }
         }
-      });
+      );
     }
   }
 

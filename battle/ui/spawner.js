@@ -163,7 +163,7 @@ export class Spawner extends EventHandler {
     e.plate = new Nameplate(e.plateDiv, e.enemy);
     e.plate.healthGauge.barWidth('100%');
     e.plate.hideLevel();
-    e.plate.hideName();
+    //e.plate.hideName();
     e.plate.hideMana();
     e.plate.update();
 

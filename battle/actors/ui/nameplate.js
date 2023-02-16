@@ -47,6 +47,8 @@ export class Nameplate extends EventHandler {
     vm.#name = document.createElement('span');
 
     vm.#box.classList.add('nameplate');
+    vm.#level.classList.add('nameplate-text');
+    vm.#name.classList.add('nameplate-text');
 
     vm.#name.innerHTML = vm.#actor.displayName;
     vm.#level.innerHTML = 'level: ' + vm.#actor.level.level;
