@@ -9,7 +9,7 @@ export class DOM {
       e.href = path;
       DOM.head.appendChild(e);
     } else {
-      e = document.querySelector('#battle-styles');
+      e = document.querySelector(id);
     }
     return e;
   }
