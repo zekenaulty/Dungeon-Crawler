@@ -15,14 +15,6 @@ export class ActorParty extends EventHandler {
     vm.#members = new List();
     vm.#members.push(vm.#actor);
     
-    //maybe
-    vm.defineEvent(
-      'death',
-      'damaged',
-      'healed',
-      'levwled up'
-      );
-    
   }
   
   add(actor) {

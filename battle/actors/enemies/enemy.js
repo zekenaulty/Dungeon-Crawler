@@ -39,9 +39,9 @@ export class Enemy extends Actor {
     vm.attributes.pointsPerLevel = 20;
 
     vm.listenToEvent('death', (e) => {
-      e.actor.stopAi();
-      if (e.actor.casting) {
-        e.actor.casting.interupt();
+      e.stopAi();
+      if (e.casting) {
+        e.casting.interupt();
       }
     });
     

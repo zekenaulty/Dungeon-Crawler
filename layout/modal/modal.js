@@ -9,6 +9,7 @@ export class Modal extends EventHandler {
 
   #isOpen = false;
 
+
   #id = 0;
   #previous = -1;
   #intervalId = -1;
@@ -34,6 +35,7 @@ export class Modal extends EventHandler {
       'opening',
       'closing'
     );
+
 
     if (!document.getElementById('modal-styles')) {
       vm.#styles = document.createElement('link');
@@ -67,13 +69,14 @@ export class Modal extends EventHandler {
   close() {
     let vm = this;
     if (vm.isOpen) {
-      vm.#isOpen = false;
 
       let e = { cancel: false, modal: vm };
       vm.raiseEvent('closing', e);
       if (e.cancel) {
         return;
       }
+
+      vm.#isOpen = false;
 
       let body = document.querySelector('body');
 
@@ -83,18 +86,12 @@ export class Modal extends EventHandler {
         Modal.#openCount = 0;
       }
 
-      try {
+      if (body.contains(vm.#closeButton)) {
         body.removeChild(vm.#closeButton);
-      } catch (e) {}
-      
-      try {
-        body.removeChild(vm.#backdrop);
-      } catch (e) {}
-      
-      try {
-        body.removeChild(vm.#content);
-      } catch (e) {}
-      
+      }
+
+      body.removeChild(vm.#backdrop);
+      body.removeChild(vm.#content);
 
       if (Modal.#openCount < 1) {
         body.classList.remove('modal-body-lock');

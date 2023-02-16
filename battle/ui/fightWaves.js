@@ -31,15 +31,18 @@ export class FightWaves extends EventHandler {
     vm.#gameLevel = gameLevel;
 
     vm.#battleWon = () => {
-      vm.#battle.close();
+      if (vm.#battle) {
+        vm.#battle.close();
+        vm.#battle = undefined;
+      }
       vm.#count++;
-      
-      if(vm.#count % 10 == 0) {
+
+      if (vm.#count % 10 == 0) {
         vm.#party.each((a) => {
           a.recover();
         });
       }
-      
+
       Loader.open('BATTLE ' + vm.#count);
       SaveData.save(vm.#gameLevel);
       setTimeout(() => {
@@ -65,9 +68,7 @@ export class FightWaves extends EventHandler {
     vm.#running = false;
     vm.#gameLevel.raiseEvent('grind stopped');
     if (vm.#battle) {
-      vm.#battle.stopAi();
       vm.#battle.ignoreEvent('won battle', vm.#battleWon);
-      vm.#battle.close();
       vm.#battle = undefined;
     }
   }

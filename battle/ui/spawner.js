@@ -116,7 +116,7 @@ export class Spawner extends EventHandler {
     vm.#createEnemy(e);
     vm.#enemyHooks(e);
     
-    vm.#battle.addEnemey(e.div);
+    vm.#battle.addEnemey(e.enemy);
   }
 
   #createEnemyLayout(index) {
@@ -164,6 +164,9 @@ export class Spawner extends EventHandler {
     e.details = new DetailSheet(e.enemy);
     
     vm.#party.each((a) => {
+      a.enemies.forEach((v) => {
+        v.party.add(e.enemy);
+      });
       a.enemies.push(e.enemy);
       e.enemy.enemies.push(a);
     });
@@ -207,27 +210,19 @@ export class Spawner extends EventHandler {
           a.level.addXp(ActorLevel.monsterXp(e.enemy.level.level));
         }
       });
-      
-      let h = vm.#party.first();
-      if (h.enemies.length < 1) {
-        vm.#battle.stopAi();
-        vm.#battle.raiseEvent('end combat', vm);
-        vm.#gameLevel.raiseEvent('updated', vm.#gameLevel);
-        vm.#battle.raiseEvent('won battle', vm.#battle);
-      }
     };
 
     e.detailsClosing = () => {
-      vm.#battle.battlefield.classList.add('battle-hide');
-      vm.#battle.infoPanel.classList.add('battle-hide');
-      vm.#battle.actionbars.classList.add('battle-hide');
+      vm.#battle.battlefield.classList.remove('battle-hide');
+      vm.#battle.infoPanel.classList.remove('battle-hide');
+      vm.#battle.actionbars.classList.remove('battle-hide');
 
     };
 
     e.detailsOpening = () => {
-      vm.#battle.battlefield.classList.remove('battle-hide');
-      vm.#battle.infoPanel.classList.remove('battle-hide');
-      vm.#battle.actionbars.classList.remove('battle-hide');
+      vm.#battle.battlefield.classList.add('battle-hide');
+      vm.#battle.infoPanel.classList.add('battle-hide');
+      vm.#battle.actionbars.classList.add('battle-hide');
     };
     
     e.battleClosing = () => {

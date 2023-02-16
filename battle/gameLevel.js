@@ -46,7 +46,6 @@ export class GameLevel extends EventHandler {
   #mageDetail;
 
   #battle;
-  #gameOverId = -1;
 
   #endGrind;
 
@@ -74,7 +73,7 @@ export class GameLevel extends EventHandler {
     vm.#warrior = new Warrior(vm);
     vm.#healer = new Healer(vm);
     vm.#mage = new Mage(vm);
-    
+
     vm.#warrior.party.add(vm.#mage);
     vm.#warrior.party.add(vm.#healer);
 
@@ -221,7 +220,6 @@ export class GameLevel extends EventHandler {
     return actor === vm.#mage;
   }
 
-
   isHero(actor) {
     let vm = this;
     return vm.isWarrior(actor) || vm.isHealer(actor) || vm.isMage(actor);
@@ -311,6 +309,9 @@ export class GameLevel extends EventHandler {
     vm.#resetMaze();
     vm.#randomMaze();
     vm.#warrior.recover();
+    vm.#healer.recover();
+    vm.#mage.recover();
+    vm.raiseEvent('updated', vm);
   }
 
   #resetMaze() {
@@ -388,15 +389,20 @@ export class GameLevel extends EventHandler {
   beginBattle() {
     let vm = this;
     vm.raiseEvent('battle starting', vm);
+    
+    if (vm.#battle) {
+      vm.#battle = undefined;
+    }
 
     vm.#battle = new Battle(
       vm.#warrior.party,
       vm);
 
     vm.#battle.listenToEvent('won battle', () => {
-      vm.#battle.close();
       SaveData.save(vm);
       vm.raiseEvent('won battle');
+      vm.raiseEvent('updated', vm);
+      vm.#battle = undefined;
     });
 
     Loader.close(0);
@@ -430,28 +436,12 @@ export class GameLevel extends EventHandler {
       d[5] < 25;
   }
 
-  gameOver(delay = 2250) {
+  gameOver() {
     let vm = this;
-    if (vm.#gameOverId > -1 || !vm.#battle) {
-      return;
-    }
-
-    vm.stopGrind();
+    vm.fightWaves.stop();
     vm.autoPilot.stop();
-
-    //alert('GAME OVER');
-    vm.#gameOverId = setTimeout(() => {
-      if (vm.#battle) {
-        vm.#warrior.stopAi();
-        vm.#battle.clearEnemies();
-        vm.#battle.close();
-        vm.#battle = undefined;
-        vm.#gameOverId = -1;
-        vm.raiseEvent('game over', vm);
-
-        vm.#firstLevel();
-      }
-    }, delay);
+    vm.raiseEvent('game over', vm);
+    vm.raiseEvent('updated', vm);
   }
 
   histogram() {

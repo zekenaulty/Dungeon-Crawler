@@ -93,10 +93,8 @@ export class Actor extends EventHandler {
       vm.attributes.hp = 0;
       vm.raiseEvent(
         'death',
-        {
-          actor: vm,
-          gameLevel: vm.gameLevel
-        });
+        vm
+      );
     }
   }
 

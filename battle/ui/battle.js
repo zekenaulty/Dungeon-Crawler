@@ -28,11 +28,10 @@ export class Battle extends Modal {
 
   #party;
 
-  #isOpen = false;
-
   #partyDamaged;
   #partyDeath;
-  #closing;
+  #enemyDeath;
+  #closed;
   #opening;
 
   #spawner;
@@ -97,28 +96,31 @@ export class Battle extends Modal {
         },
         100
       );
-      vm.#isOpen = true;
     };
 
-    vm.#closing = () => {
+    vm.#closed = () => {
       vm.ignoreEvent('opening', vm.#opening);
-      vm.ignoreEvent('closing', vm.#closing);
+      vm.ignoreEvent('closed', vm.#closed);
       vm.#party.each((a) => {
         a.ignoreEvent('damaged', vm.#partyDamaged);
         a.ignoreEvent('death', vm.#partyDeath);
         a.battle = undefined;
       });
-      vm.#isOpen = false;
+    };
+    
+    vm.#enemyDeath = (e) => {
+      if(e.party.dead()){
+        vm.stopAi();
+        e.ignoreEvent('death', vm.#enemyDeath);
+        vm.raiseEvent('end combat', vm);
+        vm.raiseEvent('won battle', vm);
+        vm.close();
+      }
     };
 
     vm.listenToEvent('opening', vm.#opening);
-    vm.listenToEvent('closing', vm.#closing);
+    vm.listenToEvent('closed', vm.#closed);
 
-  }
-
-  get isOpen() {
-    let vm = this;
-    return vm.#isOpen;
   }
 
   get paused() {
@@ -155,6 +157,7 @@ export class Battle extends Modal {
         vm.stopAi();
         vm.raiseEvent('end combat', vm);
         vm.#gameLevel.gameOver();
+        vm.close();
       }
     };
 
@@ -261,7 +264,8 @@ export class Battle extends Modal {
 
   addEnemey(e) {
     let vm = this;
-    vm.#battlefield.appendChild(e);
+    e.listenToEvent('death', vm.#enemyDeath);
+    vm.#battlefield.appendChild(e.div);
   }
 
   removeEnemy(e) {
@@ -320,7 +324,6 @@ export class Battle extends Modal {
 
   pause() {
     let vm = this;
-
     vm.#paused = !vm.paused;
     if (vm.#paused) {
       vm.#pauseBtn.classList.add('battle-green');
