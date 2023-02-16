@@ -20,7 +20,7 @@ export class Spawner extends EventHandler {
 
   #combatDelayMin = 400;
   #combatDelayMax = 750;
-  
+
   constructor(party, gameLevel, battle) {
     super();
 
@@ -67,7 +67,7 @@ export class Spawner extends EventHandler {
 
   #mobLevel() {
     let vm = this;
-    
+
     vm.#minMobLevel = vm.#gameLevel.level - 2;
     vm.#maxMobLevel = vm.#gameLevel.level + 3;
 
@@ -112,10 +112,10 @@ export class Spawner extends EventHandler {
   #addEnemey(index) {
     let vm = this;
     let e = vm.#createEnemyLayout(index);
-    
+
     vm.#createEnemy(e);
     vm.#enemyHooks(e);
-    
+
     vm.#battle.addEnemey(e.enemy);
   }
 
@@ -129,7 +129,7 @@ export class Spawner extends EventHandler {
     e.div.appendChild(e.enemyDiv);
     e.div.appendChild(e.plateDiv);
     e.id = `enemy_${index}`;
-    
+
     e.plateDiv.style.paddingLeft = '6px';
     e.plateDiv.style.paddingRight = '6px';
 
@@ -144,6 +144,8 @@ export class Spawner extends EventHandler {
       vm.#battle
     );
 
+    e.enemyDiv.classList.add(e.enemy.displayName);
+
     let l = vm.#mobLevel();
     while (e.enemy.level.level < l) {
       e.enemy.level.levelUp();
@@ -151,7 +153,7 @@ export class Spawner extends EventHandler {
 
     e.enemy.spendPoints();
     e.enemy.recover();
-    
+
     e.plate = new Nameplate(e.plateDiv, e.enemy);
     e.plate.healthGauge.barWidth('100%');
     e.plate.hideLevel();
@@ -162,7 +164,7 @@ export class Spawner extends EventHandler {
     e.enemy.id = e.id;
     e.enemy.div = e.div;
     e.details = new DetailSheet(e.enemy);
-    
+
     vm.#party.each((a) => {
       a.enemies.forEach((v) => {
         v.party.add(e.enemy);
@@ -195,7 +197,7 @@ export class Spawner extends EventHandler {
       e.enemyDiv.classList.add('battle-dmg');
       e.plate.update();
       setTimeout(() => {
-        if(e && e.enemyDiv) {
+        if (e && e.enemyDiv) {
           e.enemyDiv.classList.remove('battle-dmg');
         }
       }, 250);
@@ -225,7 +227,7 @@ export class Spawner extends EventHandler {
       vm.#battle.infoPanel.classList.add('battle-hide');
       vm.#battle.actionbars.classList.add('battle-hide');
     };
-    
+
     e.battleClosing = () => {
       let vm = this;
       e.div.removeEventListener('dblclick', e.dblClick);
@@ -242,10 +244,10 @@ export class Spawner extends EventHandler {
       e.details = undefined;
 
       vm.#battle.ignoreEvent('closing', e.battleClosing);
-      
+
       e = undefined;
     };
-    
+
     e.div.addEventListener('dblclick', e.dblClick);
     e.details.listenToEvent('opening', e.detailsOpening);
     e.details.listenToEvent('closing', e.detailsClosing);
@@ -253,7 +255,7 @@ export class Spawner extends EventHandler {
     e.enemy.listenToEvent('end recoil', e.endRecoil);
     e.enemy.listenToEvent('damaged', e.damaged);
     e.enemy.listenToEvent('death', e.death);
-    
+
     vm.#battle.listenToEvent('closing', e.battleClosing);
   }
 

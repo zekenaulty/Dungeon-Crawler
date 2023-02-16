@@ -71,9 +71,9 @@
 }
 
 .battle-enemy-attack {
-  color: darkred;
-  font-weight: bolder;
-  font-size: 1.95em;
+  color: darkred !important;
+  font-weight: bolder !important;
+  font-size: 1.95em !important;
 }
 
 .battle-dmg {

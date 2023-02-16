@@ -9,12 +9,25 @@ import { Enemy } from './enemy.js';
 
 export class Slime extends Enemy {
 
+  #stylesheet;
   #slimes;
   #names;
 
   constructor(gameLevel, battle) {
     super(gameLevel, battle);
     let vm = this;
+    
+    
+    if (!document.getElementById('slimes-styles')) {
+      vm.#stylesheet = document.createElement('link');
+      vm.#stylesheet.id = 'slimes-styles';
+      vm.#stylesheet.rel = 'stylesheet';
+      vm.#stylesheet.href = './battle/actors/enemies/slimes.css';
+      document.querySelector('head').appendChild(vm.#stylesheet);
+    } else {
+      vm.#stylesheet = document.querySelector('#slimes-styles');
+    }
+
 
     vm.name = 'slime';
 
