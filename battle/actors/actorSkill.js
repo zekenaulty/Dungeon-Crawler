@@ -114,11 +114,12 @@ export class ActorSkill extends EventHandler {
   }
 
   doAttack(target, cost = 0) {
+    let vm = this;
+
     if (!target || vm.actor.attributes.hp < 1) {
       return;
     }
 
-    let vm = this;
     if (vm.actor.spendMp(cost)) {
 
       let maxDmg = vm.max;

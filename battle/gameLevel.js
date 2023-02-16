@@ -21,7 +21,7 @@ import { Dice } from './dice.js';
 import { Loader } from '../layout/loader/loader.js';
 import { SaveData } from './saveData.js';
 import { AutoPilot } from './autoPilot.js';
-import { FightWaves } from './ui/fightWaves.js';
+import { Fight } from './ui/fight.js';
 
 export class GameLevel extends EventHandler {
 
@@ -45,12 +45,8 @@ export class GameLevel extends EventHandler {
   #healerDetail;
   #mageDetail;
 
-  #battle;
-
-  #endGrind;
-
   autoPilot;
-  fightWaves;
+  fight;
 
   constructor() {
     super();
@@ -115,11 +111,6 @@ export class GameLevel extends EventHandler {
   get mageDetail() {
     let vm = this;
     return vm.#mageDetail;
-  }
-
-  get battle() {
-    let vm = this;
-    return vm.#battle;
   }
 
   saveState() {
@@ -221,7 +212,7 @@ export class GameLevel extends EventHandler {
     vm.#maze = new Maze(vm.#scaler.rows, vm.#scaler.columns);
     vm.#renderer = new CanvasRectangle(vm, vm.#maze, vm.#scaler, gfx);
     vm.autoPilot = new AutoPilot(vm.#warrior.party, vm, vm.#maze);
-    vm.fightWaves = new FightWaves(vm.#warrior.party, vm);
+    vm.fight = new Fight(vm.#warrior.party, vm);
 
     vm.#loadGenerators();
     vm.#maze.listenToEvent('solved', () => {
@@ -365,7 +356,7 @@ export class GameLevel extends EventHandler {
       if (vm.#shouldBattle(dice)) {
         Loader.open('BATTLE');
         setTimeout(() => {
-          vm.beginBattle();
+          vm.fight.start(true);
         }, 650);
       } else if (vm.#shouldTeleport(dice)) {
         vm.teleport();
@@ -373,30 +364,6 @@ export class GameLevel extends EventHandler {
 
       vm.raiseEvent('updated', vm);
     }, 100);
-
-  }
-
-  beginBattle() {
-    let vm = this;
-    vm.raiseEvent('battle starting', vm);
-    
-    if (vm.#battle) {
-      vm.#battle = undefined;
-    }
-
-    vm.#battle = new Battle(
-      vm.#warrior.party,
-      vm);
-
-    vm.#battle.listenToEvent('won battle', () => {
-      SaveData.save(vm);
-      vm.raiseEvent('won battle');
-      vm.raiseEvent('updated', vm);
-      vm.#battle = undefined;
-    });
-
-    Loader.close(0);
-    vm.#battle.open();
 
   }
 
@@ -428,7 +395,7 @@ export class GameLevel extends EventHandler {
 
   gameOver() {
     let vm = this;
-    vm.fightWaves.stop();
+    vm.fight.stop();
     vm.autoPilot.stop();
     vm.raiseEvent('game over', vm);
     vm.raiseEvent('updated', vm);

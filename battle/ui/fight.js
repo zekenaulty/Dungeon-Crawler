@@ -6,7 +6,7 @@ import { EventHandler } from '../../core/eventHandler.js';
 import { Battle } from './battle.js';
 import { Loader } from '../../layout/loader/loader.js';
 
-export class FightWaves extends EventHandler {
+export class Fight extends EventHandler {
 
   #party;
   #gameLevel;
@@ -18,11 +18,8 @@ export class FightWaves extends EventHandler {
   #gameOver;
   #count = 1;
 
-  get running() {
-    let vm = this;
-    return vm.#running;
-  }
-
+  #encounter = false;
+  
   constructor(party, gameLevel) {
     super();
     let vm = this;
@@ -40,6 +37,11 @@ export class FightWaves extends EventHandler {
       }
 
       if (!vm.running) {
+        return;
+      }
+
+      if (vm.#encounter) {
+        vm.stop();
         return;
       }
 
@@ -61,16 +63,31 @@ export class FightWaves extends EventHandler {
     };
 
   }
+  
+  get running() {
+    let vm = this;
+    return vm.#running;
+  }
 
-  start() {
+  get encounter() {
+    let vm = this;
+    return vm.#encounter;
+  }
+
+  start(encounter = false) {
     let vm = this;
     if (vm.running) {
       return;
     }
+    vm.#encounter = encounter;
     vm.#running = true;
     vm.#count = 1;
     vm.raiseEvent('started');
-    Loader.open('BATTLE ' + vm.#count);
+    if (encounter) {
+      Loader.open('BATTLE');
+    } else {
+      Loader.open('BATTLE ' + vm.#count);
+    }
     vm.#beginBattle();
   }
 
@@ -79,6 +96,7 @@ export class FightWaves extends EventHandler {
     if (!vm.running) {
       return;
     }
+    vm.#encounter = false;
     vm.#running = false;
     vm.raiseEvent('stopped');
     if (vm.#battle) {
@@ -94,7 +112,6 @@ export class FightWaves extends EventHandler {
       vm.#battle.ignoreEvent('won battle', vm.#battleWon);
       vm.#battle = undefined;
     }
-
     if (!vm.running) {
       return;
     }

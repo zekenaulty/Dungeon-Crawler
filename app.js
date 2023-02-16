@@ -45,11 +45,11 @@ import { Characters } from './battle/actors/ui/characters.js'
         player.innerHTML = 'AUTO PLAY';
       });
 
-      game.fightWaves.listenToEvent('started', () => {
+      game.fight.listenToEvent('started', () => {
         waves.innerHTML = 'STOP WAVES';
       });
 
-      game.fightWaves.listenToEvent('stopped', () => {
+      game.fight.listenToEvent('stopped', () => {
         waves.innerHTML = 'FIGHT WAVES';
       });
     };
@@ -62,17 +62,17 @@ import { Characters } from './battle/actors/ui/characters.js'
       if (game.autoPilot.running) {
         game.autoPilot.stop();
       } else {
-        game.fightWaves.stop();
+        game.fight.stop();
         game.autoPilot.start();
       }
     });
 
     const waves = header.addButton('FIGHT WAVES', (e) => {
-      if (game.fightWaves.running) {
-        game.fightWaves.stop();
+      if (game.fight.running) {
+        game.fight.stop();
       } else {
         game.autoPilot.stop();
-        game.fightWaves.start();
+        game.fight.start();
       }
     });
 

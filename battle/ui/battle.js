@@ -233,7 +233,7 @@ export class Battle extends Modal {
 
   #createGrindButton() {
     let vm = this;
-    if (vm.#gameLevel.fightWaves.running) {
+    if (vm.#gameLevel.fight.running && !vm.#gameLevel.fight.encounter) {
       vm.#endGrind = document.createElement('button');
       vm.#endGrind.innerHTML = 'stop waves';
       vm.#endGrind.classList.add('battle-end-grind');
@@ -242,12 +242,12 @@ export class Battle extends Modal {
       vm.appendChild(vm.#endGrind);
 
       vm.#endGrind.addEventListener('click', () => {
-        if (vm.#gameLevel.fightWaves.running) {
-          vm.#gameLevel.fightWaves.stop();
+        if (vm.#gameLevel.fight.running) {
+          vm.#gameLevel.fight.stop();
           vm.#endGrind.innerHTML = 'fight waves';
           vm.#endGrind.classList.remove('battle-green');
         } else {
-          vm.#gameLevel.fightWaves.start();
+          vm.#gameLevel.fight.start();
           vm.#endGrind.innerHTML = 'stop waves';
           vm.#endGrind.classList.add('battle-green');
         }
