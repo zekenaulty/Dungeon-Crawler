@@ -36,6 +36,22 @@ import { Characters } from './battle/actors/ui/characters.js'
         stage.height,
         gfx);
       game.begin();
+
+      game.autoPilot.listenToEvent('started', () => {
+        player.innerHTML = 'MANUAL PLAY';
+      });
+
+      game.autoPilot.listenToEvent('stopped', () => {
+        player.innerHTML = 'AUTO PLAY';
+      });
+
+      game.fightWaves.listenToEvent('started', () => {
+        waves.innerHTML = 'STOP WAVES';
+      });
+
+      game.fightWaves.listenToEvent('stopped', () => {
+        waves.innerHTML = 'FIGHT WAVES';
+      });
     };
 
     const header = new Header(game);
@@ -45,42 +61,28 @@ import { Characters } from './battle/actors/ui/characters.js'
     const player = header.addButton('AUTO PLAY', (e) => {
       if (game.autoPilot.running) {
         game.autoPilot.stop();
-        player.innerHTML = 'AUTO PLAY';
       } else {
         game.fightWaves.stop();
-        waves.innerHTML = 'FIGHT WAVES';
         game.autoPilot.start();
-        player.innerHTML = 'MANUAL PLAY';
       }
     });
 
     const waves = header.addButton('FIGHT WAVES', (e) => {
       if (game.fightWaves.running) {
         game.fightWaves.stop();
-        waves.innerHTML = 'FIGHT WAVES';
       } else {
         game.autoPilot.stop();
         game.fightWaves.start();
-        waves.innerHTML = 'STOP WAVES';
       }
-    });
-
-    const states = header.addButton('SAVES', (e) => {
-      saves.open(true);
     });
 
     const character = header.addButton('CHARACTERS', (e) => {
       Characters.show(game);
     });
 
-    game.listenToEvent('grind started', () => {
-      waves.innerHTML = 'STOP WAVES';
+    const states = header.addButton('SAVES', (e) => {
+      saves.open(true);
     });
-
-    game.listenToEvent('grind stopped', () => {
-      waves.innerHTML = 'FIGHT WAVES';
-    });
-
     joystick.listenToEvent('up', () => {
       game.move('north');
     });

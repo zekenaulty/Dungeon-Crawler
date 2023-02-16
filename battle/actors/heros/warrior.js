@@ -37,25 +37,28 @@ export class Warrior extends Actor {
     vm.reset();
 
     vm.name = 'warrior';
+    vm.displayName = 'Vor'
 
     vm.addSkill('cleave', new Cleave(vm));
     vm.addSkill('slam', new Slam(vm));
-    //vm.addSkill('heal', new Heal(vm));
 
     vm.listenToEvent('leveled up', (e) => {
+      vm.attributes.baseHpLevel += 20;
       if (e.level.level % 5 === 0) {
-        vm.attributes.baseHpLevel += 50;
         vm.attributes.baseDamageLevel += 2;
-        vm.recover();
       }
-      
-      if(e.level.level % 25 == 0) {
+
+      if (e.level.level % 25 == 0) {
         vm.skills.cleave.addMaxCharge();
         vm.skills.slam.addMaxCharge();
       }
-      
+
       vm.attributes.strengthLevel++;
       vm.attributes.strengthLevel++;
+      vm.attributes.strengthLevel++;
+
+      vm.recover();
+
     });
 
   }
@@ -119,7 +122,7 @@ export class Warrior extends Actor {
     } else if (
       vm.enemies.length > 1 &&
       vm.skills.cleave.charges > 0 &&
-      !vm.skills.cleave.onCd && 
+      !vm.skills.cleave.onCd &&
       Dice.coin() == 1
     ) {
       vm.skills.cleave.invoke();

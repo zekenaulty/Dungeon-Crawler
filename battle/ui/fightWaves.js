@@ -27,14 +27,22 @@ export class FightWaves extends EventHandler {
     super();
     let vm = this;
 
+    vm.defineEvent('started', 'stopped');
+
     vm.#party = party;
     vm.#gameLevel = gameLevel;
 
     vm.#battleWon = () => {
       if (vm.#battle) {
+        vm.#battle.ignoreEvent('won battle', vm.#battleWon);
         vm.#battle.close();
         vm.#battle = undefined;
       }
+
+      if (!vm.running) {
+        return;
+      }
+
       vm.#count++;
 
       if (vm.#count % 10 == 0) {
@@ -56,17 +64,23 @@ export class FightWaves extends EventHandler {
 
   start() {
     let vm = this;
+    if (vm.running) {
+      return;
+    }
     vm.#running = true;
     vm.#count = 1;
-    vm.#gameLevel.raiseEvent('grind started');
+    vm.raiseEvent('started');
     Loader.open('BATTLE ' + vm.#count);
     vm.#beginBattle();
   }
 
   stop() {
     let vm = this;
+    if (!vm.running) {
+      return;
+    }
     vm.#running = false;
-    vm.#gameLevel.raiseEvent('grind stopped');
+    vm.raiseEvent('stopped');
     if (vm.#battle) {
       vm.#battle.ignoreEvent('won battle', vm.#battleWon);
       vm.#battle = undefined;
@@ -79,6 +93,10 @@ export class FightWaves extends EventHandler {
     if (vm.#battle) {
       vm.#battle.ignoreEvent('won battle', vm.#battleWon);
       vm.#battle = undefined;
+    }
+
+    if (!vm.running) {
+      return;
     }
 
     vm.#battle = new Battle(

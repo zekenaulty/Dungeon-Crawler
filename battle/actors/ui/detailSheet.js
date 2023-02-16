@@ -37,7 +37,8 @@ export class DetailSheet extends Modal {
     vm.#container.classList.add('detail-sheet-content');
     vm.appendChild(vm.#container);
 
-    vm.#add('Name', vm.#actor, 'name');
+    vm.#add('Name', vm.#actor, 'displayName');
+    vm.#add('Class', vm.#actor, 'name');
     vm.#add('Level', vm.#actor.level, 'level');
     vm.#add('XP', vm.#actor.level, 'xpRequired');
     vm.#spacer();

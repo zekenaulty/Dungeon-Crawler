@@ -34,8 +34,10 @@ export class Enemy extends Actor {
 
     vm.battle = battle;
     vm.name = 'enemy';
-    vm.autoBattle = true;
+    vm.displayName = 'enemy';
     
+    vm.autoBattle = true;
+
     vm.attributes.pointsPerLevel = 20;
 
     vm.listenToEvent('death', (e) => {
@@ -44,20 +46,12 @@ export class Enemy extends Actor {
         e.casting.interupt();
       }
     });
-    
+
     vm.listenToEvent('leveled up', (e) => {
-      if (e.level.level % 5 === 0) {
-        vm.attributes.baseHpLevel += 50;
-        vm.attributes.strengthLevel++;
-        vm.recover();
-      }
-      if (e.level.level % 10 == 0) {
-        vm.attributes.baseDamageLevel += 1;
-      }
+      vm.attributes.baseHpLevel += 15;
+      vm.attributes.vitalityLevel += 2;
+      vm.recover();
     });
-
-
-
   }
 
   #getWeightedTargets() {
@@ -67,24 +61,29 @@ export class Enemy extends Actor {
     let w = vm.enemies.find((e) => {
       return e.name == 'warrior';
     });
-    
+
     let h = vm.enemies.find((e) => {
       return e.name == 'healer';
     });
-    
+
     let m = vm.enemies.find((e) => {
       return e.name == 'mage';
     });
-    
+
     while (l.length < 30) {
       l.push(w);
       l.push(w);
       l.push(w);
       l.push(h);
       l.push(w);
+      l.push(w);
+      l.push(w);
       l.push(m);
+      l.push(w);
+      l.push(w);
+      l.push(w);
     }
-    
+
     return l;
   }
 
@@ -165,9 +164,12 @@ export class Enemy extends Actor {
     let stats = new List();
     stats.push('strength');
     stats.push('strength');
+    stats.push('strength');
+    stats.push('strength');
     stats.push('vitality');
     stats.push('strength');
     stats.push('strength');
+    stats.push('vitality');
     stats.push('vitality');
     while (vm.attributes.available > 0) {
       vm.attributes.available--;

@@ -48,7 +48,7 @@ export class Nameplate extends EventHandler {
 
     vm.#box.classList.add('nameplate');
 
-    vm.#name.innerHTML = vm.#actor.name;
+    vm.#name.innerHTML = vm.#actor.displayName;
     vm.#level.innerHTML = 'level: ' + vm.#actor.level.level;
     vm.#name.style.padding = '2px 1px 2px 1px';
     vm.#level.style.padding = '2px 1px 2px 1px';

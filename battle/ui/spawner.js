@@ -206,6 +206,7 @@ export class Spawner extends EventHandler {
       e.div.style.visibility = 'hidden';
 
       vm.#party.each((a) => {
+        a.enemies.delete(e.enemy);
         if (a.attributes.hp > 0) {
           a.level.addXp(ActorLevel.monsterXp(e.enemy.level.level));
         }

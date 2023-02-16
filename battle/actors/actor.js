@@ -24,6 +24,7 @@ export class Actor extends EventHandler {
   battle;
   autoBattle = true;
   party;
+  displayName;
 
   constructor(gameLevel) {
     super();

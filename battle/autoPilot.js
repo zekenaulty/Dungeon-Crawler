@@ -35,6 +35,8 @@ export class AutoPilot extends EventHandler {
     super();
 
     let vm = this;
+    
+    vm.defineEvent('started', 'stopped');
 
     vm.#party = party;
 
@@ -51,6 +53,8 @@ export class AutoPilot extends EventHandler {
       return;
     }
     vm.#running = true;
+    
+    vm.raiseEvent('started');
 
     if (vm.#loopId > -1) {
       clearInterval(vm.#loopId);
@@ -74,11 +78,15 @@ export class AutoPilot extends EventHandler {
 
   stop() {
     let vm = this;
+if(!vm.running) {
+  return;
+}
 
     vm.#running = false;
     if (vm.#loopId > -1) {
       clearInterval(vm.#loopId);
       vm.#loopId = -1;
+    vm.raiseEvent('stopped');
     }
   }
 

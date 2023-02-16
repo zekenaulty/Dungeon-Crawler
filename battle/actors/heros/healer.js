@@ -12,7 +12,7 @@ import { Resurect } from '../skills/resurect.js';
 
 export class Healer extends Actor {
 
-  #aiIntervalMin = 850;
+  #aiIntervalMin = 750;
   #aiIntervalMax = 950;
 
   /*  dexterity should factor 
@@ -34,6 +34,8 @@ export class Healer extends Actor {
 
     vm.reset();
     vm.name = 'healer';
+    vm.displayName = 'Ayla';
+    
     vm.attributes.scaleWith = 'intellect';
 
     delete vm.skills.attack;
@@ -44,18 +46,13 @@ export class Healer extends Actor {
     vm.addSkill('resurect', new Resurect(vm));
 
     vm.listenToEvent('leveled up', (e) => {
-      if (e.level.level % 5 === 0) {
-        vm.attributes.baseHpLevel += 25;
-        vm.attributes.baseMpLevel += 10;
-
-        vm.recover();
-      }
-
-      if (e.level.level % 10 == 0) {
-        vm.attributes.baseDamageLevel += 3;
-      }
-
+      vm.attributes.baseHpLevel += 10;
+      vm.attributes.baseMpLevel += 1;
       vm.attributes.intellectLevel++;
+      vm.attributes.intellectLevel++;
+      vm.attributes.intellectLevel++;
+      vm.recover();
+
     });
 
   }
@@ -93,7 +90,7 @@ export class Healer extends Actor {
     if (!vm.aiCanAct()) {
       return;
     }
-    
+
     if (
       vm.skills.resurect &&
       vm.party.firstDead() &&

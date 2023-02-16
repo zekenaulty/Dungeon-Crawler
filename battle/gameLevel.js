@@ -66,8 +66,6 @@ export class GameLevel extends EventHandler {
       'updated',
       'teleporting',
       'teleported',
-      'grind started',
-      'grind stopped'
     );
 
     vm.#warrior = new Warrior(vm);
@@ -191,18 +189,10 @@ export class GameLevel extends EventHandler {
     let vm = this;
     return `
       <span><span class="bolder">Dungeon Level: </span>${vm.level}</span>
-      <span class="small-text"><span class="bolder pl-1">Warrior Level: </span>${vm.#warrior.level.level}</span>
-      <span class="small-text"><span class="bolder pl-1">Healer Level: </span>${vm.#healer.level.level}</span>
-      <span class="small-text"><span class="bolder pl-1">Mage Level: </span>${vm.#mage.level.level}</span>
+      <span class="small-text"><span class="bolder pl-1">${vm.#warrior.displayName} Level: </span>${vm.#warrior.level.level}</span>
+      <span class="small-text"><span class="bolder pl-1">${vm.#mage.displayName} Level: </span>${vm.#mage.level.level}</span>
+      <span class="small-text"><span class="bolder pl-1">${vm.#healer.displayName} Level: </span>${vm.#healer.level.level}</span>
       `;
-    /*     <span><span></span>${}</span>  */
-    /*
-      <span><span class="bolder">Warrior</span></span>
-      <span><span class="bolder pl-1">Level: </span>${vm.#warrior.level.level}</span>
-      <span><span class="bolder pl-1">Health: </span>${vm.#warrior.attributes.health}</span>
-      <span><span class="bolder pl-1">Mana: </span>${vm.#warrior.attributes.mana}</span>
-    
-    */
   }
 
   isWarrior(actor) {
