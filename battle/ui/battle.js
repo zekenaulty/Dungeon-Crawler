@@ -114,7 +114,6 @@ export class Battle extends Modal {
         e.ignoreEvent('death', vm.#enemyDeath);
         vm.raiseEvent('end combat', vm);
         vm.raiseEvent('won battle', vm);
-        vm.close();
       }
     };
 

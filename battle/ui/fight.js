@@ -19,7 +19,7 @@ export class Fight extends EventHandler {
   #count = 1;
 
   #encounter = false;
-  
+
   constructor(party, gameLevel) {
     super();
     let vm = this;
@@ -30,40 +30,41 @@ export class Fight extends EventHandler {
     vm.#gameLevel = gameLevel;
 
     vm.#battleWon = () => {
-      if (vm.#battle) {
-        vm.#battle.ignoreEvent('won battle', vm.#battleWon);
-        vm.#battle.close();
-        vm.#battle = undefined;
-      }
-
-      if (!vm.running) {
-        return;
-      }
-
-      if (vm.#encounter) {
-        vm.stop();
-        return;
-      }
-
-      vm.#count++;
-
-      if (vm.#count % 10 == 0) {
-        vm.#party.each((a) => {
-          a.recover();
-        });
-      }
-
-      Loader.open('BATTLE ' + vm.#count);
-      SaveData.save(vm.#gameLevel);
       setTimeout(() => {
+
+          if (vm.#battle) {
+            vm.#battle.ignoreEvent('won battle', vm.#battleWon);
+            vm.#battle.close();
+            vm.#battle = undefined;
+          }
+
+          if (!vm.running) {
+            return;
+          }
+
+          if (vm.#encounter) {
+            vm.stop();
+            return;
+          }
+
+          vm.#count++;
+
+          if (vm.#count % 10 == 0) {
+            vm.#party.each((a) => {
+              a.recover();
+            });
+          }
+
+          Loader.open('BATTLE ' + vm.#count);
+          SaveData.save(vm.#gameLevel);
           vm.#beginBattle();
         },
-        100
+        550
       );
     };
 
   }
-  
+
   get running() {
     let vm = this;
     return vm.#running;
@@ -126,7 +127,7 @@ export class Fight extends EventHandler {
         Loader.close(0);
         vm.#battle.open();
       },
-      750
+      450
     );
   }
 
