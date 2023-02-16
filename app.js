@@ -1,4 +1,4 @@
-import { go } from './isReady.js';
+import { go } from './core/isReady.js';
 import { List } from './core/list.js';
 import { Header } from './layout/header/header.js';
 import { Stage } from './layout/stage/stage.js';
@@ -18,24 +18,23 @@ import { Characters } from './battle/actors/ui/characters.js'
       used for dirty history hax 
       to allow back button to 
       close modals... 
-      dev on android phone relflex
-      back button
+      dev on android phone reflex
+      back button user
     */
     history.replaceState(0, 'root');
 
     const game = new GameLevel();
     const saves = new Saves(game);
-
-    game.listenToEvent('updated', () => {
-      header.info(game.summary);
-    });
-
     const stageReady = (gfx) => {
       game.initialize(
         stage.width,
         stage.height,
         gfx);
       game.begin();
+
+      game.listenToEvent('updated', () => {
+        header.info(game.summary);
+      });
 
       game.autoPilot.listenToEvent('started', () => {
         player.innerHTML = 'MANUAL PLAY';
@@ -83,7 +82,7 @@ import { Characters } from './battle/actors/ui/characters.js'
     const states = header.addButton('SAVES', (e) => {
       saves.open(true);
     });
-    
+
     joystick.listenToEvent('up', () => {
       game.move('north');
     });
