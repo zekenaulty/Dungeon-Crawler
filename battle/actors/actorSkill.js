@@ -96,7 +96,9 @@ export class ActorSkill extends EventHandler {
 
   doHeal(target, percent = 0.5, cost = 20, resurect = false) {
     let vm = this;
-    if (!target || (!resurect && target.attributes.hp < 1)) {
+    if (!target ||
+      vm.actor.attributes.hp < 1 ||
+      (!resurect && target.attributes.hp < 1)) {
       return;
     }
 
@@ -110,7 +112,7 @@ export class ActorSkill extends EventHandler {
   }
 
   doAttack(target, cost = 0) {
-    if (!target) {
+    if (!target || vm.actor.attributes.hp < 1) {
       return;
     }
 
@@ -147,7 +149,9 @@ export class ActorSkill extends EventHandler {
   safeInvoke(action) {
     let vm = this;
 
-    if (vm.onGcd || vm.actor.casting === vm) {
+    if (vm.onGcd ||
+      vm.actor.casting === vm ||
+      vm.actor.attributes.hp < 1) {
       return;
     }
 
