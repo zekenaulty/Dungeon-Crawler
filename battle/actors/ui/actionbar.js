@@ -69,16 +69,16 @@ export class Actionbar extends EventHandler {
       skill.ignoreEvent('end cast', update);
       skill.ignoreEvent('end recoil', done);
       skill.ignoreEvent('begin cast', begin);
-      vm.#battle.ignoreEvent('closed', release);
       btn.removeEventListener('click', doClick);
+      console.log('released skill ' + skill.name);
     }
     
     btn.addEventListener('click', doClick);
+    skill.clearEvents();
     skill.listenToEvent('begin cast', begin);
     skill.listenToEvent('end recoil', done);
     skill.listenToEvent('updated', update);
     skill.listenToEvent('end cast', update);
-    vm.#battle.listenToEvent('closed', release);
   }
 
 

@@ -26,9 +26,11 @@ export class Actor extends EventHandler {
   party;
   displayName;
   #aiId = -1;
-  aiIntervalMin = 1250;
-  aiIntervalMax = 1750;
+  aiIntervalMin = 550;
+  aiIntervalMax = 1250;
   id;
+  
+  static #sequence = 0
 
   constructor(gameLevel) {
     super();
@@ -273,7 +275,8 @@ export class Actor extends EventHandler {
 
   getId() {
     let vm = this;
-    vm.id = `${vm.name}_${new Date().getTime()}`;
+    Actor.#sequence++;
+    vm.id = `${vm.name}_${new Date().getTime()}_${Actor.#sequence}`;
   }
 
 }

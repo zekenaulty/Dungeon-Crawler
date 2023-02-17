@@ -32,7 +32,7 @@ export class Battle extends Modal {
   #partyDamaged;
   #partyDeath;
   #enemyDeath;
-  #closed;
+  #closing;
   #opening;
 
   #spawner;
@@ -40,7 +40,7 @@ export class Battle extends Modal {
   constructor(party, gameLevel) {
     super();
     let vm = this;
-
+  
     vm.#party = party;
     vm.#gameLevel = gameLevel;
     vm.#paused = true;
@@ -82,14 +82,17 @@ export class Battle extends Modal {
       );
     };
 
-    vm.#closed = () => {
-      vm.ignoreEvent('opening', vm.#opening);
-      vm.ignoreEvent('closed', vm.#closed);
+    vm.#closing = () => {
       vm.#party.each((a) => {
         a.ignoreEvent('damaged', vm.#partyDamaged);
         a.ignoreEvent('death', vm.#partyDeath);
+        a.enemies.forEach((e) => {
+          a.enemies.delete(e);
+        });
         a.battle = undefined;
       });
+      vm.ignoreEvent('opening', vm.#opening);
+      vm.ignoreEvent('closing', vm.#closing);
     };
 
     vm.#enemyDeath = (e) => {
@@ -103,7 +106,7 @@ export class Battle extends Modal {
     };
 
     vm.listenToEvent('opening', vm.#opening);
-    vm.listenToEvent('closed', vm.#closed);
+    vm.listenToEvent('closing', vm.#closing);
 
   }
 

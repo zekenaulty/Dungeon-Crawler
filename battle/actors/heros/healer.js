@@ -12,8 +12,8 @@ import { Resurect } from '../skills/resurect.js';
 
 export class Healer extends Actor {
 
-  #aiIntervalMin = 750;
-  #aiIntervalMax = 950;
+  #aiIntervalMin = 350;
+  #aiIntervalMax = 650;
 
   constructor(gameLevel) {
     super(gameLevel);

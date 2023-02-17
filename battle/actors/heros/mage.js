@@ -14,8 +14,8 @@ import { Dice } from '../../dice.js';
 
 export class Mage extends Actor {
 
-  #aiIntervalMin = 777;
-  #aiIntervalMax = 1331;
+  #aiIntervalMin = 350;
+  #aiIntervalMax = 650;
 
   constructor(gameLevel) {
     super(gameLevel);

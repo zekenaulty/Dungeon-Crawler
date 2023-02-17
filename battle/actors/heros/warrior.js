@@ -14,8 +14,8 @@ import { Dice } from '../../dice.js';
 
 export class Warrior extends Actor {
 
-  #aiIntervalMin = 850;
-  #aiIntervalMax = 1250;
+  #aiIntervalMin = 350;
+  #aiIntervalMax = 650;
 
   constructor(gameLevel) {
     super(gameLevel);

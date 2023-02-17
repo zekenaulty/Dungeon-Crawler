@@ -57,6 +57,17 @@ export class EventHandler {
     e.remove(action);
   }
 
+  clearEvents() {
+    let vm = this;
+    let e = vm.#events;
+    vm.#events = {};
+    for(let p in e) {
+      e[p].length = 0;
+      delete e[p];
+      vm.defineEvent(p);
+    }
+    e = undefined;
+  }
 }
 
 class EventDispatcher {

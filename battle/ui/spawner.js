@@ -46,15 +46,15 @@ export class Spawner extends EventHandler {
   spawn() {
     let vm = this;
     let count = vm.#spawnCount();
-    
+
     vm.#party.each((a) => {
       a.enemies = new List();
     });
-    
+
     for (let i = 0; i < count; i++) {
       vm.#addEnemey(i);
     }
-    
+
     let delay = vm.#combatDelay;
     setTimeout(() => {
         vm.#gameLevel.raiseEvent(
@@ -134,7 +134,6 @@ export class Spawner extends EventHandler {
     e.enemyDiv = document.createElement('div');
     e.div.appendChild(e.enemyDiv);
     e.div.appendChild(e.plateDiv);
-    e.id = `enemy_${index}`;
 
     e.plateDiv.style.paddingLeft = '6px';
     e.plateDiv.style.paddingRight = '6px';
@@ -163,11 +162,9 @@ export class Spawner extends EventHandler {
     e.plate = new Nameplate(e.plateDiv, e.enemy);
     e.plate.healthGauge.barWidth('100%');
     e.plate.hideLevel();
-    //e.plate.hideName();
     e.plate.hideMana();
     e.plate.update();
 
-    //e.enemy.id = e.id;
     e.enemy.div = e.div;
     e.details = new DetailSheet(e.enemy);
 
@@ -175,11 +172,11 @@ export class Spawner extends EventHandler {
       a.enemies.forEach((v) => {
         v.party.add(e.enemy);
       });
-      
+
       if (!a.enemies.includes(e.enemy)) {
         a.enemies.push(e.enemy);
       }
-      
+
       if (!e.enemy.enemies.includes(a)) {
         e.enemy.enemies.push(a);
       }
@@ -230,11 +227,10 @@ export class Spawner extends EventHandler {
       e.enemy.stopAi();
     };
 
-    e.detailsClosing = () => {
+    e.detailsClosed = () => {
       vm.#battle.battlefield.classList.remove('battle-hide');
       vm.#battle.infoPanel.classList.remove('battle-hide');
       vm.#battle.actionbars.classList.remove('battle-hide');
-
     };
 
     e.detailsOpening = () => {
@@ -243,11 +239,11 @@ export class Spawner extends EventHandler {
       vm.#battle.actionbars.classList.add('battle-hide');
     };
 
-    e.battleClosing = () => {
+    e.battleClosed = () => {
       let vm = this;
       e.div.removeEventListener('dblclick', e.dblClick);
       e.details.ignoreEvent('opening', e.detailsOpening);
-      e.details.ignoreEvent('closing', e.detailsClosing);
+      e.details.ignoreEvent('closed', e.detailsClosed);
       e.enemy.ignoreEvent('begin cast', e.beginCast);
       e.enemy.ignoreEvent('end recoil', e.endRecoil);
       e.enemy.ignoreEvent('damaged', e.damaged);
@@ -259,21 +255,19 @@ export class Spawner extends EventHandler {
       e.enemyDiv = undefined;
       e.plateDiv = undefined;
       e.details = undefined;
-
-      vm.#battle.ignoreEvent('closing', e.battleClosing);
-
+      e.enemy = undefined;
       e = undefined;
     };
 
     e.div.addEventListener('dblclick', e.dblClick);
     e.details.listenToEvent('opening', e.detailsOpening);
-    e.details.listenToEvent('closing', e.detailsClosing);
+    e.details.listenToEvent('closed', e.detailsClosed);
     e.enemy.listenToEvent('begin cast', e.beginCast);
     e.enemy.listenToEvent('end recoil', e.endRecoil);
     e.enemy.listenToEvent('damaged', e.damaged);
     e.enemy.listenToEvent('death', e.death);
 
-    vm.#battle.listenToEvent('closing', e.battleClosing);
+    vm.#battle.listenToEvent('closed', e.battleClosed);
   }
 
 }
