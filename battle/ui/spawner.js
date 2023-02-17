@@ -164,6 +164,8 @@ export class Spawner extends EventHandler {
     e.plate.hideLevel();
     e.plate.hideMana();
     e.plate.update();
+    e.plate.plate.style.top = '0px';
+    e.plate.plate.style.left = '0px';
 
     e.enemy.div = e.div;
     e.details = new DetailSheet(e.enemy);

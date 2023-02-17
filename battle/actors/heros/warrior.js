@@ -90,7 +90,7 @@ export class Warrior extends Actor {
       vm.enemies.length > 2 &&
       vm.skills.slam.charges > 0 &&
       !vm.skills.slam.onCd &&
-      Dice.d6() > 3
+      Dice.d6() > 2
     ) {
       vm.skills.slam.invoke();
       return;
@@ -98,7 +98,7 @@ export class Warrior extends Actor {
       vm.enemies.length > 1 &&
       vm.skills.cleave.charges > 0 &&
       !vm.skills.cleave.onCd &&
-      Dice.coin() == 1
+      Dice.d6() > 1
     ) {
       vm.skills.cleave.invoke();
       return;

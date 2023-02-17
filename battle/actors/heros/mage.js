@@ -103,7 +103,7 @@ export class Mage extends Actor {
       vm.enemies.length > 2 &&
       !vm.skills.arcaneWave.onCd &&
       vm.attributes.mp >= vm.skills.arcaneWave.mpCost &&
-      Dice.d6() > 4 &&
+      Dice.d6() > 2 &&
       !vm.#regenMana
     ) {
       vm.skills.arcaneWave.invoke();
@@ -114,7 +114,7 @@ export class Mage extends Actor {
       vm.enemies.length > 1 &&
       !vm.skills.magicMissles.onCd &&
       vm.attributes.mp >= vm.skills.magicMissles.mpCost &&
-      Dice.d6() > 3 &&
+      Dice.d6() > 1 &&
       !vm.#regenMana
     ) {
       vm.skills.magicMissles.invoke();
@@ -124,7 +124,7 @@ export class Mage extends Actor {
       vm.skills.arcaneBlast &&
       !vm.skills.arcaneBlast.onCd &&
       vm.attributes.mp >= vm.skills.arcaneBlast.mpCost &&
-      Dice.d6() > 4 &&
+      Dice.d6() > 2 &&
        !vm.#regenMana
     ) {
       vm.skills.arcaneBlast.invoke();

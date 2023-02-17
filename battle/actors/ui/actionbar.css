@@ -26,8 +26,10 @@
 }
 
 .actionbar-btn-cooldown {
-  color: darkgray !important;
-  border: 1px solid silver !important;
+  color: black !important;
+  border: 1px dashed silver !important;
+  background-color: white !important;
+  opacity: 0.1;
 }
 
 
