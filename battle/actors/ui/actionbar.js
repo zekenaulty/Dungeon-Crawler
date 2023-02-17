@@ -1,3 +1,4 @@
+import { DOM } from '../../../core/dom.js';
 import { List } from '../../../core/list.js';
 import { EventHandler } from '../../../core/eventHandler.js'
 import { Modal } from '../../../ui/modal/modal.js'
@@ -18,15 +19,7 @@ export class Actionbar extends EventHandler {
     vm.#bar = bar;
     vm.#battle = battle;
 
-    if (!document.getElementById('actionbar-styles')) {
-      vm.#stylesheet = document.createElement('link');
-      vm.#stylesheet.id = 'actionbar-styles';
-      vm.#stylesheet.rel = 'stylesheet';
-      vm.#stylesheet.href = './battle/actors/ui/actionbar.css';
-      document.querySelector('head').appendChild(vm.#stylesheet);
-    } else {
-      vm.#stylesheet = document.querySelector('#actionbar-styles');
-    }
+    DOM.stylesheet('./battle/actors/ui/actionbar.css', 'actionbar_styles')
 
   }
 
@@ -41,11 +34,8 @@ export class Actionbar extends EventHandler {
   #addButton(skill) {
     let vm = this;
     if (skill.register && !skill.availableOutOfCombatOnly) {
-      let btn = document.createElement('button');
-      btn.innerHTML = skill.displayName;
-      btn.classList.add('actionbar-btn');
+      let btn = DOM.button(skill.displayName, vm.#bar, 'actionbar-btn');
       vm.#buttonHooks(btn, skill);
-      vm.#bar.appendChild(btn);
     }
   }
 
@@ -61,16 +51,16 @@ export class Actionbar extends EventHandler {
 
     let begin = () => {
       btn.classList.add('actionbar-btn-active-' + skill.actor.name);
-      btn.innerHTML = skill.displayName;
+      btn.innerText = skill.displayName;
     };
 
     let done = () => {
       btn.classList.remove('actionbar-btn-active-' + skill.actor.name);
-      btn.innerHTML = skill.displayName;
+      btn.innerText = skill.displayName;
     };
 
     let update = () => {
-      btn.innerHTML = skill.displayName;
+      btn.innerText = skill.displayName;
       vm.#battle.partyInfo();
     };
     
@@ -79,7 +69,7 @@ export class Actionbar extends EventHandler {
       skill.ignoreEvent('end cast', update);
       skill.ignoreEvent('end recoil', done);
       skill.ignoreEvent('begin cast', begin);
-      vm.#battle.ignoreEvent('closing', release);
+      vm.#battle.ignoreEvent('closed', release);
       btn.removeEventListener('click', doClick);
     }
     
@@ -88,7 +78,7 @@ export class Actionbar extends EventHandler {
     skill.listenToEvent('end recoil', done);
     skill.listenToEvent('updated', update);
     skill.listenToEvent('end cast', update);
-    vm.#battle.listenToEvent('closing', release);
+    vm.#battle.listenToEvent('closed', release);
   }
 
 
