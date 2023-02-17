@@ -78,7 +78,7 @@ export class Battle extends Modal {
 
           vm.startAi();
         },
-        100
+        10
       );
     };
 

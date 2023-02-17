@@ -122,7 +122,7 @@ export class Fight extends EventHandler {
         Loader.close(0);
         vm.#battle.open();
       },
-      450
+      350
     );
   }
 

@@ -357,7 +357,7 @@ export class GameLevel extends EventHandler {
         Loader.open('BATTLE');
         setTimeout(() => {
           vm.fight.start(true);
-        }, 650);
+        }, 100);
       } else if (vm.#shouldTeleport(dice)) {
         vm.teleport();
       }
