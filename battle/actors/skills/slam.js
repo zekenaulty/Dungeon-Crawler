@@ -5,12 +5,12 @@ export class Slam extends ActorSkill {
 
   #maxCharges = 1;
   #charges = 1;
-  #rechargeTime = 5000;
+  #rechargeTime = 3000;
 
   constructor(actor) {
     super(actor);
     let vm = this;
-    vm.cooldown = 2000;
+    vm.cooldown = 1000;
     vm.register = true;
     vm.name = 'Slam';
     vm.#charges = vm.#maxCharges;

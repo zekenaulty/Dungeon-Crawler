@@ -10,7 +10,7 @@ export class ArcaneBlast extends ActorSkill {
     vm.register = true;
     vm.name = 'Arcane Blast';
     vm.bubble = true;
-    vm.mpCost = 10;
+    vm.mpCost = 6;
     
     vm.calcDmg();
   }
@@ -39,7 +39,7 @@ export class ArcaneBlast extends ActorSkill {
     vm.actor.target = vm.actor.getTarget();
     vm.calcDmg();
     vm.safeInvoke(() => {
-      vm.doAttack(vm.actor.target);
+      vm.doAttack(vm.actor.target, vm.mpCost);
     });
   }
 

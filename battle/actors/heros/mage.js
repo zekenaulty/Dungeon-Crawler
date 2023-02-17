@@ -16,6 +16,7 @@ export class Mage extends Actor {
 
   #aiIntervalMin = 350;
   #aiIntervalMax = 650;
+  #regenMana = false;
 
   constructor(gameLevel) {
     super(gameLevel);
@@ -87,6 +88,14 @@ export class Mage extends Actor {
     if (!vm.aiCanAct()) {
       return;
     }
+    
+    if(vm.lowMana(0.05)) {
+      vm.#regenMana = true;
+    }
+    
+    if(vm.#regenMana && !vm.lowMana(0.7)) {
+      vm.#regenMana = false;
+    }
 
     if (
       !vm.casting &&
@@ -94,7 +103,8 @@ export class Mage extends Actor {
       vm.enemies.length > 2 &&
       !vm.skills.arcaneWave.onCd &&
       vm.attributes.mp >= vm.skills.arcaneWave.mpCost &&
-      Dice.d6() > 3
+      Dice.d6() > 4 &&
+      !vm.#regenMana
     ) {
       vm.skills.arcaneWave.invoke();
       return;
@@ -104,7 +114,8 @@ export class Mage extends Actor {
       vm.enemies.length > 1 &&
       !vm.skills.magicMissles.onCd &&
       vm.attributes.mp >= vm.skills.magicMissles.mpCost &&
-      Dice.d6() > 3
+      Dice.d6() > 3 &&
+      !vm.#regenMana
     ) {
       vm.skills.magicMissles.invoke();
       return;
@@ -112,7 +123,9 @@ export class Mage extends Actor {
       !vm.casting &&
       vm.skills.arcaneBlast &&
       !vm.skills.arcaneBlast.onCd &&
-      Dice.d6() > 2
+      vm.attributes.mp >= vm.skills.arcaneBlast.mpCost &&
+      Dice.d6() > 4 &&
+       !vm.#regenMana
     ) {
       vm.skills.arcaneBlast.invoke();
       return;
@@ -133,7 +146,7 @@ export class Mage extends Actor {
     vm.buyAttribute('intellect');
     vm.buyAttribute('intellect');
     vm.buyAttribute('intellect');
-    vm.buyAttribute('intellect');
+    vm.buyAttribute('vitality');
 
   }
 

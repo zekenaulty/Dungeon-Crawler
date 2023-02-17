@@ -158,6 +158,13 @@ export class Actor extends EventHandler {
     return vm.attributes.hp <= low;
   }
 
+  lowMana(p = 0.3) {
+    let vm = this;
+    let low = Math.floor(vm.attributes.maxMp * p);
+    return vm.attributes.mp <= low;
+  }
+
+
   reset() {}
 
   buyAttribute(attributeName) {

@@ -11,7 +11,7 @@ export class MagicMissles extends ActorSkill {
     vm.register = true;
     vm.name = 'Magic Missles';
     vm.bubble = true;
-    vm.mpCost = 15;
+    vm.mpCost = 8;
   }
 
   get displayName() {

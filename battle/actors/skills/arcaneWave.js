@@ -11,7 +11,7 @@ export class ArcaneWave extends ActorSkill {
     vm.register = true;
     vm.name = 'Arcane Wave';
     vm.bubble = true;
-    vm.mpCost = 20;
+    vm.mpCost = 15;
   }
 
   get displayName() {

@@ -38,7 +38,7 @@ export class Warrior extends Actor {
         vm.attributes.baseDamageLevel += 2;
       }
 
-      if (e.level.level % 25 == 0) {
+      if (e.level.level == 25) {
         vm.skills.cleave.addMaxCharge();
         vm.skills.slam.addMaxCharge();
       }
@@ -82,7 +82,7 @@ export class Warrior extends Actor {
 
     vm.checkLoop();
     
-    if (!vm.aiCanAct()) {
+    if (!vm.aiCanAct() || vm.casting) {
       return;
     }
     

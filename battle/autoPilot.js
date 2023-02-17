@@ -10,8 +10,8 @@ export class AutoPilot extends EventHandler {
   #maze;
   #gameLevel;
 
-  #breathMin = 450;
-  #breathMax = 550;
+  #breathMin = 650;
+  #breathMax = 1250;
 
   #running = false;
 
@@ -53,6 +53,7 @@ export class AutoPilot extends EventHandler {
       return;
     }
     vm.#running = true;
+    vm.#lock = false;
 
     vm.raiseEvent('started');
 
@@ -62,12 +63,15 @@ export class AutoPilot extends EventHandler {
     }, vm.#breath);
   }
 
+  #lock = false;
   #loop() {
     let vm = this;
 
     if (vm.#canAct) {
+      vm.#lock = true;
       vm.#levelUp();
       vm.#nextMove();
+      vm.#lock = false;
     }
 
   }
@@ -80,12 +84,18 @@ export class AutoPilot extends EventHandler {
 
     vm.#running = false;
     clearInterval(vm.#loopId);
+    vm.#lock = false;
     vm.raiseEvent('stopped');
   }
 
   get #canAct() {
     let vm = this;
-    if (Modal.openCount > 0 || Loader.isOpen) {
+    if (
+      Modal.openCount > 0 ||
+      Loader.isOpen ||
+      vm.lock ||
+      !vm.#running
+    ) {
       return false;
     }
     return vm.#running;

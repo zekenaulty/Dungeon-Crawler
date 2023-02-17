@@ -22,7 +22,7 @@ export class Wand extends ActorSkill {
 
   get summary() {
     let vm = this;
-    return `Hit target for ${vm.min}-${vm.max} damage.`;
+    return `Hit target for ${vm.min}-${vm.max} damage. Generates 5 mana.`;
   }
 
   invoke() {
@@ -30,6 +30,12 @@ export class Wand extends ActorSkill {
     vm.actor.target = vm.actor.getTarget();
     vm.safeInvoke(() => {
       vm.doAttack(vm.actor.target);
+      if(vm.actor.attributes.mp < vm.actor.attributes.maxMp) {
+        vm.actor.attributes.mp += 5;
+        if(vm.actor.attributes.mp > vm.actor.attributes.maxMp) {
+          vm.actor.attributes.mp = vm.actor.attributes.maxMp;
+        }
+      }
     });
   }
 

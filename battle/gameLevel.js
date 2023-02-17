@@ -27,7 +27,7 @@ export class GameLevel extends EventHandler {
 
   #level = 0;
   #mazeMaxRooms = 8;
-  #toTiny = 6;
+  #toTiny = 10;
   #roomGrowthFactor = 0.3;
 
   #scaler;
