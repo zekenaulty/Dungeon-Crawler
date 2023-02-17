@@ -85,7 +85,8 @@ export class Characters {
 
     vm.characters.open(true);
     document.body.appendChild(vm.characters.nav);
-
+    
+    clearInterval(vm.#loopId);
     vm.#loopId = setInterval(() => {
 
         vm.characters.warrior.update();

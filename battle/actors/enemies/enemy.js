@@ -35,6 +35,8 @@ export class Enemy extends Actor {
       vm.attributes.vitalityLevel += 2;
       vm.recover();
     });
+
+    vm.getId();
   }
 
   #getWeightedTargets() {
@@ -103,6 +105,9 @@ export class Enemy extends Actor {
 
   aiLoop() {
     let vm = this;
+
+    vm.checkLoop();
+    
     let d = Dice.roll(20);
 
     if (vm.attributes.hp < 1) {

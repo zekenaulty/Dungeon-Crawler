@@ -167,7 +167,7 @@ export class Spawner extends EventHandler {
     e.plate.hideMana();
     e.plate.update();
 
-    e.enemy.id = e.id;
+    //e.enemy.id = e.id;
     e.enemy.div = e.div;
     e.details = new DetailSheet(e.enemy);
 
@@ -218,13 +218,16 @@ export class Spawner extends EventHandler {
     e.death = (n) => {
       vm.#battle.removeEnemy(e.enemy);
       e.div.style.visibility = 'hidden';
-
+      e.enemy.party.each((a) => {
+        a.party.remove(e.enemy);
+      });
       vm.#party.each((a) => {
         a.enemies.delete(e.enemy);
         if (a.attributes.hp > 0) {
           a.level.addXp(ActorLevel.monsterXp(e.enemy.level.level));
         }
       });
+      e.enemy.stopAi();
     };
 
     e.detailsClosing = () => {
@@ -249,6 +252,8 @@ export class Spawner extends EventHandler {
       e.enemy.ignoreEvent('end recoil', e.endRecoil);
       e.enemy.ignoreEvent('damaged', e.damaged);
       e.enemy.ignoreEvent('death', e.death);
+      e.enemy.stopAi();
+      e.enemy.battle = undefined;
       e.plate = undefined;
       e.div = undefined;
       e.enemyDiv = undefined;

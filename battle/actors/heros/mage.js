@@ -75,10 +75,14 @@ export class Mage extends Actor {
 
     vm.attributes.hp = vm.attributes.maxHp;
     vm.attributes.mp = vm.attributes.maxMp;
+    
+    vm.getId();
   }
 
   aiLoop() {
     let vm = this;
+
+    vm.checkLoop();
 
     if (!vm.aiCanAct()) {
       return;
@@ -95,7 +99,7 @@ export class Mage extends Actor {
       vm.skills.arcaneWave.invoke();
       return;
     } else if (
-      !vm.casting &&
+      !vm.casting  &&
       vm.skills.magicMissles &&
       vm.enemies.length > 1 &&
       !vm.skills.magicMissles.onCd &&

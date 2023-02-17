@@ -73,15 +73,19 @@ export class Warrior extends Actor {
 
     vm.attributes.hp = vm.attributes.maxHp;
     vm.attributes.mp = vm.attributes.maxMp;
+    
+    vm.getId();
   }
 
   aiLoop() {
     let vm = this;
 
+    vm.checkLoop();
+    
     if (!vm.aiCanAct()) {
       return;
     }
-
+    
     if (
       vm.enemies.length > 2 &&
       vm.skills.slam.charges > 0 &&

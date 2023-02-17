@@ -66,16 +66,20 @@ export class Healer extends Actor {
 
     vm.attributes.hp = vm.attributes.maxHp;
     vm.attributes.mp = vm.attributes.maxMp;
+    
+    vm.getId();
   }
 
 
   aiLoop() {
     let vm = this;
 
+    vm.checkLoop();
+
     if (!vm.aiCanAct()) {
       return;
     }
-
+    
     if (
       !vm.casting &&
       vm.skills.resurect &&

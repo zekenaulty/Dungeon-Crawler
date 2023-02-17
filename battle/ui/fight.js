@@ -105,6 +105,7 @@ export class Fight extends EventHandler {
     let vm = this;
 
     if (vm.#battle) {
+      vm.#battle.stopAi();
       vm.#battle.ignoreEvent('won battle', vm.#battleWon);
       vm.#battle = undefined;
     }

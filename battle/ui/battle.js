@@ -98,6 +98,7 @@ export class Battle extends Modal {
         vm.stopAi();
         vm.raiseEvent('end combat', vm);
         vm.raiseEvent('won battle', vm);
+        e.battle = undefined;
       }
     };
 

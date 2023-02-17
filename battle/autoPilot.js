@@ -35,14 +35,14 @@ export class AutoPilot extends EventHandler {
     super();
 
     let vm = this;
-    
+
     vm.defineEvent('started', 'stopped');
 
     vm.#party = party;
 
     vm.#gameLevel = game;
     vm.#maze = maze;
-    
+
     vm.#party.autoBattle();
   }
 
@@ -53,14 +53,10 @@ export class AutoPilot extends EventHandler {
       return;
     }
     vm.#running = true;
-    
+
     vm.raiseEvent('started');
 
-    if (vm.#loopId > -1) {
-      clearInterval(vm.#loopId);
-      vm.#loopId = -1;
-    }
-
+    clearInterval(vm.#loopId);
     vm.#loopId = setInterval(() => {
       vm.#loop();
     }, vm.#breath);
@@ -78,16 +74,13 @@ export class AutoPilot extends EventHandler {
 
   stop() {
     let vm = this;
-if(!vm.running) {
-  return;
-}
+    if (!vm.running) {
+      return;
+    }
 
     vm.#running = false;
-    if (vm.#loopId > -1) {
-      clearInterval(vm.#loopId);
-      vm.#loopId = -1;
+    clearInterval(vm.#loopId);
     vm.raiseEvent('stopped');
-    }
   }
 
   get #canAct() {
@@ -118,7 +111,7 @@ if(!vm.running) {
   #levelUp() {
     let vm = this;
     vm.#party.each((a) => {
-      while(a.attributes.available > 0) {
+      while (a.attributes.available > 0) {
         a.spendPoints();
       }
     });
