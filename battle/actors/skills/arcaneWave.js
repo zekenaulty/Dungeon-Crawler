@@ -2,29 +2,28 @@ import { List } from '../../../core/list.js';
 import { ActorSkill } from '../actorSkill.js';
 
 
-export class MagicMissles extends ActorSkill {
+export class ArcaneWave extends ActorSkill {
 
   constructor(actor) {
     super(actor);
     let vm = this;
     vm.cooldown = 4000;
     vm.register = true;
-    vm.name = 'Magic Missles';
+    vm.name = 'Arcane Wave';
     vm.bubble = true;
-    vm.mpCost = 15;
+    vm.mpCost = 20;
   }
 
   get displayName() {
-    return `magic missles`;
+    return `arcane wave`;
   }
   
   calcDmg() {
     let vm = this;
-    vm.minBy = 0;
-    vm.maxBy = 0
-    
-    vm.minBy = new Number('-' + Math.ceil(vm.min * 0.2));
-    vm.maxBy = new Number('-' + Math.ceil(vm.max * 0.15));
+    let int = vm.actor.attributes.intellect + vm.actor.attributes.intellectLevel;
+
+    vm.minBy = Math.ceil(int * 0.15);
+    vm.maxBy = Math.ceil(int * 0.35);
   }
   
 

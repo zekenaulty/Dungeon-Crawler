@@ -1,7 +1,6 @@
 import { List } from '../../../core/list.js';
 import { ActorSkill } from '../actorSkill.js';
 
-
 export class Attack extends ActorSkill {
 
   constructor(actor) {
@@ -20,7 +19,7 @@ export class Attack extends ActorSkill {
 
   get summary() {
     let vm = this;
-    return `Hit the selected target for ${vm.min}-${vm.max} damage.`;
+    return `Hit target for ${vm.min}-${vm.max} damage.`;
   }
 
   invoke() {

@@ -13,7 +13,7 @@ export class Teleport extends ActorSkill {
     vm.availableOutOfCombat = true;
     vm.availableOutOfCombatOnly = true;
 
-    vm.mpCost = 10;
+    vm.mpCost = 20;
   }
 
   get displayName() {

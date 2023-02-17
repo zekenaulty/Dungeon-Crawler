@@ -218,6 +218,15 @@ export class GameLevel extends EventHandler {
     vm.#maze.listenToEvent('solved', () => {
       vm.#nextLevel();
     });
+
+    vm.autoPilot.listenToEvent('stopped', () => {
+      vm.raiseEvent('updated', vm);
+    });
+
+    vm.fight.listenToEvent('stopped', () => {
+      vm.raiseEvent('updated', vm);
+    });
+
   }
 
   begin(newGame = false) {

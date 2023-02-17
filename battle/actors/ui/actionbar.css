@@ -8,7 +8,7 @@
   margin-right: 8px;
   margin-bottom: 4px;
   padding: 1px 3px 1px 3px;
-  min-width: 90px;
+  min-width: 98px;
 }
 
 .actionbar-btn-active-warrior {
@@ -22,8 +22,8 @@
 }
 
 .actionbar-btn-active-mage {
-  color: blue !important;
-  border: 1px solid darkblue !important;
+  color: orange !important;
+  border: 1px solid darkorange !important;
 }
 
 .actionbar {

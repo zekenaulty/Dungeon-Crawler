@@ -1,33 +1,43 @@
 import { List } from '../../../core/list.js';
 import { ActorSkill } from '../actorSkill.js';
 
-
-export class Wand extends ActorSkill {
+export class ArcaneBlast extends ActorSkill {
 
   constructor(actor) {
     super(actor);
     let vm = this;
-    vm.cooldown = 1250;
+    vm.cooldown = 2000;
     vm.register = true;
-    vm.name = 'Wand';
+    vm.name = 'Arcane Blast';
     vm.bubble = true;
-    vm.minBy = -2;
-    vm.maxBy = -4;
-    vm.mpCost = 0;
+    vm.mpCost = 10;
+    
+    vm.calcDmg();
+  }
+  
+  calcDmg() {
+    let vm = this;
+    let int = vm.actor.attributes.intellect;
+
+    vm.minBy = Math.ceil(int * 0.15);
+    vm.maxBy = Math.ceil(int * 0.35);
   }
 
+
   get displayName() {
-    return `wand`;
+    return `arcane blast`;
   }
 
   get summary() {
     let vm = this;
-    return `Hit target for ${vm.min}-${vm.max} damage.`;
+    vm.calcDmg();
+    return `Blast target for ${vm.min}-${vm.max} damage.`;
   }
 
   invoke() {
     let vm = this;
     vm.actor.target = vm.actor.getTarget();
+    vm.calcDmg();
     vm.safeInvoke(() => {
       vm.doAttack(vm.actor.target);
     });

@@ -5,7 +5,10 @@ import { ActorLevel } from '../actorLevel.js';
 import { ActorInventory } from '../actorInventory.js';
 import { ActorAttributes } from '../actorAttributes.js';
 import { Modal } from '../../../ui/modal/modal.js';
+import { ArcaneBlast } from '../skills/arcaneBlast.js';
+import { ArcaneWave } from '../skills/arcaneWave.js';
 import { MagicMissles } from '../skills/magicMissles.js';
+import { Teleport } from '../skills/teleport.js';
 import { Wand } from '../skills/wand.js';
 import { Dice } from '../../dice.js';
 
@@ -21,16 +24,19 @@ export class Mage extends Actor {
     vm.reset();
     vm.name = 'mage';
     vm.displayName = 'Zyth';
-    
+
     vm.aiIntervalMin = vm.#aiIntervalMin;
     vm.aiIntervalMax = vm.#aiIntervalMax;
-    
+
     vm.attributes.scaleWith = 'intellect';
 
     delete vm.skills.attack;
 
     vm.addSkill('wand', new Wand(vm));
+    vm.addSkill('arcaneBlast', new ArcaneBlast(vm));
     vm.addSkill('magicMissles', new MagicMissles(vm));
+    vm.addSkill('arcaneWave', new ArcaneWave(vm));
+    vm.addSkill('teleport', new Teleport(vm));
 
 
     vm.listenToEvent('leveled up', (e) => {
@@ -58,7 +64,7 @@ export class Mage extends Actor {
     vm.level.xpToLevel = ActorLevel.xpForNextLevel();
 
     vm.attributes.baseHp = 120;
-    vm.attributes.baseMp = 400;
+    vm.attributes.baseMp = 150;
     vm.attributes.scaleWith = 'intellect';
 
     vm.attributes.baseDamage = 7;
@@ -79,6 +85,17 @@ export class Mage extends Actor {
     }
 
     if (
+      !vm.casting &&
+      vm.skills.arcaneWave &&
+      vm.enemies.length > 2 &&
+      !vm.skills.arcaneWave.onCd &&
+      vm.attributes.mp >= vm.skills.arcaneWave.mpCost &&
+      Dice.d6() > 3
+    ) {
+      vm.skills.arcaneWave.invoke();
+      return;
+    } else if (
+      !vm.casting &&
       vm.skills.magicMissles &&
       vm.enemies.length > 1 &&
       !vm.skills.magicMissles.onCd &&
@@ -87,7 +104,19 @@ export class Mage extends Actor {
     ) {
       vm.skills.magicMissles.invoke();
       return;
-    } else if (vm.skills.wand && !vm.skills.wand.onCd) {
+    } else if (
+      !vm.casting &&
+      vm.skills.arcaneBlast &&
+      !vm.skills.arcaneBlast.onCd &&
+      Dice.d6() > 2
+    ) {
+      vm.skills.arcaneBlast.invoke();
+      return;
+    } else if (
+      !vm.casting &&
+      vm.skills.wand &&
+      !vm.skills.wand.onCd
+    ) {
       vm.skills.wand.invoke();
       return;
     }

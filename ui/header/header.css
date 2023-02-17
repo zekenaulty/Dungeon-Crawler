@@ -50,9 +50,9 @@
   color: orange;
   background-color: black;
   height: 26px;
-  margin-bottom: 2px;
+  margin-bottom: 4px;
   margin-right: 2px;
-  font-size: 1.2em;
+  font-size: 1.1em;
   border: 1px solid orange;
   text-align: center;
   width: 100px;
@@ -74,7 +74,7 @@
 
 .header-menu {
   position: fixed;
-  top: 8px;
+  top: 4px;
   right: 3vw;
   color: orange;
   font-family: monospace;

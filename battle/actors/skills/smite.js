@@ -22,7 +22,7 @@ export class Smite extends ActorSkill {
 
   get summary() {
     let vm = this;
-    return `Hit the selected target for ${vm.min}-${vm.max} damage.`;
+    return `Hit target for ${vm.min}-${vm.max} damage.`;
   }
 
   invoke() {

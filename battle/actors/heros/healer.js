@@ -22,9 +22,9 @@ export class Healer extends Actor {
     vm.reset();
     vm.name = 'healer';
     vm.displayName = 'Ayla';
-    
+
     vm.attributes.scaleWith = 'intellect';
-    
+
     vm.aiIntervalMin = vm.#aiIntervalMin;
     vm.aiIntervalMax = vm.#aiIntervalMax;
 
@@ -54,9 +54,9 @@ export class Healer extends Actor {
     vm.level.xp = 0;
     vm.level.xpToLevel = ActorLevel.xpForNextLevel();
     vm.attributes.scaleWith = 'intellect';
-    
+
     vm.attributes.baseHp = 180;
-    vm.attributes.baseMp = 300;
+    vm.attributes.baseMp = 80;
 
     vm.attributes.baseDamage = 7;
     vm.attributes.strength = 10;
@@ -77,6 +77,7 @@ export class Healer extends Actor {
     }
 
     if (
+      !vm.casting &&
       vm.skills.resurect &&
       vm.party.firstDead() &&
       vm.attributes.mp >= vm.skills.resurect.mpCost &&
@@ -87,19 +88,25 @@ export class Healer extends Actor {
     }
 
     if (
+      !vm.casting &&
       vm.party.lowHealth() &&
       vm.attributes.mp >= vm.skills.groupHeal.mpCost &&
       !vm.skills.groupHeal.onCd
     ) {
       vm.skills.groupHeal.invoke();
     } else if (
+      !vm.casting &&
       vm.party.lowestHealthMember().lowHealth(0.7) &&
       vm.attributes.mp >= vm.skills.heal.mpCost &&
       !vm.skills.heal.onCd
     ) {
       vm.skills.heal.invoke();
       return;
-    } else if (vm.skills.smite && !vm.skills.smite.onCd) {
+    } else if (
+      !vm.casting &&
+      vm.skills.smite &&
+      !vm.skills.smite.onCd
+      ) {
       vm.skills.smite.invoke();
       return;
     }

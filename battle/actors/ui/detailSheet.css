@@ -11,8 +11,8 @@
   border: 1px solid white;
   margin-bottom: auto;
   padding: 10px 14px 10px 14px;
-  font-size: 1.2em;
-  line-height: 1.3em;
+  font-size: 1.1em;
+  line-height: 1.2em;
   border-radius: 13px 13px 13px 13px;
   background-color: black;
 }
@@ -36,14 +36,14 @@
 }
 
 .detail-sheet-attribute-bold {
-  font-size: 1.2em;
-  line-height: 1.4em;
+  font-size: 1.1em;
+  line-height: 1.2em;
   font-weight: bold;
 }
 
 .detail-sheet-attribute-text {
-  font-size: 1.2em;
-  line-height: 1.4em;
+  font-size: 1.1em;
+  line-height: 1.2em;
   font-weight: normal;
 }
 
@@ -73,8 +73,8 @@
   border: 1px solid white;
   margin-bottom: auto;
   padding: 10px 14px 10px 14px;
-  font-size: 1.2em;
-  line-height: 1.3em;
+  font-size: 1.1em;
+  line-height: 1.2em;
   border-radius: 13px 13px 13px 13px;
 }
 

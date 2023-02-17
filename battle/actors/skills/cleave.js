@@ -14,15 +14,23 @@ export class Cleave extends ActorSkill {
     vm.register = true;
     vm.name = 'Cleave';
     vm.#charges = vm.#maxCharges;
-    vm.minBy = -1;
-    vm.maxBy = -3;
     vm.mpCost = 0;
+    vm.calcDmg();
   }
 
   addMaxCharge() {
     let vm = this;
     vm.#maxCharges++;
     vm.#charges = vm.#maxCharges;
+  }
+  
+  calcDmg() {
+    let vm = this;
+    vm.minBy = 0;
+    vm.maxBy = 0
+    
+    vm.minBy = new Number('-' + Math.ceil(vm.min * 0.2));
+    vm.maxBy = new Number('-' + Math.ceil(vm.max * 0.15));
   }
   
   get displayName() {
@@ -32,6 +40,7 @@ export class Cleave extends ActorSkill {
 
   get summary() {
     let vm = this;
+    vm.calcDmg();
     return `Hit each enemy for ${vm.min}-${vm.max} damage.`;
   }
 
@@ -42,6 +51,7 @@ export class Cleave extends ActorSkill {
 
   invoke() {
     let vm = this;
+    vm.calcDmg();
     vm.safeInvoke(() => {
       if (vm.#charges > 0) {
         vm.#charges--;
@@ -56,7 +66,6 @@ export class Cleave extends ActorSkill {
           }
         }, vm.#rechargeTime);
       }
-
     });
   }
 }

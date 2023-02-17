@@ -73,14 +73,14 @@ export class DetailSheet extends Modal {
     });
 
     vm.listenToEvent('closed', (e) => {
-      if(vm.#actor.gameLevel.isWarrior(vm.#actor)) {
+      if(vm.#actor.gameLevel.isHero(vm.#actor)) {
         SaveData.save(vm.#actor.gameLevel);
       }
       vm.#actor.gameLevel.raiseEvent('updated', vm.#actor.gameLevel);
     });
   }
 
-  #addSkill(skill, isWarrior, edge) {
+  #addSkill(skill, isHero, edge) {
     let vm = this;
     let e = {
       element: document.createElement('span'),
@@ -91,7 +91,7 @@ export class DetailSheet extends Modal {
       }
     };
 
-    if (isWarrior && skill.availableOutOfCombat && vm.#editable) {
+    if (isHero && skill.availableOutOfCombat && vm.#editable) {
       e.element.addEventListener('click', () => {
         e.element.classList.add('detail-sheet-skill-active');
         let clear = () => {
@@ -113,11 +113,9 @@ export class DetailSheet extends Modal {
     vm.#skills.appendChild(e.element);
   }
 
-  #add(label, scope, key, editableAttribute = false, target) {
+  #add(label, scope, key, editableAttribute = false) {
     let vm = this;
-    if (!target) {
-      target = vm.#container;
-    }
+    let target = vm.#container;
 
     let e = {
       row: document.createElement('div'),
@@ -127,7 +125,11 @@ export class DetailSheet extends Modal {
       button: editableAttribute ? document.createElement('button') : undefined,
       update: () => {
         e.label.innerHTML = `${label}:&nbsp;`;
-        e.value.innerHTML = `${scope[key]}`;
+        if (scope[key + 'Level']) {
+          e.value.innerHTML = `${scope[key] + scope[key + 'Level']}`;
+        } else {
+          e.value.innerHTML = `${scope[key]}`;
+        }
       }
     };
 
