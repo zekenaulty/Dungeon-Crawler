@@ -1,3 +1,4 @@
+import { DOM } from '../../../core/dom.js';
 import { List } from '../../../core/list.js';
 import { EventHandler } from '../../../core/eventHandler.js'
 import { Gauge } from './gauge.js';
@@ -9,6 +10,8 @@ export class Nameplate extends EventHandler {
   #actor;
 
   #box;
+  #plate;
+  #autoBattleBtn;
 
   #name;
   #level;
@@ -43,10 +46,12 @@ export class Nameplate extends EventHandler {
     }
 
     vm.#box = document.createElement('div');
+    vm.#plate = document.createElement('div');
     vm.#level = document.createElement('span');
     vm.#name = document.createElement('span');
 
-    vm.#box.classList.add('nameplate');
+    vm.#box.classList.add('nameplate-outer');
+    vm.#plate.classList.add('nameplate');
     vm.#level.classList.add('nameplate-text');
     vm.#name.classList.add('nameplate-text');
 
@@ -55,18 +60,18 @@ export class Nameplate extends EventHandler {
     vm.#name.style.padding = '2px 1px 2px 1px';
     vm.#level.style.padding = '2px 1px 2px 1px';
 
-    vm.#box.appendChild(vm.#name);
-    vm.#box.appendChild(vm.#level);
+    vm.#plate.appendChild(vm.#name);
+    vm.#plate.appendChild(vm.#level);
 
     vm.#health = new Gauge(
-      vm.#box,
+      vm.#plate,
       vm.#actor.attributes.maxHp,
       vm.#actor.attributes.hp,
       vm.#actor.attributes.health,
       '');
 
     vm.#mana = new Gauge(
-      vm.#box,
+      vm.#plate,
       vm.#actor.attributes.maxMp,
       vm.#actor.attributes.mp,
       vm.#actor.attributes.mana,
@@ -74,12 +79,18 @@ export class Nameplate extends EventHandler {
     vm.#mana.fillColor('darkblue');
     vm.#mana.borderColor('blue');
 
+    vm.#box.appendChild(vm.#plate);
     container.appendChild(vm.#box);
   }
 
   get box() {
     let vm = this;
     return vm.#box;
+  }
+
+  get plate() {
+    let vm = this;
+    return vm.#plate;
   }
 
   hideLevel() {
@@ -115,6 +126,35 @@ export class Nameplate extends EventHandler {
   update() {
     let vm = this;
     vm.#changed();
+  }
+
+  createAutoBattleButton() {
+    let vm = this;
+
+    if (vm.#autoBattleBtn) {
+      return;
+    }
+
+    vm.#autoBattleBtn = DOM.button(
+      '>',
+      vm.#box,
+      ['nameplate-auto-battle-btn'],
+      () => {
+        if (vm.#actor.autoBattle) {
+          vm.#autoBattleBtn.classList.remove('battle-green');
+          vm.#actor.autoBattle = false;
+          vm.#actor.stopAi();
+        } else {
+          vm.#autoBattleBtn.classList.add('battle-green');
+          vm.#actor.autoBattle = true;
+          vm.#actor.startAi();
+        }
+      }
+    );
+
+    if (vm.#actor.autoBattle) {
+      vm.#autoBattleBtn.classList.add('battle-green');
+    }
   }
 
 }

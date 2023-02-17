@@ -32,7 +32,7 @@
   /*
   padding: 6px 1px 1px 8px;
   */
-  padding-left: 10px;
+  padding-left: 3px;
 }
 
 .battle-pc-actions {
@@ -49,9 +49,9 @@
   border: 1px solid white;
   border-radius: 13px 13px 13px 13px;
   color: white;
-  
+
   padding: 0px 8px 0px 8px;
-  
+
 }
 
 .battle-enemy {

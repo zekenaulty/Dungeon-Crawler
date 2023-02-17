@@ -41,7 +41,7 @@ export class Actionbar extends EventHandler {
 
   #buttonHooks(btn, skill) {
     let vm = this;
-    
+
     let doClick = () => {
       if (!vm.#battle || vm.#battle.paused || Modal.openCount > 1) {
         return;
@@ -59,24 +59,38 @@ export class Actionbar extends EventHandler {
       btn.innerText = skill.displayName;
     };
 
+    let beginCd = () => {
+      btn.classList.add('actionbar-btn-cooldown');
+      btn.innerText = skill.displayName;
+    };
+
+    let endCd = () => {
+      btn.classList.remove('actionbar-btn-cooldown');
+      btn.innerText = skill.displayName;
+    };
+
     let update = () => {
       btn.innerText = skill.displayName;
       vm.#battle.partyInfo();
     };
-    
-    let release =() => {
+
+    let release = () => {
       skill.ignoreEvent('updated', update);
       skill.ignoreEvent('end cast', update);
+      skill.ignoreEvent('begin cd', beginCd);
+      skill.ignoreEvent('end cd', endCd);
       skill.ignoreEvent('end recoil', done);
       skill.ignoreEvent('begin cast', begin);
       btn.removeEventListener('click', doClick);
       console.log('released skill ' + skill.name);
     }
-    
+
     btn.addEventListener('click', doClick);
     skill.clearEvents();
     skill.listenToEvent('begin cast', begin);
     skill.listenToEvent('end recoil', done);
+    skill.listenToEvent('begin cd', beginCd);
+    skill.listenToEvent('end cd', endCd);
     skill.listenToEvent('updated', update);
     skill.listenToEvent('end cast', update);
   }

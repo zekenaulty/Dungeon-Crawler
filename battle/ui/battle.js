@@ -59,7 +59,7 @@ export class Battle extends Modal {
 
     vm.#topBtns = DOM.nav(vm.content, 'battle-top-buttons');
 
-    vm.#createAutoBattleButton();
+    //vm.#createAutoBattleButton();
     vm.#createAutoPlayButton();
     vm.#createFightWavesButton();
     vm.#createPauseButton();
@@ -157,7 +157,9 @@ export class Battle extends Modal {
       if (!vm.#nameplates) {
         vm.#nameplates = new List();
       }
-      vm.#nameplates.push(new Nameplate(vm.#partyInfo, a));
+      let n = new Nameplate(vm.#partyInfo, a);
+      n.createAutoBattleButton();
+      vm.#nameplates.push(n);
       a.listenToEvent('damaged', vm.#partyDamaged);
       a.listenToEvent('death', vm.#partyDeath);
       a.battle = vm;
