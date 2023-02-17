@@ -86,39 +86,13 @@
   display: none !important;
 }
 
-.battle-auto-battle {
-  position: fixed;
-  top: 14px;
-  right: 18px;
-  z-index: 20000;
-}
-
-.battle-pause {
-  position: fixed;
-  top: 14px;
-  right: 120px;
-  z-index: 20000;
-}
-
 .battle-green {
   color: green !important;
   border-color: green !important;
 }
 
-
-.battle-end-grind {
-  position: fixed;
-  top: 14px;
-  right: 224px;
-  z-index: 200;
-  background-color: black;
-  color: white;
-  border: 1px solid white;
-  border-radius: 13px 13px 13px 13px;
-  margin-top: 2px;
-  margin-right: 4px;
-  padding: 4px 6px 4px 6px;
-  min-width: 90px;
+.battle-top-btn {
+  font-weight: bolder;
 }
 
 .battle-btn {
@@ -126,11 +100,6 @@
   color: white;
   border: 1px solid white;
   border-radius: 13px 13px 13px 13px;
-  /*
-  margin-top: 4px;
-  margin-right: 4px;
-  margin-bottom: 8px;
-  */
   padding: 4px 6px 4px 6px;
   min-width: 90px;
 }
@@ -145,4 +114,16 @@
   border: 1px solid white;
   border-radius: 13px 13px 13px 13px;
   color: white;
+}
+
+.battle-top-buttons {
+  position: fixed;
+  top: 14px;
+  right: 2vw;
+  width: 96vw;
+  z-index: 200;
+  display: flex;
+  justify-content: space-evenly;
+  flex-flow: row;
+  flex-wrap: nowrap;
 }

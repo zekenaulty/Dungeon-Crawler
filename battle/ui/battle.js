@@ -17,12 +17,14 @@ export class Battle extends Modal {
   #battlefield;
   #partyInfo;
   #actions;
+  #topBtns;
   #pauseBtn;
   #autoBattleBtn;
+  #fightWavesBtn;
+  #autoPlayBtn;
 
   #gameLevel;
   #paused = true;
-  #fightWavesBtn;
 
   #nameplates;
   #actionbars;
@@ -40,7 +42,7 @@ export class Battle extends Modal {
   constructor(party, gameLevel) {
     super();
     let vm = this;
-  
+
     vm.#party = party;
     vm.#gameLevel = gameLevel;
     vm.#paused = true;
@@ -55,9 +57,12 @@ export class Battle extends Modal {
     vm.#registerParty();
     vm.partyInfo();
 
-    vm.#createPauseButton();
-    vm.#createFightWavesButton();
+    vm.#topBtns = DOM.nav(vm.content, 'battle-top-buttons');
+
     vm.#createAutoBattleButton();
+    vm.#createAutoPlayButton();
+    vm.#createFightWavesButton();
+    vm.#createPauseButton();
 
     vm.defineEvent(
       'begin combat',
@@ -169,8 +174,8 @@ export class Battle extends Modal {
     let vm = this;
     vm.#pauseBtn = DOM.button(
       'pause',
-      vm.content,
-      ['battle-btn', 'battle-pause'],
+      vm.#topBtns,
+      ['battle-btn', 'battle-top-btn'],
       () => {
         if (vm.#paused) {
           vm.#paused = false;
@@ -187,8 +192,8 @@ export class Battle extends Modal {
     let vm = this;
     vm.#autoBattleBtn = DOM.button(
       'auto battle',
-      vm.content,
-      ['battle-btn', 'battle-auto-battle'],
+      vm.#topBtns,
+      ['battle-btn', 'battle-top-btn'],
       () => {
         if (vm.#party.first().autoBattle) {
           vm.#autoBattleBtn.classList.remove('battle-green');
@@ -213,22 +218,48 @@ export class Battle extends Modal {
 
   #createFightWavesButton() {
     let vm = this;
-    if (vm.#gameLevel.fight.running && !vm.#gameLevel.fight.encounter) {
-      vm.#fightWavesBtn = DOM.button(
-        'waves',
-        vm.content,
-        ['battle-end-grind', 'battle-green'],
-        () => {
-          if (vm.#gameLevel.fight.running) {
-            vm.#gameLevel.fight.stop();
-            vm.#fightWavesBtn.classList.remove('battle-green');
-          } else {
-            vm.#gameLevel.fight.start();
-            vm.#fightWavesBtn.classList.add('battle-green');
-          }
+    vm.#fightWavesBtn = DOM.button(
+      'waves',
+      vm.#topBtns,
+      ['battle-btn', 'battle-top-btn'],
+      () => {
+        if (vm.#gameLevel.fight.running) {
+          vm.#gameLevel.fight.stop();
+          vm.#fightWavesBtn.classList.remove('battle-green');
+        } else {
+          vm.#gameLevel.fight.start();
+          vm.#fightWavesBtn.classList.add('battle-green');
         }
-      );
+      }
+    );
+
+    if (vm.#gameLevel.fight.running && !vm.#gameLevel.fight.encounter) {
+      vm.#fightWavesBtn.classList.add('battle-green');
     }
+
+  }
+
+  #createAutoPlayButton() {
+    let vm = this;
+    vm.#autoPlayBtn = DOM.button(
+      'auto play',
+      vm.#topBtns,
+      ['battle-btn', 'battle-top-btn'],
+      () => {
+        if (vm.#gameLevel.autoPilot.running) {
+          vm.#gameLevel.autoPilot.stop();
+          vm.#autoPlayBtn.classList.remove('battle-green');
+        } else {
+          vm.#gameLevel.autoPilot.start();
+          vm.#autoPlayBtn.classList.add('battle-green');
+        }
+      }
+    );
+
+    if (vm.#gameLevel.autoPilot.running) {
+      vm.#autoPlayBtn.classList.add('battle-green');
+    }
+
   }
 
   partyInfo() {
