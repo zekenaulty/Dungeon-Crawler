@@ -126,6 +126,10 @@ export class GameLevel extends EventHandler {
       vm.autoPilot.stop();
     }
 
+    if (vm.fight) {
+      vm.fight.stop();
+    }
+
     Loader.open(`LEVEL ${state.level}`);
 
     let warriorState = state.warrior;
