@@ -95,12 +95,14 @@ export class Spawner extends EventHandler {
 
   #spawnCount() {
     let vm = this;
-    let d = Dice.d20();
+    let d = Dice.roll(30);
     let m = 1;
 
-    if (d > 17) {
+    if (d > 27) {
+      m = 10;
+    } else if (d > 23) {
       m = 8;
-    } else if (d > 15) {
+    } else if (d > 17) {
       m = 6;
     } else if (d > 13) {
       m = 5;
@@ -117,7 +119,7 @@ export class Spawner extends EventHandler {
 
   #addEnemey(index) {
     let vm = this;
-    let e = vm.#createEnemyui(index);
+    let e = vm.#createEnemyUI(index);
 
     vm.#createEnemy(e);
     vm.#enemyHooks(e);
@@ -125,7 +127,7 @@ export class Spawner extends EventHandler {
     vm.#battle.addEnemey(e.enemy);
   }
 
-  #createEnemyui(index) {
+  #createEnemyUI(index) {
     let vm = this;
     let e = {};
 
@@ -166,6 +168,7 @@ export class Spawner extends EventHandler {
     e.plate.update();
     e.plate.plate.style.top = '0px';
     e.plate.plate.style.left = '0px';
+    e.plate.box.style.minHeight = '43px';
 
     e.enemy.div = e.div;
     e.details = new DetailSheet(e.enemy);

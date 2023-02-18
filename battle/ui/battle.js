@@ -159,6 +159,28 @@ export class Battle extends Modal {
       }
       let n = new Nameplate(vm.#partyInfo, a);
       n.createAutoBattleButton();
+      let ii = -1;
+      n.box.addEventListener('dblclick', () => {
+        if (vm.#gameLevel.isWarrior(a)) {
+          vm.#gameLevel.warriorInfo();
+        } else if (vm.#gameLevel.isMage(a)) {
+          vm.#gameLevel.mageInfo();
+        } else if (vm.#gameLevel.isHealer(a)) {
+          vm.#gameLevel.healerInfo();
+        }
+        vm.battlefield.classList.add('battle-hide');
+        vm.infoPanel.classList.add('battle-hide');
+        vm.actionbars.classList.add('battle-hide');
+        clearInterval(ii);
+        ii = setInterval(() => {
+          if (Modal.openCount == 1) {
+            vm.battlefield.classList.remove('battle-hide');
+            vm.infoPanel.classList.remove('battle-hide');
+            vm.actionbars.classList.remove('battle-hide');
+            clearInterval(ii);
+          }
+        }, 10);
+      });
       vm.#nameplates.push(n);
       a.listenToEvent('damaged', vm.#partyDamaged);
       a.listenToEvent('death', vm.#partyDeath);
