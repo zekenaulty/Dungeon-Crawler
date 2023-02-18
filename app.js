@@ -23,84 +23,86 @@ import { Characters } from './battle/actors/ui/characters.js'
     */
     history.replaceState(0, 'root');
 
-    const game = new GameLevel();
-    const saves = new Saves(game);
-    const stageReady = (gfx) => {
+    setTimeout(() => {
+      const game = new GameLevel();
+      const saves = new Saves(game);
+      const stageReady = (gfx) => {
 
-      game.initialize(
-        stage.width,
-        stage.height,
-        gfx);
-      game.begin();
-      
-      header.info(game.summary);
+        game.initialize(
+          stage.width,
+          stage.height,
+          gfx);
+        game.begin();
 
-      game.listenToEvent('updated', () => {
         header.info(game.summary);
+
+        game.listenToEvent('updated', () => {
+          header.info(game.summary);
+        });
+
+        game.autoPilot.listenToEvent('started', () => {
+          player.innerHTML = 'MANUAL PLAY';
+        });
+
+        game.autoPilot.listenToEvent('stopped', () => {
+          player.innerHTML = 'AUTO PLAY';
+        });
+
+        game.fight.listenToEvent('started', () => {
+          waves.innerHTML = 'STOP WAVES';
+        });
+
+        game.fight.listenToEvent('stopped', () => {
+          waves.innerHTML = 'FIGHT WAVES';
+        });
+      };
+
+      const header = new Header();
+      const stage = new Stage(stageReady);
+      const joystick = new JoyStick();
+
+      const player = header.addButton('AUTO PLAY', (e) => {
+        if (game.autoPilot.running) {
+          game.autoPilot.stop();
+        } else {
+          game.fight.stop();
+          game.autoPilot.start();
+        }
       });
 
-      game.autoPilot.listenToEvent('started', () => {
-        player.innerHTML = 'MANUAL PLAY';
+      const waves = header.addButton('FIGHT WAVES', (e) => {
+        if (game.fight.running) {
+          game.fight.stop();
+        } else {
+          game.autoPilot.stop();
+          game.fight.start();
+        }
       });
 
-      game.autoPilot.listenToEvent('stopped', () => {
-        player.innerHTML = 'AUTO PLAY';
+      const character = header.addButton('CHARACTERS', (e) => {
+        Characters.show(game);
       });
 
-      game.fight.listenToEvent('started', () => {
-        waves.innerHTML = 'STOP WAVES';
+      const states = header.addButton('SAVES', (e) => {
+        saves.open(true);
       });
 
-      game.fight.listenToEvent('stopped', () => {
-        waves.innerHTML = 'FIGHT WAVES';
+      joystick.listenToEvent('up', () => {
+        game.move('north');
       });
-    };
 
-    const header = new Header();
-    const stage = new Stage(stageReady);
-    const joystick = new JoyStick();
+      joystick.listenToEvent('down', () => {
+        game.move('south');
+      });
 
-    const player = header.addButton('AUTO PLAY', (e) => {
-      if (game.autoPilot.running) {
-        game.autoPilot.stop();
-      } else {
-        game.fight.stop();
-        game.autoPilot.start();
-      }
-    });
+      joystick.listenToEvent('left', () => {
+        game.move('west');
+      });
 
-    const waves = header.addButton('FIGHT WAVES', (e) => {
-      if (game.fight.running) {
-        game.fight.stop();
-      } else {
-        game.autoPilot.stop();
-        game.fight.start();
-      }
-    });
-
-    const character = header.addButton('CHARACTERS', (e) => {
-      Characters.show(game);
-    });
-
-    const states = header.addButton('SAVES', (e) => {
-      saves.open(true);
-    });
-
-    joystick.listenToEvent('up', () => {
-      game.move('north');
-    });
-
-    joystick.listenToEvent('down', () => {
-      game.move('south');
-    });
-
-    joystick.listenToEvent('left', () => {
-      game.move('west');
-    });
-
-    joystick.listenToEvent('right', () => {
-      game.move('east');
-    });
+      joystick.listenToEvent('right', () => {
+        game.move('east');
+      });
+    }, 350);
 
   });
 

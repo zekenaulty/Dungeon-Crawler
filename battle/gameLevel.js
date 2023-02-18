@@ -126,7 +126,7 @@ export class GameLevel extends EventHandler {
       vm.autoPilot.stop();
     }
 
-    Loader.open();
+    Loader.open(`LEVEL ${state.level}`);
 
     let warriorState = state.warrior;
     let healerState = state.healer;
@@ -272,7 +272,7 @@ export class GameLevel extends EventHandler {
 
   #randomMaze() {
     let vm = this;
-    Loader.open();
+    Loader.open(`LEVEL ${vm.level}`);
     setTimeout(() => {
       vm.#randomGenerator().generate();
     }, vm.#breath);
@@ -344,7 +344,7 @@ export class GameLevel extends EventHandler {
     vm.#generators.forEach((g) => {
       g.listenToEvent('generated', () => {
         setTimeout(() => {
-            Loader.open();
+            Loader.open(`LEVEL ${vm.level}`);
             vm.#renderer.draw();
             Loader.close(350);
             vm.raiseEvent('updated', vm);

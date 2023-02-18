@@ -6,7 +6,7 @@ export class Loader {
   static #loaderText;
   static #text;
   static #open = false;
-  
+
   static get isOpen() {
     return Loader.#open;
   }
@@ -15,7 +15,7 @@ export class Loader {
     let vm = Loader;
     let bg = vm.#loaderBg;
     let text = vm.#loaderText;
-    
+
     DOM.stylesheet('./ui/loader/loader.css', 'loader_styles');
 
     if (!bg) {
@@ -35,14 +35,15 @@ export class Loader {
     let vm = Loader;
 
     if (vm.#open) {
+      vm.#text.innerText = msg;
       return;
     }
-    
+
     vm.#build();
     vm.#open = true;
-    
+
     vm.#text.innerText = msg;
-    
+
     vm.#loaderText.classList.remove('loader-hide');
     vm.#loaderBg.classList.remove('loader-hide');
   }
