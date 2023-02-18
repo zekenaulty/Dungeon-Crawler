@@ -55,6 +55,7 @@ export class Saves extends Modal {
 
     newGame.addEventListener('click', () => {
       vm.close();
+      SaveData.remove('auto');
       vm.#gameLevel.begin(true);
     });
 

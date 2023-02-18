@@ -22,6 +22,7 @@ import { Loader } from '../ui/loader/loader.js';
 import { SaveData } from './saveData.js';
 import { AutoPilot } from './autoPilot.js';
 import { Fight } from './ui/fight.js';
+import { Characters } from './actors/ui/characters.js'
 
 export class GameLevel extends EventHandler {
 
@@ -63,23 +64,6 @@ export class GameLevel extends EventHandler {
       'teleporting',
       'teleported',
     );
-
-    vm.#warrior = new Warrior(vm);
-    vm.#healer = new Healer(vm);
-    vm.#mage = new Mage(vm);
-
-    vm.#warrior.party.add(vm.#mage);
-    vm.#warrior.party.add(vm.#healer);
-
-    vm.#healer.party.add(vm.#mage);
-    vm.#healer.party.add(vm.#warrior);
-
-    vm.#mage.party.add(vm.#healer);
-    vm.#mage.party.add(vm.#warrior);
-
-    vm.#warriorDetail = new DetailSheet(vm.#warrior, true);
-    vm.#healerDetail = new DetailSheet(vm.#healer, true);
-    vm.#mageDetail = new DetailSheet(vm.#mage, true);
 
   }
 
@@ -211,10 +195,37 @@ export class GameLevel extends EventHandler {
     vm.#scaler = new CanvasRectangleScaler(width, height);
     vm.#maze = new Maze(vm.#scaler.rows, vm.#scaler.columns);
     vm.#renderer = new CanvasRectangle(vm, vm.#maze, vm.#scaler, gfx);
+
+    vm.#loadGenerators();
+
+  }
+
+  begin(newGame = false) {
+    let vm = this;
+    let saved = SaveData.getState();
+
+    Characters.characters = undefined;
+    
+    vm.#warrior = new Warrior(vm);
+    vm.#healer = new Healer(vm);
+    vm.#mage = new Mage(vm);
+
+    vm.#warrior.party.add(vm.#mage);
+    vm.#warrior.party.add(vm.#healer);
+
+    vm.#healer.party.add(vm.#mage);
+    vm.#healer.party.add(vm.#warrior);
+
+    vm.#mage.party.add(vm.#healer);
+    vm.#mage.party.add(vm.#warrior);
+
+    vm.#warriorDetail = new DetailSheet(vm.#warrior, true);
+    vm.#healerDetail = new DetailSheet(vm.#healer, true);
+    vm.#mageDetail = new DetailSheet(vm.#mage, true);
+
     vm.autoPilot = new AutoPilot(vm.#warrior.party, vm, vm.#maze);
     vm.fight = new Fight(vm.#warrior.party, vm);
 
-    vm.#loadGenerators();
     vm.#maze.listenToEvent('solved', () => {
       vm.#nextLevel();
     });
@@ -227,11 +238,6 @@ export class GameLevel extends EventHandler {
       vm.raiseEvent('updated', vm);
     });
 
-  }
-
-  begin(newGame = false) {
-    let vm = this;
-    let saved = SaveData.getState();
 
     if (saved && !newGame) {
       vm.loadState(saved);
@@ -289,6 +295,9 @@ export class GameLevel extends EventHandler {
       vm.autoPilot.stop();
     }
 
+    if (vm.fight) {
+      vm.fight.stop();
+    }
   }
 
   #nextLevel() {
