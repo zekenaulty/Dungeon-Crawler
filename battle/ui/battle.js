@@ -247,11 +247,17 @@ export class Battle extends Modal {
       vm.#topBtns,
       ['battle-btn', 'battle-top-btn'],
       () => {
-        if (vm.#gameLevel.fight.running) {
+        if (vm.#gameLevel.fight.running && !vm.#gameLevel.fight.encounter) {
           vm.#gameLevel.fight.stop();
           vm.#fightWavesBtn.classList.remove('battle-green');
         } else {
-          vm.#gameLevel.fight.start();
+
+          if (vm.#gameLevel.autoPilot.running) {
+            vm.#gameLevel.autoPilot.stop();
+            vm.#autoPlayBtn.classList.remove('battle-green');
+          }
+
+          vm.#gameLevel.fight.restart();
           vm.#fightWavesBtn.classList.add('battle-green');
         }
       }
@@ -274,6 +280,12 @@ export class Battle extends Modal {
           vm.#gameLevel.autoPilot.stop();
           vm.#autoPlayBtn.classList.remove('battle-green');
         } else {
+
+          if (vm.#gameLevel.fight.running && !vm.#gameLevel.fight.encounter) {
+            vm.#gameLevel.fight.stop();
+            vm.#fightWavesBtn.classList.remove('battle-green');
+          }
+
           vm.#gameLevel.autoPilot.start();
           vm.#autoPlayBtn.classList.add('battle-green');
         }

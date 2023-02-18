@@ -75,6 +75,16 @@ export class Fight extends EventHandler {
     return vm.#encounter;
   }
 
+  restart() {
+    let vm = this;
+    vm.#running = true;
+    vm.#encounter = false;
+    if(!vm.#battle) {
+    vm.#running = true;
+      vm.start(false);
+    }
+  }
+
   start(encounter = false) {
     let vm = this;
     if (vm.running) {
