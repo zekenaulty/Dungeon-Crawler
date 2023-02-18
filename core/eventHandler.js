@@ -90,13 +90,15 @@ class EventDispatcher {
 
   remove(action) {
     let vm = this;
+    
     vm.#listeners.delete(action);
   }
 
   dispatch() {
     let vm = this;
-    for (let i = 0; i < vm.#listeners.length; i++) {
-      let action = vm.#listeners[i];
+    let a = vm.#listeners.slice(0,vm.#listeners.length);
+    for (let i = 0; i < a.length; i++) {
+      let action = a[i];
       if (action) {
         action.apply(vm.#parent, arguments);
       }

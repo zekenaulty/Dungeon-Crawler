@@ -136,7 +136,7 @@ export class Nameplate extends EventHandler {
     }
 
     vm.#autoBattleBtn = DOM.button(
-      '>',
+      '▸',
       vm.#box,
       ['nameplate-auto-battle-btn'],
       () => {
