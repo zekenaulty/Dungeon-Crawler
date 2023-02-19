@@ -41,6 +41,7 @@ export class DetailSheet extends Modal {
     vm.#add('Class', vm.#actor, 'name');
     vm.#add('Level', vm.#actor.level, 'level');
     vm.#add('XP', vm.#actor.level, 'xpRequired');
+    vm.#add('Gold', vm.#actor.inventory, 'gold');
     vm.#spacer();
     vm.#add('Health', vm.#actor.attributes, 'health');
     vm.#add('Mana', vm.#actor.attributes, 'mana');

@@ -83,6 +83,7 @@ export class Fight extends EventHandler {
     vm.#running = true;
       vm.start(false);
     }
+    vm.raiseEvent('started');
   }
 
   start(encounter = false) {

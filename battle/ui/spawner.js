@@ -227,6 +227,7 @@ export class Spawner extends EventHandler {
         a.enemies.delete(e.enemy);
         if (a.attributes.hp > 0) {
           a.level.addXp(ActorLevel.monsterXp(e.enemy.level.level));
+          a.inventory.addGold(ActorInventory.monsterGold(e.enemy.level.level));
         }
       });
       e.enemy.stopAi();

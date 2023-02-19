@@ -1,5 +1,6 @@
 import { List } from '../../core/list.js';
 import { EventHandler } from '../../core/eventHandler.js'
+import { Dice } from '../dice.js';
 
 export class ActorInventory extends EventHandler {
 
@@ -7,26 +8,22 @@ export class ActorInventory extends EventHandler {
 
   gold = 0;
   items = new List();
+  lootTable = new List();
 
   get maxItemSlots() {
-    return 40;
+    return 4000;
   }
 
   static monsterGold(
     level = 1,
-    factor = 0.05,
-    base = 10,
-    cap = 100) {
-    let amount = 0;
-    for (let l = 1; l <= level; l++) {
-      if (amount >= cap) {
-        break;
-      }
-      amount +=
-        Math.ceil(base * (vm.level / 2)) +
-        Math.floor(amount * factor);
+    factor = 0.02,
+    base = 5
+  ) {
+    if (Dice.roll(10) > 8) {
+      let l = Math.ceil(base * level / 3);
+      return l + Math.floor(l / 2 * factor);
     }
-    return amount;
+    return 0;
   }
 
   constructor(actor) {

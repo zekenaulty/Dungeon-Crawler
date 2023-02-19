@@ -41,19 +41,19 @@ import { Characters } from './battle/actors/ui/characters.js'
         });
 
         game.autoPilot.listenToEvent('started', () => {
-          player.innerHTML = 'MANUAL PLAY';
+          player.innerText = 'MANUAL PLAY';
         });
 
         game.autoPilot.listenToEvent('stopped', () => {
-          player.innerHTML = 'AUTO PLAY';
+          player.innerText = 'AUTO PLAY';
         });
 
         game.fight.listenToEvent('started', () => {
-          waves.innerHTML = 'STOP WAVES';
+          waves.innerText = 'STOP WAVES';
         });
 
         game.fight.listenToEvent('stopped', () => {
-          waves.innerHTML = 'FIGHT WAVES';
+          waves.innerText = 'FIGHT WAVES';
         });
       };
 
