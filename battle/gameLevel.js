@@ -1,5 +1,6 @@
 import { List } from '../core/list.js';
 import { EventHandler } from '../core/eventHandler.js'
+import { Alert } from '../ui/alert/alert.js';
 
 import { Maze } from '../mazes/maze.js';
 import { CanvasRectangle } from '../mazes/renderers/canvasRectangle.js';
@@ -209,7 +210,7 @@ export class GameLevel extends EventHandler {
     let saved = SaveData.getState();
 
     Characters.characters = undefined;
-    
+
     vm.#warrior = new Warrior(vm);
     vm.#healer = new Healer(vm);
     vm.#mage = new Mage(vm);
@@ -302,6 +303,8 @@ export class GameLevel extends EventHandler {
     if (vm.fight) {
       vm.fight.stop();
     }
+
+    SaveData.save(vm);
   }
 
   #nextLevel() {
@@ -314,6 +317,8 @@ export class GameLevel extends EventHandler {
     vm.#warrior.recover();
     vm.#healer.recover();
     vm.#mage.recover();
+    SaveData.save(vm);
+
     vm.raiseEvent('updated', vm);
   }
 
@@ -421,6 +426,7 @@ export class GameLevel extends EventHandler {
     vm.autoPilot.stop();
     vm.raiseEvent('game over', vm);
     vm.raiseEvent('updated', vm);
+    Alert.popup('GAME OVER');
   }
 
   histogram() {

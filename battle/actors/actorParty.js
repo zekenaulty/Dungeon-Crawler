@@ -58,7 +58,7 @@ export class ActorParty extends EventHandler {
     }
   }
 
-  lowestHealthMember() {
+  lowestHealthMember(living = true) {
     let vm = this;
 
     if (!vm.#members || vm.#members.length < 1) {
@@ -70,7 +70,7 @@ export class ActorParty extends EventHandler {
       let b = vm.#members[i];
       let ap = a.attributes.hp / a.attributes.maxHp * 100;
       let bp = b.attributes.hp / b.attributes.maxHp * 100;
-      if (bp < ap) {
+      if (bp < ap && ((living && b.attributes.hp > 0) || !living)) {
         a = b;
       }
     }

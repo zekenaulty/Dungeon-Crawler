@@ -1,6 +1,7 @@
 import { List } from '../../core/list.js';
 import { EventHandler } from '../../core/eventHandler.js'
 import { Dice } from '../dice.js';
+import { Alert } from '../../ui/alert/alert.js';
 
 export class ActorInventory extends EventHandler {
 

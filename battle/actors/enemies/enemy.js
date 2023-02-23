@@ -83,6 +83,9 @@ export class Enemy extends Actor {
     }
 
     let t = hostile ? vm.#weightedTargets.sample() : vm.party.random();
+    while(t.attributes.hp < 1) {
+      t = hostile ? vm.#weightedTargets.sample() : vm.party.random();
+    }
     return t;
   }
 

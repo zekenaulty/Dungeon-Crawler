@@ -10,6 +10,7 @@ import { SaveData } from '../saveData.js';
 import { Nameplate } from '../actors/ui/nameplate.js';
 import { Spawner } from './spawner.js';
 import { Actionbar } from '../actors/ui/actionbar.js'
+import { Alert } from '../../ui/alert/alert.js';
 
 export class Battle extends Modal {
 

@@ -8,6 +8,7 @@ import { ActorInventory } from '../actors/actorInventory.js';
 import { DetailSheet } from '../actors/ui/detailSheet.js';
 import { SaveData } from '../saveData.js';
 import { Nameplate } from '../actors/ui/nameplate.js';
+import { Alert } from '../../ui/alert/alert.js';
 
 export class Spawner extends EventHandler {
 
@@ -223,10 +224,12 @@ export class Spawner extends EventHandler {
       e.enemy.party.each((a) => {
         a.party.remove(e.enemy);
       });
+      let xp = ActorLevel.monsterXp(e.enemy.level.level);
+      //Alert.popup('Gained ' + xp + ' experience!', 650);
       vm.#party.each((a) => {
         a.enemies.delete(e.enemy);
         if (a.attributes.hp > 0) {
-          a.level.addXp(ActorLevel.monsterXp(e.enemy.level.level));
+          a.level.addXp(xp);
           a.inventory.addGold(ActorInventory.monsterGold(e.enemy.level.level));
         }
       });
