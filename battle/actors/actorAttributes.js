@@ -9,7 +9,7 @@ export class ActorAttributes extends EventHandler {
   vitality = 5;
   intellect = 0;
 
-  baseDamage = 3;
+  baseDamage = 10;
   baseHp = 10;
   baseMp = 0;
 
@@ -54,12 +54,20 @@ export class ActorAttributes extends EventHandler {
 
   get health() {
     let vm = this;
-    return `${vm.hp}/${vm.maxHp}`;
+    let h = vm.hp;
+    if (h < 0) {
+      h = 0;
+    }
+    return `${h}/${vm.maxHp}`;
   }
 
   get mana() {
     let vm = this;
-    return `${vm.mp}/${vm.maxMp}`;
+    let m = vm.mp;
+    if (m < 0) {
+      m = 0;
+    }
+    return `${m}/${vm.maxMp}`;
   }
 
   get maxHp() {
