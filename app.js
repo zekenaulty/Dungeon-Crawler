@@ -7,6 +7,7 @@ import { GameLevel } from './battle/gameLevel.js';
 import { Loader } from './ui/loader/loader.js';
 import { Saves } from './battle/ui/saves.js';
 import { Characters } from './battle/actors/ui/characters.js'
+import { Alert } from './ui/alert/alert.js';
 
 (() => {
 
@@ -102,6 +103,9 @@ import { Characters } from './battle/actors/ui/characters.js'
       joystick.listenToEvent('right', () => {
         game.move('east');
       });
+      
+      //Alert.popup('test');
+
     }, 350);
 
   });

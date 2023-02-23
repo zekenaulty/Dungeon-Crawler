@@ -8,7 +8,6 @@ export class ActorInventory extends EventHandler {
 
   gold = 0;
   items = new List();
-  lootTable = new List();
 
   get maxItemSlots() {
     return 4000;
@@ -25,7 +24,7 @@ export class ActorInventory extends EventHandler {
     }
     return 0;
   }
-
+  
   constructor(actor) {
     super();
     let vm = this;

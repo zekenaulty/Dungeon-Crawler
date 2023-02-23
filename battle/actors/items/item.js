@@ -3,8 +3,6 @@ import { EventHandler } from '../../../core/eventHandler.js'
 
 export class Item extends EventHandler {
 
-  name = 'base item';
-  displayName = 'Item';
   stackable = false;
   equipable = false;
   
@@ -13,6 +11,14 @@ export class Item extends EventHandler {
     super();
     let vm = this;
 
+  }
+  
+  get name() {
+    return 'base item';
+  }
+  
+  get displayName() {
+    return 'Item';
   }
   
   get summary() {
@@ -24,7 +30,9 @@ export class Item extends EventHandler {
   
   unequip() {}
   
-  use() {}
+  use(target) {
+    
+  }
   
 
 }
