@@ -21,7 +21,7 @@ export class DOM {
   static get body() {
     return document.querySelector('body');
   }
-  
+
   static element(tag, parent, classes, text, clicker) {
     let e = document.createElement(tag);
 
@@ -41,6 +41,36 @@ export class DOM {
       });
     }
 
+    return e;
+  }
+
+  static input(type, parent, classes, name, value, events) {
+    let e = DOM.element('input', parent, classes);
+    e.type = type;
+    
+    if (name) {
+      e.name = name;
+      e.id = name;
+    }
+    
+    if (value) {
+      e.value = value;
+    }
+    
+    if (events && Array.isArray(events)) {
+      events.forEach((n) => {
+        a.addEventListener(n.event, n.action);
+      });
+    } else if (events) {
+      a.addEventListener(n.event, n.action);
+    }
+    
+    return e;
+  }
+  
+  static label(text, parent, classes, $for) {
+    let e = DOM.element('label', parent, classes, text);
+    e.htmlFor = $for;
     return e;
   }
 
@@ -113,13 +143,13 @@ export class DOM {
       to.appendChild(e);
     }
   }
-  
+
   static remove(e, from) {
     if (!from) {
       from = DOM.body;
     }
-    
-    if(from.contains(e)) {
+
+    if (from.contains(e)) {
       from.removeChild(e);
     }
   }

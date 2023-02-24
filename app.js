@@ -8,6 +8,7 @@ import { Loader } from './ui/loader/loader.js';
 import { Saves } from './battle/ui/saves.js';
 import { Characters } from './battle/actors/ui/characters.js'
 import { Alert } from './ui/alert/alert.js';
+import { SaveData } from '../battle/saveData.js';
 
 (() => {
 
@@ -56,6 +57,7 @@ import { Alert } from './ui/alert/alert.js';
         game.fight.listenToEvent('stopped', () => {
           waves.innerText = 'FIGHT WAVES';
         });
+
       };
 
       const header = new Header();
@@ -103,11 +105,19 @@ import { Alert } from './ui/alert/alert.js';
       joystick.listenToEvent('right', () => {
         game.move('east');
       });
-      
-      //Alert.popup('test');
+
+      game.listenToEvent('state loaded', () => {
+        joystick.setChecked(game.randomBattles);
+      });
+      joystick.setChecked(game.randomBattles);
+
+      joystick.onEncountersChanged((e) => {
+        game.randomBattles = e.srcElement.checked ? true : false;
+        SaveData.save(game);
+      });
 
     }, 350);
-
+    
   });
 
 })();

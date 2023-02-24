@@ -102,26 +102,27 @@
   display: none !important;
 }
 
-.sig-left {
-  font-family: monospace;
+.random-group {
   position: fixed;
-  bottom: 12px;
-  left: 6px;
+  top: 92vh;
+  height: 25px;
+  left: 10px;
+  z-index: 200;
+  max-width: 200px;
   color: orange;
-  background-color: black;
-  font-size: 0.8em;
-  text-align: center;
-  width: 100px;
+  display: flex;
+  flex-flow: row;
+  flex-wrap: nowrap;
 }
 
-.sig-right {
-  font-family: monospace;
-  position: fixed;
-  bottom: 12px;
-  right: 6px;
-  color: orange;
-  background-color: black;
-  font-size: 0.8em;
-  text-align: center;
-  width: 100px;
+.random-check {
+
+  
+}
+
+.random-label {
+  display: flex;
+  flex-flow: column;
+  flex-wrap: nowrap;
+  justify-content: center;
 }

@@ -5,6 +5,7 @@ export class JoyStick extends EventHandler {
 
   #footer;
   #mover;
+  #check;
 
   constructor() {
     super();
@@ -49,6 +50,19 @@ export class JoyStick extends EventHandler {
         vm.raiseEvent('right');
       });
       
+    let group = DOM.div(vm.#footer, 'random-group');
+    vm.#check = DOM.input('checkbox', group, 'random-check', 'random_battles');
+    DOM.label('random encounters?', group, 'random-label', 'random_battles');
+    
+  }
+  
+  onEncountersChanged(action){
+    let vm = this;
+    vm.#check.addEventListener('change', action);
   }
 
+  setChecked(checked) {
+    let vm = this;
+    vm.#check.checked = checked;
+  }
 }

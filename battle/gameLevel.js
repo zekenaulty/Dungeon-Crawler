@@ -49,6 +49,8 @@ export class GameLevel extends EventHandler {
 
   autoPilot;
   fight;
+  
+  randomBattles = true;
 
   constructor() {
     super();
@@ -64,6 +66,7 @@ export class GameLevel extends EventHandler {
       'updated',
       'teleporting',
       'teleported',
+      'state loaded'
     );
 
   }
@@ -113,8 +116,9 @@ export class GameLevel extends EventHandler {
       warrior: warriorState,
       healer: healerState,
       mage: mageState,
-      maze: mazeState,
-      summary: vm.summary
+      maze: mazeState,      
+      randomBattles: vm.randomBattles,
+      summary: vm.summary,
     };
 
     return state;
@@ -138,9 +142,9 @@ export class GameLevel extends EventHandler {
     let mageState = state.mage;
     let mazeState = state.maze;
 
+    vm.randomBattles = state.randomBattles;
     vm.#level = state.level;
     vm.#mazeMaxRooms = state.mazeMaxRooms;
-    //vm.#toTiny = state.toTiny;
     vm.#roomGrowthFactor = state.roomGrowthFactor;
 
     vm.#resetMaze();
@@ -158,6 +162,7 @@ export class GameLevel extends EventHandler {
 
     Loader.close(350);
     vm.raiseEvent('updated', vm);
+    vm.raiseEvent('state loaded', vm);
   }
 
   get level() {
@@ -407,7 +412,8 @@ export class GameLevel extends EventHandler {
   }
 
   #shouldBattle(d) {
-    return d[0] > 11 && d[1] < 11 && d[2] > 2 && d[3] < 20;
+    let vm = this;
+    return vm.randomBattles && d[0] > 11 && d[1] < 11 && d[2] > 2 && d[3] < 20;
   }
 
   #shouldTeleport(d) {
