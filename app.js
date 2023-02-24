@@ -28,11 +28,11 @@ import { SaveData } from './battle/saveData.js';
     setTimeout(() => {
       const game = new GameLevel();
       const saves = new Saves(game);
-      const stageReady = (gfx) => {
+      const stageReady = (ref, gfx) => {
 
         game.initialize(
-          stage.width,
-          stage.height,
+          ref.width,
+          ref.height,
           gfx);
         game.begin();
 

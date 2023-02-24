@@ -47,7 +47,7 @@ export class Stage extends EventHandler {
     vm.#canvas.width = vm.#stage.offsetWidth;
     vm.#canvas.height = vm.#stage.offsetHeight;
     if (vm.#canvas.height > 400) {
-      vm.raiseEvent('ready', vm.#gfx);
+      vm.raiseEvent('ready', vm, vm.#gfx);
     } else {
       setTimeout(() => { vm.#scale(); }, 10);
     }
