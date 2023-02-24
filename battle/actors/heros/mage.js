@@ -64,8 +64,8 @@ export class Mage extends Actor {
     vm.level.xp = 0;
     vm.level.xpToLevel = ActorLevel.xpForNextLevel();
 
-    vm.attributes.baseHp = 120;
-    vm.attributes.baseMp = 150;
+    vm.attributes.baseHp = 20;
+    vm.attributes.baseMp = 50;
     vm.attributes.scaleWith = 'intellect';
 
     vm.attributes.baseDamage = 7;

@@ -55,8 +55,8 @@ export class Healer extends Actor {
     vm.level.xpToLevel = ActorLevel.xpForNextLevel();
     vm.attributes.scaleWith = 'intellect';
 
-    vm.attributes.baseHp = 180;
-    vm.attributes.baseMp = 80;
+    vm.attributes.baseHp = 30;
+    vm.attributes.baseMp = 30;
 
     vm.attributes.baseDamage = 7;
     vm.attributes.strength = 10;

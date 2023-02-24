@@ -11,6 +11,7 @@ import { Teleport } from '../skills/teleport.js';
 import { AutoBattle } from '../skills/autoBattle.js';
 import { Modal } from '../../../ui/modal/modal.js';
 import { Dice } from '../../dice.js';
+import { Slash } from '../skills/slash.js';
 
 export class Warrior extends Actor {
 
@@ -29,6 +30,9 @@ export class Warrior extends Actor {
     vm.aiIntervalMin = vm.#aiIntervalMin;
     vm.aiIntervalMax = vm.#aiIntervalMax;
     
+    delete vm.skills.attack;
+
+    vm.addSkill('slash', new Slash(vm));
     vm.addSkill('cleave', new Cleave(vm));
     vm.addSkill('slam', new Slam(vm));
 
@@ -63,7 +67,7 @@ export class Warrior extends Actor {
     vm.level.xpToLevel = ActorLevel.xpForNextLevel();
     vm.attributes.scaleWith = 'strength';
 
-    vm.attributes.baseHp = 200;
+    vm.attributes.baseHp = 50;
 
     vm.attributes.baseDamage = 8;
     vm.attributes.strength = 40;
@@ -73,7 +77,7 @@ export class Warrior extends Actor {
 
     vm.attributes.hp = vm.attributes.maxHp;
     vm.attributes.mp = vm.attributes.maxMp;
-    
+
     vm.getId();
   }
 
@@ -81,11 +85,11 @@ export class Warrior extends Actor {
     let vm = this;
 
     vm.checkLoop();
-    
+
     if (!vm.aiCanAct() || vm.casting) {
       return;
     }
-    
+
     if (
       vm.enemies.length > 2 &&
       vm.skills.slam.charges > 0 &&
@@ -102,8 +106,8 @@ export class Warrior extends Actor {
     ) {
       vm.skills.cleave.invoke();
       return;
-    } else if (!vm.skills.attack.onCd) {
-      vm.skills.attack.invoke();
+    } else if (!vm.skills.slash.onCd) {
+      vm.skills.slash.invoke();
       return;
     }
   }

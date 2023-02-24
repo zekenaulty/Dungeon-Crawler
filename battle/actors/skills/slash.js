@@ -1,32 +1,32 @@
 import { List } from '../../../core/list.js';
 import { ActorSkill } from '../actorSkill.js';
 
-export class Heal extends ActorSkill {
+export class Slash extends ActorSkill {
 
   constructor(actor) {
     super(actor);
     let vm = this;
-    vm.cooldown = 1500;
+    vm.cooldown = 750;
     vm.register = true;
-    vm.name = 'Heal';
+    vm.name = 'Slash';
     vm.bubble = true;
-    vm.availableOutOfCombat = true;
-    vm.mpCost = 4;
+    vm.mpCost = 0;
   }
-  
+
   get displayName() {
-    return `heal`;
+    return `slash`;
   }
-  
+
   get summary() {
     let vm = this;
-    return `Heal lowest health ally for 35% of max health.`;
+    return `Hit target for ${vm.min}-${vm.max} damage.`;
   }
 
   invoke() {
     let vm = this;
+    vm.actor.target = vm.actor.getTarget();
     vm.safeInvoke(() => {
-      vm.doHeal(vm.actor.party.lowestHealthMember(), 0.35, vm.mpCost);
+      vm.doAttack(vm.actor.target);
     });
   }
 

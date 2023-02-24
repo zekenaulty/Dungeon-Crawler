@@ -304,7 +304,6 @@ export class GameLevel extends EventHandler {
       vm.fight.stop();
     }
 
-    SaveData.save(vm);
   }
 
   #nextLevel() {
@@ -317,7 +316,6 @@ export class GameLevel extends EventHandler {
     vm.#warrior.recover();
     vm.#healer.recover();
     vm.#mage.recover();
-    SaveData.save(vm);
 
     vm.raiseEvent('updated', vm);
   }
@@ -356,6 +354,7 @@ export class GameLevel extends EventHandler {
             Loader.open(`LEVEL ${vm.level}`);
             vm.#renderer.draw();
             Loader.close(350);
+            SaveData.save(vm);
             vm.raiseEvent('updated', vm);
           },
           vm.#breath
@@ -426,6 +425,7 @@ export class GameLevel extends EventHandler {
     vm.autoPilot.stop();
     vm.raiseEvent('game over', vm);
     vm.raiseEvent('updated', vm);
+    vm.#firstLevel();
     Alert.popup('GAME OVER');
   }
 
