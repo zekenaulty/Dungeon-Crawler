@@ -3,7 +3,7 @@
   top: 1vh;
   left: 2vw;
   right: 2vw;
-  height: 68vh;
+  height: 64vh;
   border: 1px solid white;
   border-radius: 13px 13px 13px 13px;
   color: white;
@@ -22,7 +22,7 @@
   flex-wrap: nowrap;
   justify-content: start;
   align-content: start;
-  top: 70vh;
+  top: 65.5vh;
   left: 2vw;
   right: 60vw;
   height: 28vh;
@@ -42,7 +42,7 @@
   align-content: start;
   flex-flow: column;
   flex-wrap: nowrap;
-  top: 70vh;
+  top: 65.5vh;
   left: 42vw;
   right: 2vw;
   height: 28vh;
