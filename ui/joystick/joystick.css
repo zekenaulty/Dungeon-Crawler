@@ -1,6 +1,6 @@
 .foot {
   position: fixed;
-  top: 82vh;
+  top: 77vh;
   left: 0vw;
   height: 20vh;
   width: 100vw;
@@ -104,7 +104,7 @@
 
 .random-group {
   position: fixed;
-  top: 92vh;
+  top: 85vh;
   height: 25px;
   left: 10px;
   z-index: 200;
