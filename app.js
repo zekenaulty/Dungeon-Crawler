@@ -117,7 +117,7 @@ import { SaveData } from '../battle/saveData.js';
       });
 
     }, 350);
-    
+
   });
 
 })();

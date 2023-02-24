@@ -11,18 +11,18 @@
 }
 
 .actionbar-btn-active-warrior {
-  color: red !important;
-  border: 1px solid darkred !important;
+  color: skyblue !important;
+  border: 1px solid deepskyblue !important;
 }
 
 .actionbar-btn-active-healer {
-  color: goldenrod !important;
-  border: 1px solid darkgoldenrod !important;
+  color: hotpink !important;
+  border: 1px solid deeppink !important;
 }
 
 .actionbar-btn-active-mage {
-  color: orange !important;
-  border: 1px solid darkorange !important;
+  color: gold !important;
+  border: 1px solid darkgoldenrod !important;
 }
 
 .actionbar-btn-cooldown {
