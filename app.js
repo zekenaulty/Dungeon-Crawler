@@ -29,7 +29,28 @@ import { SaveData } from './battle/saveData.js';
       const game = new GameLevel();
       const saves = new Saves(game);
       const stageReady = (ref, gfx) => {
+        game.listenToEvent('updated', () => {
+          header.info(game.summary);
+        });
 
+        game.listenToEvent('bind', () => {
+          game.autoPilot.listenToEvent('started', () => {
+            player.innerText = 'MANUAL PLAY';
+          });
+
+          game.autoPilot.listenToEvent('stopped', () => {
+            player.innerText = 'AUTO PLAY';
+          });
+
+          game.fight.listenToEvent('started', () => {
+            waves.innerText = 'STOP WAVES';
+          });
+
+          game.fight.listenToEvent('stopped', () => {
+            waves.innerText = 'FIGHT WAVES';
+          });
+        });
+        
         game.initialize(
           ref.width,
           ref.height,
@@ -37,27 +58,6 @@ import { SaveData } from './battle/saveData.js';
         game.begin();
 
         header.info(game.summary);
-
-        game.listenToEvent('updated', () => {
-          header.info(game.summary);
-        });
-
-        game.autoPilot.listenToEvent('started', () => {
-          player.innerText = 'MANUAL PLAY';
-        });
-
-        game.autoPilot.listenToEvent('stopped', () => {
-          player.innerText = 'AUTO PLAY';
-        });
-
-        game.fight.listenToEvent('started', () => {
-          waves.innerText = 'STOP WAVES';
-        });
-
-        game.fight.listenToEvent('stopped', () => {
-          waves.innerText = 'FIGHT WAVES';
-        });
-
       };
 
       const header = new Header();

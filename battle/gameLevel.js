@@ -66,7 +66,7 @@ export class GameLevel extends EventHandler {
       'updated',
       'teleporting',
       'teleported',
-      'state loaded'
+      'bind'
     );
 
   }
@@ -120,6 +120,8 @@ export class GameLevel extends EventHandler {
       randomBattles: vm.randomBattles,
       summary: vm.summary,
     };
+    
+    vm.raiseEvent('saved', vm);
 
     return state;
   }
@@ -162,7 +164,7 @@ export class GameLevel extends EventHandler {
 
     Loader.close(350);
     vm.raiseEvent('updated', vm);
-    vm.raiseEvent('state loaded', vm);
+    vm.raiseEvent('loaded save', vm);
   }
 
   get level() {
@@ -254,6 +256,9 @@ export class GameLevel extends EventHandler {
     } else {
       vm.#firstLevel();
     }
+    
+    vm.raiseEvent('bind', vm);
+
   }
 
   solve() {
