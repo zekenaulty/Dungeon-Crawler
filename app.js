@@ -106,7 +106,7 @@ import { SaveData } from './battle/saveData.js';
         game.move('east');
       });
 
-      game.listenToEvent('state loaded', () => {
+      game.listenToEvent('loaded save', () => {
         joystick.setChecked(game.randomBattles);
       });
       joystick.setChecked(game.randomBattles);
