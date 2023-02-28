@@ -75,6 +75,6 @@ export class Slime extends Enemy {
   #ascii;
   get ascii() {
     let vm = this;
-    return vm.#slimes.sample();
+    return vm.#ascii;
   }
 }

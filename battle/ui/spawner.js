@@ -2,7 +2,7 @@ import { List } from '../../core/list.js';
 import { EventHandler } from '../../core/eventHandler.js';
 import { Modal } from '../../ui/modal/modal.js'
 import { Dice } from '../dice.js';
-import { Slime } from '../actors/enemies/slime.js';
+import { Emoji } from '../actors/enemies/emoji.js';
 import { ActorLevel } from '../actors/actorLevel.js';
 import { ActorInventory } from '../actors/actorInventory.js';
 import { DetailSheet } from '../actors/ui/detailSheet.js';
@@ -147,7 +147,7 @@ export class Spawner extends EventHandler {
   #createEnemy(e) {
     let vm = this;
 
-    e.enemy = new Slime(
+    e.enemy = new Emoji(
       vm.#gameLevel,
       vm.#battle
     );
